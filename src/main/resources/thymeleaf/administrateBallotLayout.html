@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Stimmzettellayout verwalten - Wahlauszählungen nach der Weighted Inclusive Gregory Method</title>
+    <style type="text/css">
+        label:after {
+            content: ":";
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Stimmzettelmuster</h1>
+</header>
+<main>
+    <section th:each="election : ${ballotLayout.elections}">
+        <h2 th:text="${election.officeName}">Bundesschiedsgericht</h2>
+
+        <p>
+            <span th:text="${election.numberOfFemaleExclusivePositions}">1</span> Frauenplätze,
+            <span th:text="${election.numberOfNotFemaleExclusivePositions}">1</span> offene Plätze
+        </p>
+        <ul>
+            <li th:each="candidate : ${election.candidates}">
+                <span th:text="${candidate.name}">Petra Lustig</span><span th:if="${candidate.female}"> (♀)</span>
+            </li>
+        </ul>
+        <a href="#">löschen</a>
+    </section>
+    <section>
+        <h2>Weiteres Amt hinzufügen</h2>
+
+        <form>
+            <label>Name des Amtes</label>
+            <input/><br/>
+            <label>Anzahl Frauenplätze</label>
+            <input/><br/>
+            <label>Anzahl offene Plätze</label>
+            <input/><br/>
+            <label>Kandidat*innen</label><br/>
+            <textarea>Petra Lustig (w)
+                John Doe (m)
+                Willhelm Tell (m)
+                Mandy Schwalkowiak (w)</textarea><br/>
+            <input type="submit" value="Hinzufügen"/>
+        </form>
+    </section>
+</main>
+</body>
+</html>

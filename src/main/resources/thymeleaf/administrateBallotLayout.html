@@ -14,38 +14,45 @@
     <h1>Stimmzettelmuster</h1>
 </header>
 <main>
-    <section th:each="election : ${ballotLayout.elections}">
-        <h2 th:text="${election.officeName}">Bundesschiedsgericht</h2>
+    <form method="POST">
+        <section th:each="election : ${ballotLayout.elections}">
+            <h2 th:text="${election.officeName}">Bundesschiedsgericht</h2>
 
-        <p>
-            <span th:text="${election.numberOfFemaleExclusivePositions}">1</span> Frauenplätze,
-            <span th:text="${election.numberOfNotFemaleExclusivePositions}">1</span> offene Plätze
-        </p>
-        <ul>
-            <li th:each="candidate : ${election.candidates}">
-                <span th:text="${candidate.name}">Petra Lustig</span><span th:if="${candidate.female}"> (♀)</span>
-            </li>
-        </ul>
-        <a href="#">löschen</a>
-    </section>
-    <section>
-        <h2>Weiteres Amt hinzufügen</h2>
 
-        <form>
+            <p>
+                <span th:text="${election.numberOfFemaleExclusivePositions}">1</span> Frauenplätze,
+                <span th:text="${election.numberOfNotFemaleExclusivePositions}">1</span> offene Plätze
+            </p>
+            <ul>
+                <li th:each="candidate : ${election.candidates}">
+                    <span th:text="${candidate.name}">Petra Lustig</span><span th:if="${candidate.female}"> (♀)</span>
+                </li>
+            </ul>
+            <a href="#">löschen</a>
+        </section>
+        <section>
+            <h2>Weiteres Amt hinzufügen</h2>
+
             <label>Name des Amtes</label>
-            <input/><br/>
+            <input name="election.officeName"/><br/>
             <label>Anzahl Frauenplätze</label>
-            <input/><br/>
+            <input name="election.numberOfFemaleExclusivePositions"/><br/>
             <label>Anzahl offene Plätze</label>
-            <input/><br/>
-            <label>Kandidat*innen</label><br/>
-            <textarea>Petra Lustig (w)
-                John Doe (m)
-                Willhelm Tell (m)
-                Mandy Schwalkowiak (w)</textarea><br/>
+            <input name="election.numberOfNonFemaleExclusivePositions"/><br/>
+
+            <h3>Kandidat*innen</h3>
+            <label>Name</label>
+            <input name="election.candidates[0].name"/>
+            <label>weiblich</label>
+            <input name="election.candidates[0].female"/>
+            <br/>
+            <label>Name</label>
+            <input name="election.candidates[1].name"/>
+            <label>weiblich</label>
+            <input name="election.candidates[1].female"/>
             <input type="submit" value="Hinzufügen"/>
-        </form>
-    </section>
+        </section>
+    </form>
 </main>
 </body>
 </html>

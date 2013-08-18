@@ -1,6 +1,5 @@
 package info.gehrels.voting.web;
 
-import info.gehrels.voting.genderedElections.GenderedElection;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,15 +21,9 @@ public class AdministrateBallotLayoutController {
 	}
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
-	public ModelAndView addNewElection(@ModelAttribute AdministrateBallotLayoutForm form) {
-		BallotLayout ballotLayout = new BallotLayout();
-		for (GenderedElectionBuilderBean genderedElectionBuilderBean : form.getElections()) {
-			GenderedElection genderedElection = genderedElectionBuilderBean.build();
-			ballotLayout.addElection(genderedElection);
-		}
-
-		this.ballotLayoutState.ballotLayout = ballotLayout;
-		return new ModelAndView("administrateBallotLayout", "ballotLayout", ballotLayout);
+	public String addNewElection(@ModelAttribute BallotLayoutBuilderBean form) {
+		this.ballotLayoutState.ballotLayout = form.createBallotLayout();
+		return "redirect:/";
 	}
 
 

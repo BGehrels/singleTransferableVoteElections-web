@@ -12,10 +12,10 @@
 	<h1>Stimmzettel eingeben</h1>
 </header>
 <main>
-	<form>
+	<form method="POST">
 		<section>
-			<label>Stimmzettelnummer</label>
-			<input/>
+			<label for="ballotId">Stimmzettelnummer</label>
+			<input id="ballotId" name="ballotId" />
 		</section>
 		<c:forEach items="${ballotLayout.elections}" var="election" varStatus="electionStatus">
 			<h2><c:out value="${election.officeName}"/></h2>
@@ -24,7 +24,7 @@
 					<li><c:out value="${candidate.name}" /></li>
 				</c:forEach>
 			</ol>
-			<input type="text" name="election[${electionStatus.index}]" />
+			<input type="text" name="votesByElectionId[${electionStatus.index}]" />
 		</c:forEach>
 		<section>
 			<input type="submit" value="Hinzufügen &amp; nächsten Stimmzettel ausfüllen"/>

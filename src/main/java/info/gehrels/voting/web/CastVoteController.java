@@ -1,6 +1,7 @@
 package info.gehrels.voting.web;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -13,12 +14,11 @@ public class CastVoteController {
 	private final BallotLayoutState ballotLayoutState;
 
 	public CastVoteController(BallotLayoutState ballotLayoutState) {
-
 		this.ballotLayoutState = ballotLayoutState;
 	}
 
 	@RequestMapping(value = {"/castVote"}, method = {POST, PUT})
-	public ModelAndView doCastVote() {
+	public ModelAndView doCastVote(@ModelAttribute CastVoteForm castVoteForm) {
 		return new ModelAndView("castVote", "ballotLayout", ballotLayoutState.ballotLayout);
 	}
 

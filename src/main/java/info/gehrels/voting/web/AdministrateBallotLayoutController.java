@@ -4,6 +4,7 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -34,9 +35,8 @@ public class AdministrateBallotLayoutController {
 
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {GET, HEAD})
-	public ModelAndView showCurrentBallotLayout() {
-		BallotLayout ballotLayout = ballotLayoutState.ballotLayout != null ? ballotLayoutState.ballotLayout : new BallotLayout();
-		return new ModelAndView("administrateBallotLayout", "ballotLayout", ballotLayout);
+	public ModelAndView showCurrentBallotLayout(@RequestParam int numberOfElections) {
+		return new ModelAndView("administrateBallotLayout", "numberOfElections", numberOfElections);
 	}
 
 }

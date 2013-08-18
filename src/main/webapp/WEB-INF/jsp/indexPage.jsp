@@ -11,7 +11,7 @@
 </header>
 <main>
     <ul>
-        <li><a href="/administrateBallotLayout">Stimmzettellayout verwalten</a></li>
+        <li><form method="GET" action="/administrateBallotLayout">Stimmzettellayout für <input type="number" name="numberOfElections" /> Ämter erstellen: <input type="submit"></form></li>
         <li><a href="/castVote">Stimmen eingeben</a></li>
     </ul>
 </main>

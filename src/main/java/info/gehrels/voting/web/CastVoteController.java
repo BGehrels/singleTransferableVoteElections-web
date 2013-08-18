@@ -35,6 +35,10 @@ public class CastVoteController {
 
 	@RequestMapping("/castVote")
 	public ModelAndView doGet() {
+		if (ballotLayoutState.ballotLayout == null) {
+			return new ModelAndView("redirect:/");
+		}
+
 		return new ModelAndView("castVote", "ballotLayout", ballotLayoutState.ballotLayout);
 	}
 

@@ -24,7 +24,7 @@
 					<li><c:out value="${candidate.name}" /></li>
 				</c:forEach>
 			</ol>
-			<input type="text" name="votesByElectionId[${electionStatus.index}]" />
+			<label for="votesByElectionId[${electionStatus.index}]" >Präferenz</label><input type="text" id="votesByElectionId[${electionStatus.index}]" name="votesByElectionId[${electionStatus.index}]" />
 		</c:forEach>
 		<section>
 			<input type="submit" value="Hinzufügen &amp; nächsten Stimmzettel ausfüllen"/>

@@ -2,6 +2,7 @@ package info.gehrels.voting.web.initialization;
 
 import info.gehrels.voting.web.AdministrateBallotLayoutController;
 import info.gehrels.voting.web.BallotLayoutState;
+import info.gehrels.voting.web.CastBallotsState;
 import info.gehrels.voting.web.CastVoteController;
 import info.gehrels.voting.web.IndexPageController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,12 @@ public class SpringConfig {
 
 	@Bean
 	public CastVoteController castVoteController() {
-		return new CastVoteController(ballotLayoutState());
+		return new CastVoteController(ballotLayoutState(), castBallotsState());
+	}
+
+	@Bean
+	public CastBallotsState castBallotsState() {
+		return new CastBallotsState();
 	}
 
 	@Bean

@@ -1,16 +1,19 @@
 package info.gehrels.voting.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AdministrateBallotLayoutForm {
-	private GenderedElectionBuilderBean election = new GenderedElectionBuilderBean();
+	private List<GenderedElectionBuilderBean> elections = new ArrayList<>();
 
 	public AdministrateBallotLayoutForm() {
 	}
 
-	public GenderedElectionBuilderBean getElection() {
-		return election;
+	public List<GenderedElectionBuilderBean> getElections() {
+		return elections;
 	}
 
-	public void setElection(GenderedElectionBuilderBean election) {
-		this.election = election;
+	public void setElection(List<GenderedElectionBuilderBean> elections) {
+		this.elections = elections;
 	}
 }

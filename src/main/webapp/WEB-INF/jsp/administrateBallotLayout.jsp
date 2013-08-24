@@ -17,7 +17,7 @@
 	<h1>Stimmzettelmuster</h1>
 </header>
 <main>
-	<form method="POST">
+	<form action="/administrateBallotLayout" method="POST">
 		<c:forEach begin="0" end="${numberOfElections-1}" var="i">
 			<section>
 				<h2>Weiteres Amt hinzufügen</h2>

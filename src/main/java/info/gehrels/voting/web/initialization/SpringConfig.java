@@ -2,6 +2,7 @@ package info.gehrels.voting.web.initialization;
 
 import info.gehrels.voting.web.AdministrateBallotLayoutController;
 import info.gehrels.voting.web.BallotLayoutState;
+import info.gehrels.voting.web.CalculateElectionResultsController;
 import info.gehrels.voting.web.CastBallotsState;
 import info.gehrels.voting.web.CastVoteController;
 import info.gehrels.voting.web.IndexPageController;
@@ -59,6 +60,11 @@ public class SpringConfig {
 	@Bean
 	public BallotLayoutState ballotLayoutState() {
 		return new BallotLayoutState();
+	}
+
+	@Bean
+	public CalculateElectionResultsController calculateElectionResultsController() {
+		return new CalculateElectionResultsController(ballotLayoutState(), castBallotsState());
 	}
 
 	@PostConstruct

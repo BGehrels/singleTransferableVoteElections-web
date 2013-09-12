@@ -13,6 +13,7 @@
     <ul>
         <li><form method="GET" action="/administrateBallotLayout">Stimmzettellayout für <input type="number" name="numberOfElections" /> Ämter erstellen: <input type="submit"></form></li>
         <li><a href="/castVote">Stimmen eingeben</a></li>
+        <li><a href="/calculateElectionResults">Wahlergebnis berechnen</a></li>
     </ul>
 </main>
 </body>

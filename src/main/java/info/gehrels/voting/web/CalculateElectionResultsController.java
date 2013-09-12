@@ -11,11 +11,11 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 import info.gehrels.voting.genderedElections.StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener;
 import info.gehrels.voting.singleTransferableVote.STVElectionCalculationFactory;
 import info.gehrels.voting.singleTransferableVote.StringBuilderBackedSTVElectionCalculationListener;
-import org.apache.commons.math3.fraction.BigFraction;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import static org.apache.commons.math3.fraction.BigFraction.getReducedFraction;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
 
@@ -39,6 +39,7 @@ public final class CalculateElectionResultsController {
 
 		for (GenderedElection election : ballotLayoutState.ballotLayout.getElections()) {
 			reset(auditLogBuilder);
+			// TODO: Spätestens hinter dem Funktionsaufruf sicherstellen, dass keine zwei Ballots mit der selben ID reingegeben werden
 			Result electionResult = electionCalculation
 				.calculateElectionResult(election, ImmutableList.copyOf(castBallotsState.castBallotsById.values()));
 			String auditLog = auditLogBuilder.toString();
@@ -57,7 +58,7 @@ public final class CalculateElectionResultsController {
 		StringBuilder auditLogBuilder) {
 		return new ElectionCalculationWithFemaleExclusivePositions(
 			new STVElectionCalculationFactory<>(
-				new NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum(BigFraction.getReducedFraction(1, 10)),
+				new NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum(getReducedFraction(1, 10)),
 				new StringBuilderBackedSTVElectionCalculationListener<GenderedCandidate>(auditLogBuilder),
 				new TakeFirstOneAmbiguityResolver()),
 			new StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener(auditLogBuilder));

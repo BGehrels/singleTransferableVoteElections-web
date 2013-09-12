@@ -19,7 +19,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 
 @Controller
-public class CastVoteController {
+public final class CastVoteController {
 	private final BallotLayoutState ballotLayoutState;
 	private final CastBallotsState castBallotsState;
 
@@ -54,7 +54,7 @@ public class CastVoteController {
 			i++;
 		}
 
-		return new Ballot<>(preferenceSetBuilder.build());
+		return new Ballot<>(castVoteForm.getBallotId(), preferenceSetBuilder.build());
 	}
 
 	private ElectionCandidatePreference<GenderedCandidate> createPreference(GenderedElection genderedElection,

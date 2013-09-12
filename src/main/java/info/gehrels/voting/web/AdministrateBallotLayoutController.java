@@ -12,7 +12,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
-public class AdministrateBallotLayoutController {
+public final class AdministrateBallotLayoutController {
 
 	private final BallotLayoutState ballotLayoutState;
 
@@ -22,7 +22,7 @@ public class AdministrateBallotLayoutController {
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
 	public String addNewElection(@ModelAttribute BallotLayoutBuilderBean form) {
-		this.ballotLayoutState.ballotLayout = form.createBallotLayout();
+		ballotLayoutState.ballotLayout = form.createBallotLayout();
 		return "redirect:/";
 	}
 

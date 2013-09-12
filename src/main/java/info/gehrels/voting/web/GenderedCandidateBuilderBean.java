@@ -2,12 +2,9 @@ package info.gehrels.voting.web;
 
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 
-public class GenderedCandidateBuilderBean {
+public final class GenderedCandidateBuilderBean {
 	private String name;
 	private boolean female;
-
-	public GenderedCandidateBuilderBean() {
-	}
 
 	public String getName() {
 		return name;

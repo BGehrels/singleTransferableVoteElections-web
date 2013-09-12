@@ -9,7 +9,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.ServletContextEvent;
 import java.util.EnumSet;
 
-public class MyContextLoaderListener extends ContextLoaderListener {
+public final class MyContextLoaderListener extends ContextLoaderListener {
 	public MyContextLoaderListener() {
 		super(createRootApplicationContext());
 	}

@@ -2,7 +2,7 @@ package info.gehrels.voting.web;
 
 import java.util.List;
 
-public class CastVoteForm {
+public final class CastVoteForm {
 	private int ballotId;
 	private List<String> votesByElectionId;
 

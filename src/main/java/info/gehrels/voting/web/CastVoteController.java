@@ -54,7 +54,7 @@ public final class CastVoteController {
 			i++;
 		}
 
-		return new Ballot<>(castVoteForm.getBallotId(), preferenceSetBuilder.build());
+		return Ballot.createValidBallot(castVoteForm.getBallotId(), preferenceSetBuilder.build());
 	}
 
 	private ElectionCandidatePreference<GenderedCandidate> createPreference(GenderedElection genderedElection,

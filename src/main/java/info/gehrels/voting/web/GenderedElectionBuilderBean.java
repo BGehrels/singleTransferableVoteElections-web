@@ -5,13 +5,23 @@ import com.google.common.collect.ImmutableSet.Builder;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class GenderedElectionBuilderBean {
 	private String officeName;
 	private int numberOfFemaleExclusivePositions;
 	private int numberOfNonFemaleExclusivePositions;
-	private List<GenderedCandidateBuilderBean> candidates;
+	private List<GenderedCandidateBuilderBean> candidates = new ArrayList<>();
+
+	public GenderedElectionBuilderBean() {
+	}
+
+	public GenderedElectionBuilderBean(int numberOfCandidates) {
+		for (int i = 0; i < numberOfCandidates; i++) {
+			candidates.add(new GenderedCandidateBuilderBean());
+		}
+	}
 
 	public String getOfficeName() {
 		return officeName;

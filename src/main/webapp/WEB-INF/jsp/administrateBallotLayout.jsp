@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="numberOfElections" scope="request" type="java.lang.Integer"/>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<jsp:useBean id="ballotLayoutBuilderBean" scope="request" type="info.gehrels.voting.web.BallotLayoutBuilderBean"/>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -17,25 +18,25 @@
 	<h1>Stimmzettelmuster</h1>
 </header>
 <main>
-	<form action="/administrateBallotLayout" method="POST">
-		<c:forEach begin="0" end="${numberOfElections-1}" var="i">
+	<form:form method="post" action="/administrateBallotLayout" commandName="ballotLayoutBuilderBean">
+		<c:forEach items="${ballotLayoutBuilderBean.elections}" var="election" varStatus="electionsStatus">
 			<section>
-				<h1>${i+1}. Amt</h1>
+				<h1>${electionsStatus.index+1}. Amt</h1>
 
 				<label>Name des Amtes</label>
-				<input name="elections[${i}].officeName" type="text" required/><br/>
+				<form:input path="elections[${electionsStatus.index}].officeName" required="required" /><br />
 				<label>Anzahl Frauenplätze</label>
-				<input name="elections[${i}].numberOfFemaleExclusivePositions" type="number" required/><br/>
+				<form:input path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" type="number" required="required" min="0"/><br />
 				<label>Anzahl offene Plätze</label>
-				<input name="elections[${i}].numberOfNonFemaleExclusivePositions" type="number" required/><br/>
+				<form:input path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" type="number" required="required" min="0"/><br />
 
 				<h2>Kandidat*innen</h2>
-				<c:forEach begin="0" end="${numberOfCandidatesPerElection-1}" var="j">
+				<c:forEach items="${election.candidates}" varStatus="candidatesStatus">
 					<label>Name</label>
-					<input name="elections[${i}].candidates[${j}].name"/>
+					<form:input path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].name" required="required" />
 					<label>weiblich</label>
-					<input type="radio" name="elections[${i}].candidates[${j}].female" value="true" checked="checked" /> Ja
-					<input type="radio" name="elections[${i}].candidates[${j}].female" value="false" /> Nein
+					<form:radiobutton path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].female" value="true" /> Ja
+					<form:radiobutton path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].female" value="false" /> Nein
 					<br/>
 				</c:forEach>
 			</section>
@@ -43,7 +44,7 @@
 		<section>
 			<input type="submit" value="Speichern"/>
 		</section>
-	</form>
+	</form:form>
 </main>
 </body>
 </html>

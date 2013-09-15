@@ -8,6 +8,16 @@ import java.util.List;
 public final class BallotLayoutBuilderBean {
 	private List<GenderedElectionBuilderBean> elections = new ArrayList<>();
 
+	public BallotLayoutBuilderBean() {
+	}
+
+	public BallotLayoutBuilderBean(
+		int numberOfElections, int numberOfCandidatesPerElection) {
+		for (int i = 0; i < numberOfElections; i++) {
+		elections.add(new GenderedElectionBuilderBean(numberOfCandidatesPerElection));
+		}
+	}
+
 	public List<GenderedElectionBuilderBean> getElections() {
 		return elections;
 	}

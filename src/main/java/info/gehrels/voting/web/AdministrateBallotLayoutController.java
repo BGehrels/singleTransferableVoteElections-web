@@ -2,6 +2,7 @@ package info.gehrels.voting.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,9 +22,13 @@ public final class AdministrateBallotLayoutController {
 	}
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
-	public String addNewElection(@ModelAttribute BallotLayoutBuilderBean form) {
+	public ModelAndView addNewElection(@ModelAttribute BallotLayoutBuilderBean form, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return new ModelAndView("administrateBallotLayout", new ModelMap("ballotLayoutBuilderBean", form));
+		}
+
 		ballotLayoutState.ballotLayout = form.createBallotLayout();
-		return "redirect:/";
+		return new ModelAndView("redirect:/");
 	}
 
 
@@ -32,7 +37,7 @@ public final class AdministrateBallotLayoutController {
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("numberOfElections", numberOfElections);
 		modelMap.addAttribute("numberOfCandidatesPerElection", numberOfCandidatesPerElection);
-		return new ModelAndView("administrateBallotLayout", modelMap);
+		return new ModelAndView("administrateBallotLayout", "ballotLayoutBuilderBean", new BallotLayoutBuilderBean(numberOfElections, numberOfCandidatesPerElection));
 	}
 
 }

@@ -34,7 +34,8 @@
 					<label>Name</label>
 					<input name="elections[${i}].candidates[${j}].name"/>
 					<label>weiblich</label>
-					<input name="elections[${i}].candidates[${j}].female"/>
+					<input type="radio" name="elections[${i}].candidates[${j}].female" value="true" checked="checked" /> Ja
+					<input type="radio" name="elections[${i}].candidates[${j}].female" value="false" /> Nein
 					<br/>
 				</c:forEach>
 			</section>

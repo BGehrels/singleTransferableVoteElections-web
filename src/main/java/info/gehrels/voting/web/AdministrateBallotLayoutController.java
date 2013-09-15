@@ -14,7 +14,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public final class AdministrateBallotLayoutController {
-
 	private final BallotLayoutState ballotLayoutState;
 
 	public AdministrateBallotLayoutController(BallotLayoutState ballotLayoutState) {

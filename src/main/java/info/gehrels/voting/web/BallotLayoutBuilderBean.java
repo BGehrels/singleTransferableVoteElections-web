@@ -5,11 +5,8 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BallotLayoutBuilderBean {
+public final class BallotLayoutBuilderBean {
 	private List<GenderedElectionBuilderBean> elections = new ArrayList<>();
-
-	public BallotLayoutBuilderBean() {
-	}
 
 	public List<GenderedElectionBuilderBean> getElections() {
 		return elections;
@@ -21,7 +18,7 @@ public class BallotLayoutBuilderBean {
 
 	public BallotLayout createBallotLayout() {
 		BallotLayout ballotLayout = new BallotLayout();
-		for (GenderedElectionBuilderBean genderedElectionBuilderBean : getElections()) {
+		for (GenderedElectionBuilderBean genderedElectionBuilderBean : elections) {
 			GenderedElection genderedElection = genderedElectionBuilderBean.build();
 			ballotLayout.addElection(genderedElection);
 		}

@@ -7,7 +7,7 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 
 import java.util.List;
 
-public class GenderedElectionBuilderBean {
+public final class GenderedElectionBuilderBean {
 	private String officeName;
 	private int numberOfFemaleExclusivePositions;
 	private int numberOfNonFemaleExclusivePositions;
@@ -50,7 +50,7 @@ public class GenderedElectionBuilderBean {
 		for (GenderedCandidateBuilderBean candidate : candidates) {
 			builder.add(candidate.build());
 		}
-		return new GenderedElection(this.officeName, this.numberOfFemaleExclusivePositions,
-		                            this.numberOfNonFemaleExclusivePositions, builder.build());
+		return new GenderedElection(officeName, numberOfFemaleExclusivePositions, numberOfNonFemaleExclusivePositions,
+		                            builder.build());
 	}
 }

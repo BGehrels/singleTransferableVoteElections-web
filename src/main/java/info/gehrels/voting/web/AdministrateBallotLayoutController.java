@@ -1,6 +1,7 @@
 package info.gehrels.voting.web;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,8 +29,11 @@ public final class AdministrateBallotLayoutController {
 
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {GET, HEAD})
-	public ModelAndView showCurrentBallotLayout(@RequestParam int numberOfElections) {
-		return new ModelAndView("administrateBallotLayout", "numberOfElections", numberOfElections);
+	public ModelAndView showCurrentBallotLayout(@RequestParam int numberOfElections, @RequestParam int numberOfCandidatesPerElection) {
+		ModelMap modelMap = new ModelMap();
+		modelMap.addAttribute("numberOfElections", numberOfElections);
+		modelMap.addAttribute("numberOfCandidatesPerElection", numberOfCandidatesPerElection);
+		return new ModelAndView("administrateBallotLayout", modelMap);
 	}
 
 }

@@ -20,7 +20,7 @@
 	<form action="/administrateBallotLayout" method="POST">
 		<c:forEach begin="0" end="${numberOfElections-1}" var="i">
 			<section>
-				<h2>Weiteres Amt hinzufügen</h2>
+				<h1>${i+1}. Amt</h1>
 
 				<label>Name des Amtes</label>
 				<input name="elections[${i}].officeName" type="text" required/><br/>
@@ -29,16 +29,14 @@
 				<label>Anzahl offene Plätze</label>
 				<input name="elections[${i}].numberOfNonFemaleExclusivePositions" type="number" required/><br/>
 
-				<h3>Kandidat*innen</h3>
-				<label>Name</label>
-				<input name="elections[${i}].candidates[0].name"/>
-				<label>weiblich</label>
-				<input name="elections[${i}].candidates[0].female"/>
-				<br/>
-				<label>Name</label>
-				<input name="elections[${i}].candidates[1].name"/>
-				<label>weiblich</label>
-				<input name="elections[${i}].candidates[1].female"/>
+				<h2>Kandidat*innen</h2>
+				<c:forEach begin="0" end="${numberOfCandidatesPerElection-1}" var="j">
+					<label>Name</label>
+					<input name="elections[${i}].candidates[${j}].name"/>
+					<label>weiblich</label>
+					<input name="elections[${i}].candidates[${j}].female"/>
+					<br/>
+				</c:forEach>
 			</section>
 		</c:forEach>
 		<section>

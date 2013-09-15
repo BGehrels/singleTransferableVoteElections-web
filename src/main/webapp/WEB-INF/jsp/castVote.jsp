@@ -15,7 +15,7 @@
 	<form method="POST">
 		<section>
 			<label for="ballotId">Stimmzettelnummer</label>
-			<input id="ballotId" name="ballotId" />
+			<input id="ballotId" name="ballotId" type="number" required="required"/>
 		</section>
 		<c:forEach items="${ballotLayout.elections}" var="election" varStatus="electionStatus">
 			<h2><c:out value="${election.officeName}"/></h2>

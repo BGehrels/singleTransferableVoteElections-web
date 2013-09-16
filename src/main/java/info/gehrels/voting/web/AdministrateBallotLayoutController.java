@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
@@ -21,23 +20,35 @@ public final class AdministrateBallotLayoutController {
 		this.ballotLayoutState = ballotLayoutState;
 	}
 
-	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
+	@RequestMapping(value = "/administrateBallotLayout", method = {GET})
+	public ModelAndView showCurrentBallotLayout() {
+		return new ModelAndView("administrateBallotLayout", "ballotLayoutBuilderBean", new BallotLayoutBuilderBean());
+	}
+
+	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"addNewElection"})
 	public ModelAndView addNewElection(@ModelAttribute BallotLayoutBuilderBean form, BindingResult bindingResult) {
+		form.addNewElection();
+		return createModelAndView(form);
+	}
+
+	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"addNewCandidate"})
+	public ModelAndView addNewElection(@RequestParam("addNewCandidate") int electionIndex, @ModelAttribute BallotLayoutBuilderBean form, BindingResult bindingResult) {
+		form.getElections().get(electionIndex).addNewCandidate();
+		return createModelAndView(form);
+	}
+
+	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
+	public ModelAndView saveBallotLayout(@ModelAttribute BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return new ModelAndView("administrateBallotLayout", new ModelMap("ballotLayoutBuilderBean", form));
+			return createModelAndView(form);
 		}
 
 		ballotLayoutState.ballotLayout = form.createBallotLayout();
 		return new ModelAndView("redirect:/");
 	}
 
-
-	@RequestMapping(value = "/administrateBallotLayout", method = {GET, HEAD})
-	public ModelAndView showCurrentBallotLayout(@RequestParam int numberOfElections, @RequestParam int numberOfCandidatesPerElection) {
-		ModelMap modelMap = new ModelMap();
-		modelMap.addAttribute("numberOfElections", numberOfElections);
-		modelMap.addAttribute("numberOfCandidatesPerElection", numberOfCandidatesPerElection);
-		return new ModelAndView("administrateBallotLayout", "ballotLayoutBuilderBean", new BallotLayoutBuilderBean(numberOfElections, numberOfCandidatesPerElection));
+	private ModelAndView createModelAndView(BallotLayoutBuilderBean form) {
+		return new ModelAndView("administrateBallotLayout", new ModelMap("ballotLayoutBuilderBean", form));
 	}
 
 }

@@ -9,21 +9,19 @@ public final class BallotLayoutBuilderBean {
 	private List<GenderedElectionBuilderBean> elections = new ArrayList<>();
 
 	public BallotLayoutBuilderBean() {
-	}
-
-	public BallotLayoutBuilderBean(
-		int numberOfElections, int numberOfCandidatesPerElection) {
-		for (int i = 0; i < numberOfElections; i++) {
-		elections.add(new GenderedElectionBuilderBean(numberOfCandidatesPerElection));
-		}
+		elections.add(new GenderedElectionBuilderBean());
 	}
 
 	public List<GenderedElectionBuilderBean> getElections() {
 		return elections;
 	}
 
-	public void setElection(List<GenderedElectionBuilderBean> elections) {
+	public void setElections(List<GenderedElectionBuilderBean> elections) {
 		this.elections = elections;
+	}
+
+	public void addNewElection() {
+		elections.add(new GenderedElectionBuilderBean(0));
 	}
 
 	public BallotLayout createBallotLayout() {

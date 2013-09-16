@@ -7,8 +7,10 @@ import info.gehrels.voting.web.CastBallotsState;
 import info.gehrels.voting.web.CastVoteController;
 import info.gehrels.voting.web.IndexPageController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -65,6 +67,13 @@ public class SpringConfig {
 	@Bean
 	public CalculateElectionResultsController calculateElectionResultsController() {
 		return new CalculateElectionResultsController(ballotLayoutState(), castBallotsState());
+	}
+
+	@Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("/info/gehrels/voting/web/messages");
+		return messageSource;
 	}
 
 	@PostConstruct

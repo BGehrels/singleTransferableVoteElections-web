@@ -11,6 +11,10 @@
 		label:after {
 			content: ":";
 		}
+
+		form .error {
+			color: red;
+		}
 	</style>
 </head>
 <body>
@@ -23,25 +27,32 @@
 			<section>
 				<h1>${electionsStatus.index+1}. Amt</h1>
 
-				<label>Name des Amtes</label>
-				<form:input path="elections[${electionsStatus.index}].officeName" required="required" /><br />
-				<label>Anzahl Frauenplätze</label>
-				<form:input path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" type="number" required="required" min="0"/><br />
-				<label>Anzahl offene Plätze</label>
-				<form:input path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" type="number" required="required" min="0"/><br />
+				<form:label path="elections[${electionsStatus.index}].officeName" cssErrorClass="error">Name des Amtes</form:label>
+				<form:input path="elections[${electionsStatus.index}].officeName" required="required" />
+				<form:errors path="elections[${electionsStatus.index}].officeName" cssClass="error" /><br />
+				<form:label path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" cssErrorClass="error">Anzahl Frauenplätze</form:label>
+				<form:input path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" type="number" required="required" min="0"/>
+				<form:errors path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" cssClass="error" /><br />
+				<form:label path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" cssErrorClass="error">Anzahl offene Plätze</form:label>
+				<form:input path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" type="number" required="required" min="0"/>
+				<form:errors path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" cssClass="error" /><br />
 
 				<h2>Kandidat*innen</h2>
 				<c:forEach items="${election.candidates}" varStatus="candidatesStatus">
-					<label>Name</label>
+					<form:label path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].name" cssErrorClass="error">Name</form:label>
 					<form:input path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].name" required="required" />
 					<label>weiblich</label>
 					<form:radiobutton path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].female" value="true" /> Ja
 					<form:radiobutton path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].female" value="false" /> Nein
+					<form:errors path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].name" cssClass="error" />
+					<form:errors path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].female" cssClass="error" /><br />
 					<br/>
 				</c:forEach>
+				<form:button name="addNewCandidate" value="${electionsStatus.index}">Weitere_n Kandidat_in hinzufügen</form:button>
 			</section>
 		</c:forEach>
 		<section>
+			<form:button type="submit" name="addNewElection">Weiteres Amt hinzufügen</form:button>
 			<input type="submit" value="Speichern"/>
 		</section>
 	</form:form>

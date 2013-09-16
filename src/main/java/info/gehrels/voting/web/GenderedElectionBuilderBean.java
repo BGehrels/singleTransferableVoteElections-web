@@ -15,6 +15,7 @@ public final class GenderedElectionBuilderBean {
 	private List<GenderedCandidateBuilderBean> candidates = new ArrayList<>();
 
 	public GenderedElectionBuilderBean() {
+		candidates.add(new GenderedCandidateBuilderBean());
 	}
 
 	public GenderedElectionBuilderBean(int numberOfCandidates) {
@@ -62,5 +63,9 @@ public final class GenderedElectionBuilderBean {
 		}
 		return new GenderedElection(officeName, numberOfFemaleExclusivePositions, numberOfNonFemaleExclusivePositions,
 		                            builder.build());
+	}
+
+	public void addNewCandidate() {
+		candidates.add(candidates.size(), new GenderedCandidateBuilderBean());
 	}
 }

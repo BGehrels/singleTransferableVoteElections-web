@@ -4,14 +4,21 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class GenderedElectionBuilderBean {
+	@NotEmpty
 	private String officeName;
+	@Min(0)
 	private int numberOfFemaleExclusivePositions;
+	@Min(0)
 	private int numberOfNonFemaleExclusivePositions;
+	@NotEmpty @Valid
 	private List<GenderedCandidateBuilderBean> candidates = new ArrayList<>();
 
 	public GenderedElectionBuilderBean() {

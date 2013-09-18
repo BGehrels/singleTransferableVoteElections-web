@@ -1,11 +1,15 @@
 package info.gehrels.voting.web;
 
 import info.gehrels.voting.genderedElections.GenderedElection;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class BallotLayoutBuilderBean {
+	@Valid
+	@NotEmpty
 	private List<GenderedElectionBuilderBean> elections = new ArrayList<>();
 
 	public BallotLayoutBuilderBean() {

@@ -3,10 +3,11 @@ package info.gehrels.voting.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -21,24 +22,24 @@ public final class AdministrateBallotLayoutController {
 	}
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {GET})
-	public ModelAndView showCurrentBallotLayout() {
+	public ModelAndView showNewEmptyBallotLayout() {
 		return new ModelAndView("administrateBallotLayout", "ballotLayoutBuilderBean", new BallotLayoutBuilderBean());
 	}
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"addNewElection"})
-	public ModelAndView addNewElection(@ModelAttribute BallotLayoutBuilderBean form, BindingResult bindingResult) {
+	public ModelAndView addNewElection(@Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		form.addNewElection();
 		return createModelAndView(form);
 	}
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"addNewCandidate"})
-	public ModelAndView addNewElection(@RequestParam("addNewCandidate") int electionIndex, @ModelAttribute BallotLayoutBuilderBean form, BindingResult bindingResult) {
+	public ModelAndView addNewElection(@RequestParam("addNewCandidate") int electionIndex, @Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		form.getElections().get(electionIndex).addNewCandidate();
 		return createModelAndView(form);
 	}
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
-	public ModelAndView saveBallotLayout(@ModelAttribute BallotLayoutBuilderBean form, BindingResult bindingResult) {
+	public ModelAndView saveBallotLayout(@Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return createModelAndView(form);
 		}

@@ -1,8 +1,10 @@
 package info.gehrels.voting.web;
 
 import info.gehrels.voting.genderedElections.GenderedCandidate;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public final class GenderedCandidateBuilderBean {
+	@NotEmpty
 	private String name;
 	private boolean female;
 

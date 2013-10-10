@@ -8,9 +8,12 @@ import info.gehrels.voting.Ballot.ElectionCandidatePreference;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
@@ -29,10 +32,14 @@ public final class CastVoteController {
 	}
 
 	@RequestMapping(value = "/castVote", method = {POST, PUT})
-	public String doCastVote(@ModelAttribute CastVoteForm castVoteForm) {
+	public ModelAndView doCastVote(@Valid CastVoteForm castVoteForm, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return createModelAndView(castVoteForm);
+		}
+
 		castBallotsState.castBallotsById.put(castVoteForm.getBallotId(), createBallotFromForm(castVoteForm));
 
-		return "redirect:/castVote";
+		return new ModelAndView("redirect:/castVote");
 	}
 
 	@RequestMapping(value = "/castVote", method = {HEAD, GET})
@@ -41,7 +48,14 @@ public final class CastVoteController {
 			return new ModelAndView("redirect:/");
 		}
 
-		return new ModelAndView("castVote", "ballotLayout", ballotLayoutState.ballotLayout);
+		return createModelAndView(new CastVoteForm());
+	}
+
+	private ModelAndView createModelAndView(CastVoteForm castVoteForm) {
+		ModelMap modelMap = new ModelMap();
+		modelMap.addAttribute("ballotLayout", ballotLayoutState.ballotLayout);
+		modelMap.addAttribute("castVoteForm", castVoteForm);
+		return new ModelAndView("castVote", modelMap);
 	}
 
 	private Ballot<GenderedCandidate> createBallotFromForm(CastVoteForm castVoteForm) {

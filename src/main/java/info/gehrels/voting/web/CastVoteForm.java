@@ -1,9 +1,12 @@
 package info.gehrels.voting.web;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 public final class CastVoteForm {
+	@Min(0)
 	private int ballotId;
+
 	private List<String> votesByElectionId;
 
 	public int getBallotId() {

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.apache.commons.math3.fraction.BigFraction.getReducedFraction;
+import static org.apache.commons.math3.fraction.BigFraction.ONE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
 
@@ -54,17 +54,45 @@ public final class CalculateElectionResultsController {
 		auditLogBuilder.setLength(0);
 	}
 
-	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation(
-		StringBuilder auditLogBuilder) {
+	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation(StringBuilder auditLogBuilder) {
 		return new ElectionCalculationWithFemaleExclusivePositions(
 			new STVElectionCalculationFactory<>(
-				new NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum(getReducedFraction(1, 10)),
+				createQuorumCalculation(),
 				new StringBuilderBackedSTVElectionCalculationListener<GenderedCandidate>(auditLogBuilder),
 				new TakeFirstOneAmbiguityResolver()),
 			new StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener(auditLogBuilder));
 	}
 
+	private NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum createQuorumCalculation() {
+		// § 18 Satz 2 Nr. 2 WahlO-GJ:
+		// Berechne das Quorum: q = [(gültige Stimmen) / (zu vergebende Sitze + 1)] +1. Hat der so berechnete Wert des
+		// Quorums mehr als sieben Nachkommastellen, so wird das Quorum auf sieben Nachkommastellen aufgerundet, d.h.
+		// die überzähligen	Nachkommastellen werden abgeschnitten und der Wert des Quorums wird	um die	kleinste
+		// positive Zahl, die mit sieben Nachkommastellen darstellbar ist, erhöht.
+		// TODO: SÄ zur Streichung der Rundung bei der Quorenberechnung
+		return new NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum(ONE);
+	}
+
 	// TODO: Verfahren nach Satzung implementieren
+	// § 18 Satz 2 Nr. 7 sub (II) WahlO-GJ:
+	// Haben mehrere KandidatInnen einen Überschuss, so wird zunächst der größte Überschuss übertragen. Haben zwei oder
+	// mehr KandidatInnen einen gleich großen Überschuss, so wird der Überschuss jener / jenes dieser KandidatInnen
+	// zuerst übertragen, die / der die meisten Stimmen hatte, als sich die	Stimmenzahl der	betreffenden KandidatInnen
+	// zuletzt unterschied; hatten zwei oder mehr dieser KandidatInnen zu jedem Zeitpunkt jeweils die gleiche
+	// Stimmenzahl, so wird durch eine Zufallsauswahl entschieden, welcher Überschuss als erstes übertragen wird.
+	// TODO: Eventuell eine synchrone Übertragung bei Gleichstand in die Satzung schreiben?
+	// TODO: Auch für die Stimmgewichtsübertragung bei Patt beim Streichen von Kandidierenden einfacheres Verfahren finden:
+	// § 18 Satz 2 Nr. 8 sub (i) WahlO-GJ
+	// Falls zwei oder mehr KandidatInnen gleichermaßen die wenigsten Stimmen haben, so wird jeneR dieser KandidatInnen
+	// aus dem Rennen genommen, die / der die wenigsten Stimmen hatte, als sich die Stimmenzahl der betreffenden
+	// KandidatInnen zuletzt unterschied; hatten zwei oder mehr dieser KandidatInnen zu jedem Zeitpunkt jeweils die
+	// gleiche Stimmenzahl, so wird durch eine Zufallsauswahl entschieden, welcheR dieser KandidatInnen aus dem Rennen
+	// ausscheidet
+	/*
+	 * § 19 Abs. 4 WahlO-GJ:
+	 * Sofern Zufallsauswahlen gemäß § 18 Nr. 7, 8 erforderlich sind, entscheidet das von der Tagungsleitung zu ziehende
+	 * Los; die Ziehung und die Eingabe des Ergebnisses in den Computer müssen mitgliederöffentlich erfolgen.
+	 */
 	private static final class TakeFirstOneAmbiguityResolver implements AmbiguityResolver<GenderedCandidate> {
 		@Override
 		public AmbiguityResolverResult<GenderedCandidate> chooseOneOfMany(

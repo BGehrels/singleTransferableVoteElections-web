@@ -25,7 +25,7 @@ public final class BallotLayoutBuilderBean {
 	}
 
 	public void addNewElection() {
-		elections.add(new GenderedElectionBuilderBean(0));
+		elections.add(new GenderedElectionBuilderBean());
 	}
 
 	public BallotLayout createBallotLayout() {

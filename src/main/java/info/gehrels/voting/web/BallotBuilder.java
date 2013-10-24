@@ -1,5 +1,6 @@
 package info.gehrels.voting.web;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import info.gehrels.voting.Ballot;
@@ -7,13 +8,15 @@ import info.gehrels.voting.Vote;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-public final class CastVoteBuilder {
+public final class BallotBuilder {
 	@Min(0)
-	private int ballotId;
+	private Integer ballotId;
 
+	@Valid
 	private List<VoteBuilder> votesByElectionId;
 
 	public int getBallotId() {
@@ -37,8 +40,10 @@ public final class CastVoteBuilder {
 		int i = 0;
 		Builder<Vote<GenderedCandidate>> preferenceSetBuilder = ImmutableSet.builder();
 		for (GenderedElection genderedElection : ballotLayout.getElections()) {
-			Vote<GenderedCandidate> preference =  votesByElectionId.get(i).createPreference(genderedElection);
-			preferenceSetBuilder.add(preference);
+			Optional<Vote<GenderedCandidate>> vote = votesByElectionId.get(i).createVote(genderedElection);
+			if (vote.isPresent()) {
+				preferenceSetBuilder.add(vote.get());
+			}
 			i++;
 		}
 

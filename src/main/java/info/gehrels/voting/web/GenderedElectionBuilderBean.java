@@ -25,12 +25,6 @@ public final class GenderedElectionBuilderBean {
 		candidates.add(new GenderedCandidateBuilderBean());
 	}
 
-	public GenderedElectionBuilderBean(int numberOfCandidates) {
-		for (int i = 0; i < numberOfCandidates; i++) {
-			candidates.add(new GenderedCandidateBuilderBean());
-		}
-	}
-
 	public String getOfficeName() {
 		return officeName;
 	}

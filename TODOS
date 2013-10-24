@@ -7,3 +7,5 @@
 - Gegenprüfen von Stimmen?!
 - Formularvalidierung bei Stimmzetteleingabe
 - ABC vor die einzelnen Namen der Stimmzetteleingabe schreiben
+- validieren: Keine zwei Ballots mit der selben ID
+- Errorhandling: leere Präferenz, wenn Präferenz ausgewählt

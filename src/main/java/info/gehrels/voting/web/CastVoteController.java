@@ -25,12 +25,12 @@ public final class CastVoteController {
 	}
 
 	@RequestMapping(value = "/castVote", method = {POST, PUT})
-	public ModelAndView doCastVote(@Valid CastVoteBuilder castVoteBuilder, BindingResult bindingResult) {
+	public ModelAndView doCastVote(@Valid BallotBuilder ballotBuilder, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return createModelAndView(castVoteBuilder);
+			return createModelAndView(ballotBuilder);
 		}
 
-		castBallotsState.castBallotsById.put(castVoteBuilder.getBallotId(), castVoteBuilder.createBallotFromForm(ballotLayoutState.ballotLayout));
+		castBallotsState.castBallotsById.put(ballotBuilder.getBallotId(), ballotBuilder.createBallotFromForm(ballotLayoutState.ballotLayout));
 
 		return new ModelAndView("redirect:/castVote");
 	}
@@ -41,13 +41,13 @@ public final class CastVoteController {
 			return new ModelAndView("redirect:/");
 		}
 
-		return createModelAndView(new CastVoteBuilder());
+		return createModelAndView(new BallotBuilder());
 	}
 
-	private ModelAndView createModelAndView(CastVoteBuilder castVoteBuilder) {
+	private ModelAndView createModelAndView(BallotBuilder ballotBuilder) {
 		ModelMap modelMap = new ModelMap();
 		modelMap.addAttribute("ballotLayout", ballotLayoutState.ballotLayout);
-		modelMap.addAttribute("castVoteBuilder", castVoteBuilder);
+		modelMap.addAttribute("ballotBuilder", ballotBuilder);
 		return new ModelAndView("castVote", modelMap);
 	}
 

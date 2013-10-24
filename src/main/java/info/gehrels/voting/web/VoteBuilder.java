@@ -1,5 +1,6 @@
 package info.gehrels.voting.web;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Iterables;
@@ -7,8 +8,13 @@ import info.gehrels.voting.Vote;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
 
+import javax.validation.constraints.NotNull;
+
 public final class VoteBuilder {
+	@NotNull
 	private Type type;
+
+	@NotNull
 	private String preferenceString;
 
 	public Type getType() {
@@ -27,7 +33,22 @@ public final class VoteBuilder {
 		this.preferenceString = preferenceString;
 	}
 
-	public Vote<GenderedCandidate> createPreference(GenderedElection genderedElection) {
+	public Optional<Vote<GenderedCandidate>> createVote(GenderedElection genderedElection) {
+		switch (type) {
+			case PREFERENCE:
+				return Optional.of(createPreferenceVote(genderedElection));
+			case NO:
+				return Optional.of(Vote.createNoVote(genderedElection));
+			case INVALID:
+				return Optional.of(Vote.createInvalidVote(genderedElection));
+			case NOT_VOTED:
+				return Optional.absent();
+			default:
+				throw new IllegalStateException("Unkown type " + type);
+		}
+	}
+
+	private Vote<GenderedCandidate> createPreferenceVote(GenderedElection genderedElection) {
 		Builder<GenderedCandidate> preferenceBuilder = ImmutableSet.builder();
 		for (char c : preferenceString.toUpperCase().toCharArray()) {
 			int candidateIndex = c-'A';
@@ -37,6 +58,6 @@ public final class VoteBuilder {
 	}
 
 	private enum Type {
-		PREFERENCE, NO, NOT_VOTED
+		PREFERENCE, NO, NOT_VOTED, INVALID
 	}
 }

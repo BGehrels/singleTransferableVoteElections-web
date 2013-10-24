@@ -22,10 +22,10 @@
 	<h1>Stimmzettel eingeben</h1>
 </header>
 <main>
-	<form:form method="POST" action="/castVote" commandName="castVoteBuilder">
+	<form:form method="POST" action="/castVote" commandName="ballotBuilder">
 		<section>
 			<form:label path="ballotId" cssErrorClass="error">Stimmzettelnummer</form:label>
-			<form:input path="ballotId" cssErrorClass="error" type="number" required="required"/>
+			<form:input path="ballotId" cssErrorClass="error" type="number" required="required" autofocus="autofocus"/>
 			<form:errors path="ballotId" cssClass="error" /><br />
 		</section>
 		<c:forEach items="${ballotLayout.elections}" var="election" varStatus="electionStatus">
@@ -39,6 +39,7 @@
 			<form:input path="votesByElectionId[${electionStatus.index}].preferenceString" cssErrorClass="error" type="text" />
 			<form:errors path="votesByElectionId[${electionStatus.index}].preferenceString" cssClass="error" /><br />
             <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="NO" label="Nein" /><br/>
+            <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="INVALID" label="Ungültig" /><br/>
             <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="NOT_VOTED" label="Keine Stimmabgabe" />
 		</c:forEach>
 		<section>

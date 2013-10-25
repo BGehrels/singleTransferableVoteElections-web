@@ -10,20 +10,21 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public final class BallotBuilder {
-	@Min(0)
+	@Min(0) @NotNull
 	private Integer ballotId;
 
-	@Valid
+	@Valid @NotNull
 	private List<VoteBuilder> votesByElectionId;
 
-	public int getBallotId() {
+	public Integer getBallotId() {
 		return ballotId;
 	}
 
-	public void setBallotId(int ballotId) {
+	public void setBallotId(Integer ballotId) {
 		this.ballotId = ballotId;
 	}
 

@@ -39,9 +39,8 @@ public final class CalculateElectionResultsController {
 
 		for (GenderedElection election : ballotLayoutState.ballotLayout.getElections()) {
 			reset(auditLogBuilder);
-			// TODO: Spätestens hinter dem Funktionsaufruf sicherstellen, dass keine zwei Ballots mit der selben ID reingegeben werden
 			Result electionResult = electionCalculation
-				.calculateElectionResult(election, ImmutableList.copyOf(castBallotsState.castBallotsById.values()));
+				.calculateElectionResult(election, ImmutableList.copyOf(castBallotsState.castBallotsById));
 			String auditLog = auditLogBuilder.toString();
 			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLog));
 		}

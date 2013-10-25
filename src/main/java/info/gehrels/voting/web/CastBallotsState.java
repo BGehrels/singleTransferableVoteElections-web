@@ -3,9 +3,9 @@ package info.gehrels.voting.web;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CastBallotsState {
-	public final Map<Integer, Ballot<GenderedCandidate>> castBallotsById = new HashMap<>();
+	public final Set<Ballot<GenderedCandidate>> castBallotsById = new HashSet<>();
 }

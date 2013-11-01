@@ -30,7 +30,7 @@ public final class CastVoteController {
 			return createModelAndView(ballotBuilder);
 		}
 
-		castBallotsState.castBallotsById.add(ballotBuilder.createBallotFromForm(ballotLayoutState.ballotLayout));
+		castBallotsState.firstTryCastBallots.add(ballotBuilder.createBallotFromForm(ballotLayoutState.ballotLayout));
 
 		return new ModelAndView("redirect:/castVote");
 	}

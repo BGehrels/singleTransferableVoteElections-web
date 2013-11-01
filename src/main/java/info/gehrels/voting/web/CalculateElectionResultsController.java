@@ -11,10 +11,12 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 import info.gehrels.voting.genderedElections.StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener;
 import info.gehrels.voting.singleTransferableVote.STVElectionCalculationFactory;
 import info.gehrels.voting.singleTransferableVote.StringBuilderBackedSTVElectionCalculationListener;
+import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import static info.gehrels.voting.web.BallotIterableDiffCalculator.calculateDiff;
 import static org.apache.commons.math3.fraction.BigFraction.ONE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
@@ -31,6 +33,16 @@ public final class CalculateElectionResultsController {
 
 	@RequestMapping(value = "/calculateElectionResults", method = {HEAD, GET})
 	public ModelAndView doGet() {
+		BallotIterableDiff ballotIterableDiff = calculateDiff(castBallotsState.firstTryCastBallots,
+		                                            castBallotsState.secondTryCastBallots);
+		if (ballotIterableDiff.isDifferent()) {
+			return new ModelAndView("handleDifferingBallotCollections", "ballotIterableDiff", ballotIterableDiff);
+		}
+
+		return calculateAndShowElectionResult();
+	}
+
+	private ModelAndView calculateAndShowElectionResult() {
 		StringBuilder auditLogBuilder = new StringBuilder();
 		ElectionCalculationWithFemaleExclusivePositions electionCalculation =
 			createGenderedElectionCalculation(auditLogBuilder);
@@ -40,7 +52,7 @@ public final class CalculateElectionResultsController {
 		for (GenderedElection election : ballotLayoutState.ballotLayout.getElections()) {
 			reset(auditLogBuilder);
 			Result electionResult = electionCalculation
-				.calculateElectionResult(election, ImmutableList.copyOf(castBallotsState.castBallotsById));
+				.calculateElectionResult(election, ImmutableList.copyOf(castBallotsState.firstTryCastBallots));
 			String auditLog = auditLogBuilder.toString();
 			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLog));
 		}
@@ -53,7 +65,8 @@ public final class CalculateElectionResultsController {
 		auditLogBuilder.setLength(0);
 	}
 
-	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation(StringBuilder auditLogBuilder) {
+	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation(
+		StringBuilder auditLogBuilder) {
 		return new ElectionCalculationWithFemaleExclusivePositions(
 			new STVElectionCalculationFactory<>(
 				createQuorumCalculation(),

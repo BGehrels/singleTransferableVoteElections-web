@@ -6,7 +6,7 @@ import info.gehrels.voting.Ballot;
 import info.gehrels.voting.Candidate;
 import info.gehrels.voting.Election;
 import info.gehrels.voting.Vote;
-import info.gehrels.voting.web.BallotIterableDiffer.BallotIterableDiff;
+import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 
-public final class BallotIterableDifferTest {
+public final class BallotIterableDiffCalculatorTest {
 
 	public static final ImmutableList<Ballot<Candidate>> EMPTY_BALLOT_LIST = ImmutableList.of();
 	public static final Candidate PETER = new Candidate("Peter");
@@ -24,7 +24,8 @@ public final class BallotIterableDifferTest {
 
 	@Test
 	public void calculatesEqualityBetweenEmptyBallotCollections() {
-		BallotIterableDiff ballotIterableDiff = BallotIterableDiffer.calculateDiff(EMPTY_BALLOT_LIST, EMPTY_BALLOT_LIST);
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
+			.calculateDiff(EMPTY_BALLOT_LIST, EMPTY_BALLOT_LIST);
 
 		assertThat(ballotIterableDiff.isEqual(), is(true));
 		assertThat(ballotIterableDiff.isDifferent(), is(false));
@@ -34,7 +35,7 @@ public final class BallotIterableDifferTest {
 	public void calculatesEqualityBetweenTwoBallotCollectionsWithEqualContent() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
 		Ballot<Candidate> ballot2 = createBallot(5L, PETER);
-		BallotIterableDiff ballotIterableDiff = BallotIterableDiffer
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
 			.calculateDiff(ImmutableList.of(ballot1), ImmutableList.of(ballot2));
 
 		assertThat(ballotIterableDiff.isEqual(), is(true));
@@ -45,78 +46,78 @@ public final class BallotIterableDifferTest {
 	public void calculatesDifferenceIfFirstCollectionHasTwoBallotsWithTheSameId() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
 		Ballot<Candidate> ballot2 = createBallot(5L, GUNDULA);
-		BallotIterableDiff ballotIterableDiff = BallotIterableDiffer
-			.calculateDiff(ImmutableList.of(ballot1, ballot2), ImmutableList.of(ballot2));
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
+			.calculateDiff(ImmutableList.of(ballot1, ballot2), ImmutableList.<Ballot<Candidate>>of());
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
-		assertThat(ballotIterableDiff.setAsDuplicateIds, contains(5L));
-		assertThat(ballotIterableDiff.setBsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.inAButNotInB, is(empty()));
-		assertThat(ballotIterableDiff.inBButNotInA, is(empty()));
-		assertThat(ballotIterableDiff.differentBetweenTheTwoSets, is(empty()));
+		assertThat(ballotIterableDiff.getSetAsDuplicateIds(), contains(5L));
+		assertThat(ballotIterableDiff.getSetBsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
+		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
+		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
 	}
 
 	@Test
 	public void calculatesDifferenceIfSecondCollectionHasTwoBallotsWithTheSameId() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
 		Ballot<Candidate> ballot2 = createBallot(5L, GUNDULA);
-		BallotIterableDiff ballotIterableDiff = BallotIterableDiffer
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
 			.calculateDiff(ImmutableList.of(ballot1), ImmutableList.of(ballot1, ballot2));
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
-		assertThat(ballotIterableDiff.setAsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.setBsDuplicateIds, contains(5L));
-		assertThat(ballotIterableDiff.inAButNotInB, is(empty()));
-		assertThat(ballotIterableDiff.inBButNotInA, is(empty()));
-		assertThat(ballotIterableDiff.differentBetweenTheTwoSets, is(empty()));
+		assertThat(ballotIterableDiff.getSetAsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getSetBsDuplicateIds(), contains(5L));
+		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
+		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
+		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
 	}
 
 	@Test
 	public void calculatesDifferenceIfFirstCollectionHasAMemberThatDoesNotExistInTheSecondOne() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
-		BallotIterableDiff ballotIterableDiff = BallotIterableDiffer
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
 			.calculateDiff(ImmutableList.of(ballot1), ImmutableList.<Ballot<Candidate>>of());
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
-		assertThat(ballotIterableDiff.setAsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.setBsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.inAButNotInB, contains(5L));
-		assertThat(ballotIterableDiff.inBButNotInA, is(empty()));
-		assertThat(ballotIterableDiff.differentBetweenTheTwoSets, is(empty()));
+		assertThat(ballotIterableDiff.getSetAsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getSetBsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getInAButNotInB(), contains(5L));
+		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
+		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
 	}
 
 	@Test
 	public void calculatesDifferenceIfSecondCollectionHasAMemberThatDoesNotExistInTheFirstOne() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
-		BallotIterableDiff ballotIterableDiff = BallotIterableDiffer
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
 			.calculateDiff(ImmutableList.<Ballot<Candidate>>of(), ImmutableList.of(ballot1));
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
-		assertThat(ballotIterableDiff.setAsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.setBsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.inAButNotInB, is(empty()));
-		assertThat(ballotIterableDiff.inBButNotInA, contains(5L));
-		assertThat(ballotIterableDiff.differentBetweenTheTwoSets, is(empty()));
+		assertThat(ballotIterableDiff.getSetAsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getSetBsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
+		assertThat(ballotIterableDiff.getInBButNotInA(), contains(5L));
+		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
 	}
 
 	@Test
 	public void calculatesDifferenceIfBothCollectionsContainAMemberWithTheSameIdButDifferent() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
 		Ballot<Candidate> ballot2 = createBallot(5L, GUNDULA);
-		BallotIterableDiff ballotIterableDiff = BallotIterableDiffer
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
 			.calculateDiff(ImmutableList.of(ballot1), ImmutableList.of(ballot2));
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
-		assertThat(ballotIterableDiff.setAsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.setBsDuplicateIds, is(empty()));
-		assertThat(ballotIterableDiff.inAButNotInB, is(empty()));
-		assertThat(ballotIterableDiff.inBButNotInA, is(empty()));
-		assertThat(ballotIterableDiff.differentBetweenTheTwoSets, contains(5L));
+		assertThat(ballotIterableDiff.getSetAsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getSetBsDuplicateIds(), is(empty()));
+		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
+		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
+		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), contains(5L));
 	}
 
 	private Ballot<Candidate> createBallot(long id, Candidate... candidate) {

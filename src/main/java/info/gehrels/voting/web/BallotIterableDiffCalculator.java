@@ -15,7 +15,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
-public final class BallotIterableDiffer {
+public final class BallotIterableDiffCalculator {
 	private static final Function<Ballot<?>, Long> GET_ID_FROM_BALLOT_FUNCTION = new Function<Ballot<?>, Long>() {
 		@Override
 		public Long apply(Ballot<?> input) {
@@ -23,7 +23,7 @@ public final class BallotIterableDiffer {
 		}
 	};
 
-	private BallotIterableDiffer() {
+	private BallotIterableDiffCalculator() {
 	}
 
 	public static <T extends Candidate> BallotIterableDiff calculateDiff(Iterable<Ballot<T>> ballotSetA,
@@ -32,9 +32,16 @@ public final class BallotIterableDiffer {
 		Set<Long> setBsDuplicateIds = findDuplicateIds(ballotSetB);
 
 		Set<Long> inAButNotInB = inAButNotInB(ballotSetA, ballotSetB);
+		inAButNotInB.removeAll(setAsDuplicateIds);
+
 		Set<Long> inBButNotInA = inAButNotInB(ballotSetB, ballotSetA);
+		inBButNotInA.removeAll(setBsDuplicateIds);
 
 		Set<Long> differentBetweenTheTwoSets = differentBetweenSetAAndSetB(ballotSetA, ballotSetB);
+		differentBetweenTheTwoSets.removeAll(setAsDuplicateIds);
+		differentBetweenTheTwoSets.removeAll(setBsDuplicateIds);
+		differentBetweenTheTwoSets.removeAll(inAButNotInB);
+		differentBetweenTheTwoSets.removeAll(inBButNotInA);
 
 		return new BallotIterableDiff(setAsDuplicateIds, setBsDuplicateIds, inAButNotInB, inBButNotInA,
 		                         differentBetweenTheTwoSets);
@@ -45,13 +52,12 @@ public final class BallotIterableDiffer {
 	                                                                           Iterable<Ballot<T>> ballotSetB) {
 		Set<Long> idsOfDifferingBallots = new HashSet<>();
 
-		Multimap<Long, Ballot<T>> idsToBallotSetMultimapForA = asIdToBallotsMulitmap(ballotSetA);
 		Multimap<Long, Ballot<T>> idsToBallotSetMultimapForB = asIdToBallotsMulitmap(ballotSetB);
-		for (Entry<Long, Collection<Ballot<T>>> entry : idsToBallotSetMultimapForA.asMap().entrySet()) {
-			Collection<Ballot<T>> ballots = idsToBallotSetMultimapForB.get(entry.getKey());
-			if ((entry.getValue().size() == 1) && (ballots.size() == 1)) { // Otherwise, it would have already been counted as non unique id
-				if (!entry.getValue().iterator().next().equals(ballots.iterator().next())) {
-					idsOfDifferingBallots.add(entry.getKey());
+		for (Ballot<T> ballotFromSetA : ballotSetA) {
+			Collection<Ballot<T>> ballotsFromSetB = idsToBallotSetMultimapForB.get(ballotFromSetA.id);
+			for (Ballot<T> ballotFromSetB : ballotsFromSetB) {
+				if (!ballotFromSetA.equals(ballotFromSetB)) {
+					idsOfDifferingBallots.add(ballotFromSetA.id);
 				}
 			}
 		}
@@ -97,11 +103,11 @@ public final class BallotIterableDiffer {
 	}
 
 	public static final class BallotIterableDiff {
-		public final ImmutableSet<Long> setAsDuplicateIds;
-		public final ImmutableSet<Long> setBsDuplicateIds;
-		public final ImmutableSet<Long> inAButNotInB;
-		public final ImmutableSet<Long> inBButNotInA;
-		public final ImmutableSet<Long> differentBetweenTheTwoSets;
+		private final ImmutableSet<Long> setAsDuplicateIds;
+		private final ImmutableSet<Long> setBsDuplicateIds;
+		private final ImmutableSet<Long> inAButNotInB;
+		private final ImmutableSet<Long> inBButNotInA;
+		private final ImmutableSet<Long> differentBetweenTheTwoSets;
 
 		private BallotIterableDiff(Set<Long> setAsDuplicateIds,
 		                           Set<Long> setBsDuplicateIds,
@@ -125,6 +131,26 @@ public final class BallotIterableDiffer {
 			       inAButNotInB.isEmpty() &&
 			       inBButNotInA.isEmpty() &&
 			       differentBetweenTheTwoSets.isEmpty();
+		}
+
+		public ImmutableSet<Long> getSetAsDuplicateIds() {
+			return setAsDuplicateIds;
+		}
+
+		public ImmutableSet<Long> getSetBsDuplicateIds() {
+			return setBsDuplicateIds;
+		}
+
+		public ImmutableSet<Long> getInAButNotInB() {
+			return inAButNotInB;
+		}
+
+		public ImmutableSet<Long> getInBButNotInA() {
+			return inBButNotInA;
+		}
+
+		public ImmutableSet<Long> getDifferentBetweenTheTwoSets() {
+			return differentBetweenTheTwoSets;
 		}
 	}
 }

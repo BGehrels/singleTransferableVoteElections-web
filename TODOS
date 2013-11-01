@@ -1,6 +1,4 @@
-- Ungültige Stimmen
-- Nein-Stimmen
-- Nicht abgegebene Stimmen?
+- Nein und Ungültige Stimmen in den Zwischenschritten ausweisen...
 - Losverfahren eingeben können
 - Dafür Background-Task erstellen
 - Rechte-Management?!
@@ -9,3 +7,4 @@
 - ABC vor die einzelnen Namen der Stimmzetteleingabe schreiben
 - validieren: Keine zwei Ballots mit der selben ID
 - Errorhandling: leere Präferenz, wenn Präferenz ausgewählt
+- Zrück zur Startseite auf alle Seiten klatschen.

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <jsp:useBean id="ballotLayout" scope="request" type="info.gehrels.voting.web.BallotLayout"/>
+<jsp:useBean id="firstOrSecondTry" scope="request" type="info.gehrels.voting.web.BallotInputTry"/>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -23,6 +24,7 @@
 </header>
 <main>
 	<form:form method="POST" action="/castVote" commandName="ballotBuilder">
+        <input type="hidden" name="firstOrSecondTry" value="${firstOrSecondTry}" />
 		<section>
 			<form:label path="ballotId" cssErrorClass="error">Stimmzettelnummer</form:label>
 			<form:input path="ballotId" cssErrorClass="error" type="number" required="required" autofocus="autofocus"/>

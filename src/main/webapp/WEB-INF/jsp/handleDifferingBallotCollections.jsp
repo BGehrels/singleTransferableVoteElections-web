@@ -10,6 +10,7 @@
     <title>Wahlergebnisse - Wahlauszählungen nach der Weighted Inclusive Gregory Method</title>
 </head>
 <body>
+<main>
 <h1>Wahlberechnung nicht möglich</h1>
 
 <p>Es gibt noch Abweichungen zwischen der Ersteingabe der Stimmzettel und der Kontrolleingabe. Es besteht nun die
@@ -60,5 +61,7 @@
     </ul>
 </c:if>
 </form>
+</main>
+<footer><a href="/">Zurück zur Startseite</a></footer>
 </body>
 </html>

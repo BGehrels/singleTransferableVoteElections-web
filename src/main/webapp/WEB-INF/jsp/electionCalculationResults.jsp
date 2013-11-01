@@ -8,6 +8,7 @@
 	<title>Wahlergebnisse - Wahlauszählungen nach der Weighted Inclusive Gregory Method</title>
 </head>
 <body>
+<main>
 <h1>Wahlergebnisse</h1>
 <c:forEach var="calculationResult" items="${resultModel}">
 <section>
@@ -28,5 +29,7 @@
 	<pre><c:out value="${calculationResult.auditLog}" /></pre>
 </section>
 </c:forEach>
+</main>
+<footer><a href="/">Zurück zur Startseite</a></footer>
 </body>
 </html>

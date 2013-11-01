@@ -5,6 +5,7 @@ import info.gehrels.voting.web.BallotLayoutState;
 import info.gehrels.voting.web.CalculateElectionResultsController;
 import info.gehrels.voting.web.CastBallotsState;
 import info.gehrels.voting.web.CastVoteController;
+import info.gehrels.voting.web.DeleteBallotController;
 import info.gehrels.voting.web.IndexPageController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -43,6 +44,11 @@ public class SpringConfig {
 	@Bean
 	public CastVoteController castVoteController() {
 		return new CastVoteController(ballotLayoutState(), castBallotsState());
+	}
+
+	@Bean
+	public DeleteBallotController deleteBallotController() {
+		return new DeleteBallotController(castBallotsState());
 	}
 
 	@Bean

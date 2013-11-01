@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Collection;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
@@ -34,19 +33,10 @@ public final class CastVoteController {
 			return createModelAndView(ballotBuilder, firstOrSecondTry);
 		}
 
-		getCastBallotsState(firstOrSecondTry).add(ballotBuilder.createBallotFromForm(ballotLayoutState.ballotLayout));
+		Ballot<GenderedCandidate> ballotFromForm = ballotBuilder.createBallotFromForm(ballotLayoutState.ballotLayout);
+		castBallotsState.add(firstOrSecondTry, ballotFromForm);
 
 		return new ModelAndView("redirect:/castVote?firstOrSecondTry="+ firstOrSecondTry);
-	}
-
-	private Collection<Ballot<GenderedCandidate>> getCastBallotsState(BallotInputTry firstOrSecondTry) {
-		if (firstOrSecondTry == BallotInputTry.FIRST) {
-			return castBallotsState.firstTryCastBallots;
-		} else if (firstOrSecondTry == BallotInputTry.SECOND) {
-			return castBallotsState.secondTryCastBallots;
-		} else {
-			throw new IllegalStateException("Unknown enum value " + firstOrSecondTry);
-		}
 	}
 
 	@RequestMapping(value = "/castVote", method = {HEAD, GET})

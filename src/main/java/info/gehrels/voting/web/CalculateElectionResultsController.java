@@ -33,8 +33,8 @@ public final class CalculateElectionResultsController {
 
 	@RequestMapping(value = "/calculateElectionResults", method = {HEAD, GET})
 	public ModelAndView doGet() {
-		BallotIterableDiff ballotIterableDiff = calculateDiff(castBallotsState.firstTryCastBallots,
-		                                            castBallotsState.secondTryCastBallots);
+		BallotIterableDiff ballotIterableDiff = calculateDiff(castBallotsState.getFirstTryCastBallots(),
+		                                            castBallotsState.getSecondTryCastBallots());
 		if (ballotIterableDiff.isDifferent()) {
 			return new ModelAndView("handleDifferingBallotCollections", "ballotIterableDiff", ballotIterableDiff);
 		}
@@ -52,7 +52,7 @@ public final class CalculateElectionResultsController {
 		for (GenderedElection election : ballotLayoutState.ballotLayout.getElections()) {
 			reset(auditLogBuilder);
 			Result electionResult = electionCalculation
-				.calculateElectionResult(election, ImmutableList.copyOf(castBallotsState.firstTryCastBallots));
+				.calculateElectionResult(election, ImmutableList.copyOf(castBallotsState.getFirstTryCastBallots()));
 			String auditLog = auditLogBuilder.toString();
 			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLog));
 		}

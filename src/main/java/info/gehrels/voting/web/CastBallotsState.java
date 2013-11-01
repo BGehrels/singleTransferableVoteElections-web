@@ -1,5 +1,8 @@
 package info.gehrels.voting.web;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 
@@ -10,12 +13,25 @@ public final class CastBallotsState {
 	private final Collection<Ballot<GenderedCandidate>> firstTryCastBallots = new ArrayList<>();
 	private final Collection<Ballot<GenderedCandidate>> secondTryCastBallots = new ArrayList<>();
 
-	public void deleteById(long ballotId) {
-		throw new UnsupportedOperationException();
+	public synchronized void deleteById(long ballotId) {
+		Iterables.removeIf(firstTryCastBallots, hasId(ballotId));
+		Iterables.removeIf(secondTryCastBallots, hasId(ballotId));
 	}
 
-	public void add(BallotInputTry firstOrSecondTry, Ballot<GenderedCandidate> ballotFromForm) {
+	public synchronized void add(BallotInputTry firstOrSecondTry, Ballot<GenderedCandidate> ballotFromForm) {
 		getCastBallotsState(firstOrSecondTry).add(ballotFromForm);
+	}
+
+	public synchronized Collection<Ballot<GenderedCandidate>> getFirstTryCastBallots() {
+		return ImmutableList.copyOf(firstTryCastBallots);
+	}
+
+	public synchronized Collection<Ballot<GenderedCandidate>> getSecondTryCastBallots() {
+		return ImmutableList.copyOf(secondTryCastBallots);
+	}
+
+	private BallotIdPredicate hasId(long ballotId) {
+		return new BallotIdPredicate(ballotId);
 	}
 
 	private Collection<Ballot<GenderedCandidate>> getCastBallotsState(BallotInputTry firstOrSecondTry) {
@@ -28,11 +44,16 @@ public final class CastBallotsState {
 		}
 	}
 
-	public Collection<Ballot<GenderedCandidate>> getFirstTryCastBallots() {
-		return firstTryCastBallots;
-	}
+	private static final class BallotIdPredicate implements Predicate<Ballot<GenderedCandidate>> {
+		private final long ballotId;
 
-	public Collection<Ballot<GenderedCandidate>> getSecondTryCastBallots() {
-		return secondTryCastBallots;
+		private BallotIdPredicate(long ballotId) {
+			this.ballotId = ballotId;
+		}
+
+		@Override
+		public boolean apply(Ballot<GenderedCandidate> input) {
+			return ballotId == input.id;
+		}
 	}
 }

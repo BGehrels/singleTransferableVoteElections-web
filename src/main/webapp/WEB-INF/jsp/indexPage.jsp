@@ -14,7 +14,7 @@
         <li><a href="/administrateBallotLayout">Stimmzettellayout erstellen</a></li>
         <li><a href="/castVote?firstOrSecondTry=FIRST">Stimmen eingeben (Ersteingabe)</a></li>
         <li><a href="/castVote?firstOrSecondTry=SECOND">Stimmen eingeben (Kontrolleingabe)</a></li>
-        <li><a href="/calculateElectionResults">Wahlergebnis berechnen</a></li>
+        <li><a href="/listElectionCalculations">Ergebnisberechnung</a></li>
     </ul>
 </main>
 </body>

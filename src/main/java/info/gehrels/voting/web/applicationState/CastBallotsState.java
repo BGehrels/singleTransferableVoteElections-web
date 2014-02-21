@@ -1,10 +1,12 @@
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.applicationState;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
+import info.gehrels.voting.web.BallotInputTry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,11 +24,11 @@ public final class CastBallotsState {
 		getCastBallotsState(firstOrSecondTry).add(ballotFromForm);
 	}
 
-	public synchronized Collection<Ballot<GenderedCandidate>> getFirstTryCastBallots() {
+	public synchronized ImmutableCollection<Ballot<GenderedCandidate>> getFirstTryCastBallots() {
 		return ImmutableList.copyOf(firstTryCastBallots);
 	}
 
-	public synchronized Collection<Ballot<GenderedCandidate>> getSecondTryCastBallots() {
+	public synchronized ImmutableCollection<Ballot<GenderedCandidate>> getSecondTryCastBallots() {
 		return ImmutableList.copyOf(secondTryCastBallots);
 	}
 

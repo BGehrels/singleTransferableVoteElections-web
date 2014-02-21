@@ -2,6 +2,8 @@ package info.gehrels.voting.web;
 
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
+import info.gehrels.voting.web.applicationState.BallotLayoutState;
+import info.gehrels.voting.web.applicationState.CastBallotsState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;

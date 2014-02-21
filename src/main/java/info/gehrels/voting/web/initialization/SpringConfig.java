@@ -1,12 +1,13 @@
 package info.gehrels.voting.web.initialization;
 
 import info.gehrels.voting.web.AdministrateBallotLayoutController;
-import info.gehrels.voting.web.BallotLayoutState;
+import info.gehrels.voting.web.applicationState.BallotLayoutState;
 import info.gehrels.voting.web.CalculateElectionResultsController;
-import info.gehrels.voting.web.CastBallotsState;
+import info.gehrels.voting.web.applicationState.CastBallotsState;
 import info.gehrels.voting.web.CastVoteController;
 import info.gehrels.voting.web.DeleteBallotController;
 import info.gehrels.voting.web.IndexPageController;
+import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -72,7 +73,13 @@ public class SpringConfig {
 
 	@Bean
 	public CalculateElectionResultsController calculateElectionResultsController() {
-		return new CalculateElectionResultsController(ballotLayoutState(), castBallotsState());
+		return new CalculateElectionResultsController(ballotLayoutState(), castBallotsState(),
+		                                              electionCalculationsState());
+	}
+
+	@Bean
+	public ElectionCalculationsState electionCalculationsState() {
+		return new ElectionCalculationsState();
 	}
 
 	@Bean

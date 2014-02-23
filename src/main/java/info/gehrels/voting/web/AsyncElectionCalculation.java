@@ -40,21 +40,34 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	@Override
 	public void run() {
-		if (state != ElectionCalculationState.NOT_YET_STARTED) {
-			throw new IllegalStateException("Election calculations may only be started once. Current State: " + state);
+		ElectionCalculationState currentState = getState();
+		if (currentState != ElectionCalculationState.NOT_YET_STARTED) {
+			throw new IllegalStateException("Election calculations may only be started once. Current State: " + currentState);
 		}
 
-		state = ElectionCalculationState.RUNNING;
+		setState(ElectionCalculationState.RUNNING);
 		for (GenderedElection election : elections) {
 			reset(auditLogBuilder);
 			Result electionResult = electionCalculation
 				.calculateElectionResult(election, ImmutableList.copyOf(ballots));
 			String auditLog = auditLogBuilder.toString();
 			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLog));
-			this.result = resultModelBuilder.build();
+			setResult(resultModelBuilder.build());
 		}
 
-		state = ElectionCalculationState.FINISHED;
+		setState( ElectionCalculationState.FINISHED);
+	}
+
+	private synchronized void setResult(ImmutableList<ElectionCalculationResultBean> result) {
+		this.result = result;
+	}
+
+	private synchronized ElectionCalculationState getState() {
+		return state;
+	}
+
+	private synchronized  void setState(ElectionCalculationState state) {
+		this.state = state;
 	}
 
 	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation() {

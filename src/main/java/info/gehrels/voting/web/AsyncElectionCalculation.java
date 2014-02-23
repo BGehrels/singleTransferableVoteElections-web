@@ -28,6 +28,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	private final DateTime startDateTime = DateTime.now();
 
 	private ImmutableList<ElectionCalculationResultBean> result;
+	private ElectionCalculationState state = ElectionCalculationState.NOT_YET_STARTED;
 
 	public AsyncElectionCalculation(List<GenderedElection> elections,
 	                                ImmutableCollection<Ballot<GenderedCandidate>> ballots) {
@@ -39,6 +40,11 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	@Override
 	public void run() {
+		if (state != ElectionCalculationState.NOT_YET_STARTED) {
+			throw new IllegalStateException("Election calculations may only be started once. Current State: " + state);
+		}
+
+		state = ElectionCalculationState.RUNNING;
 		for (GenderedElection election : elections) {
 			reset(auditLogBuilder);
 			Result electionResult = electionCalculation
@@ -47,6 +53,8 @@ public final class AsyncElectionCalculation implements Runnable {
 			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLog));
 			this.result = resultModelBuilder.build();
 		}
+
+		state = ElectionCalculationState.FINISHED;
 	}
 
 	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation() {
@@ -63,7 +71,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	public synchronized Snapshot getSnapshot() {
-		return new Snapshot(startDateTime, result);
+		return new Snapshot(startDateTime, state, result);
 	}
 
 	private NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum createQuorumCalculation() {
@@ -109,11 +117,13 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	public static final class Snapshot {
-		public final DateTime startDateTime;
+		private final DateTime startDateTime;
 		private final ImmutableList<ElectionCalculationResultBean> resultsOfFinishedCalculations;
+		private final ElectionCalculationState state;
 
-		public Snapshot(DateTime startDateTime, ImmutableList<ElectionCalculationResultBean> result) {
+		public Snapshot(DateTime startDateTime, ElectionCalculationState state, ImmutableList<ElectionCalculationResultBean> result) {
 			this.startDateTime = startDateTime;
+			this.state = state;
 			this.resultsOfFinishedCalculations = result;
 		}
 
@@ -124,5 +134,10 @@ public final class AsyncElectionCalculation implements Runnable {
 		public ImmutableList<ElectionCalculationResultBean> getResultsOfFinishedCalculations() {
 			return resultsOfFinishedCalculations;
 		}
+
+		public ElectionCalculationState getState() {
+			return state;
+		}
 	}
+
 }

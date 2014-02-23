@@ -13,6 +13,8 @@
     <h1>Ergebnisberechnungen vom <c:out value="${electionCalculation.startDateTime}"/></h1>
 </header>
 <main>
+    <h1>Status</h1>
+    <c:out value="${electionCalculation.state.description}" />
     <h1>Bereits abgeschlossene Berechnungen</h1>
     <c:forEach var="calculationResult" items="${electionCalculation.resultsOfFinishedCalculations}">
         <section>

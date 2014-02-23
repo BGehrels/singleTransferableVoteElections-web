@@ -13,6 +13,7 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 import info.gehrels.voting.genderedElections.StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener;
 import info.gehrels.voting.singleTransferableVote.STVElectionCalculationFactory;
 import info.gehrels.voting.singleTransferableVote.StringBuilderBackedSTVElectionCalculationListener;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -24,7 +25,9 @@ public final class AsyncElectionCalculation implements Runnable {
 	private final ElectionCalculationWithFemaleExclusivePositions electionCalculation;
 	private final StringBuilder auditLogBuilder;
 	private final ImmutableList.Builder<ElectionCalculationResultBean> resultModelBuilder = ImmutableList.builder();
-	private ImmutableList<ElectionCalculationResultBean> result = null;
+	private final DateTime startDateTime = DateTime.now();
+
+	private ImmutableList<ElectionCalculationResultBean> result;
 
 	public AsyncElectionCalculation(List<GenderedElection> elections,
 	                                ImmutableCollection<Ballot<GenderedCandidate>> ballots) {
@@ -60,6 +63,10 @@ public final class AsyncElectionCalculation implements Runnable {
 		stringBuilder.setLength(0);
 	}
 
+	public synchronized Snapshot getSnapshot() {
+		return new Snapshot(startDateTime);
+	}
+
 	private NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum createQuorumCalculation() {
 		// § 18 Satz 2 Nr. 2 WahlO-GJ:
 		// Berechne das Quorum: q = [(gültige Stimmen) / (zu vergebende Sitze + 1)] +1. Hat der so berechnete Wert des
@@ -68,6 +75,10 @@ public final class AsyncElectionCalculation implements Runnable {
 		// positive Zahl, die mit sieben Nachkommastellen darstellbar ist, erhöht.
 		// TODO: SÄ zur Streichung der Rundung bei der Quorenberechnung
 		return new NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum(ONE);
+	}
+
+	public DateTime getStartDateTime() {
+		return startDateTime;
 	}
 
 	// TODO: Verfahren nach Satzung implementieren
@@ -95,6 +106,18 @@ public final class AsyncElectionCalculation implements Runnable {
 		public AmbiguityResolverResult<GenderedCandidate> chooseOneOfMany(
 			ImmutableSet<GenderedCandidate> bestCandidates) {
 			return new AmbiguityResolverResult<>(bestCandidates.iterator().next(), "Einfach den ersten ausgewählt");
+		}
+	}
+
+	public static final class Snapshot {
+		public final DateTime startDateTime;
+
+		public Snapshot(DateTime startDateTime) {
+			this.startDateTime = startDateTime;
+		}
+
+		public DateTime getStartDateTime() {
+			return startDateTime;
 		}
 	}
 }

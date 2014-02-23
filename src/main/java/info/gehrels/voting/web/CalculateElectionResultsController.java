@@ -60,6 +60,6 @@ public final class CalculateElectionResultsController {
 	public ModelAndView showElectionCalculation(@RequestParam DateTime dateTimeTheCalculationStarted) {
 		return new ModelAndView("showElectionCalculation", "electionCalculation",
 		                        electionCalculationsState.getHistoryOfElectionCalculations()
-			                        .get(dateTimeTheCalculationStarted));
+			                        .get(dateTimeTheCalculationStarted).getSnapshot());
 	}
 }

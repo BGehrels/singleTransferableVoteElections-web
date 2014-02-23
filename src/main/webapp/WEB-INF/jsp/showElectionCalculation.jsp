@@ -1,7 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="electionCalculations" scope="request"
-             type="java.util.Map<org.joda.time.DateTime, info.gehrels.voting.web.AsyncElectionCalculation>"/>
+<jsp:useBean id="electionCalculation" scope="request" type="info.gehrels.voting.web.AsyncElectionCalculation"/>
 <!DOCTYPE HTML>
 <html>
 <head>

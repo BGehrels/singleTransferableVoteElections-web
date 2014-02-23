@@ -10,6 +10,7 @@ import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import static info.gehrels.voting.web.BallotIterableDiffCalculator.calculateDiff;
@@ -21,6 +22,7 @@ public final class CalculateElectionResultsController {
 	private final BallotLayoutState ballotLayoutState;
 	private final CastBallotsState castBallotsState;
 	private final ElectionCalculationsState electionCalculationsState;
+
 
 	public CalculateElectionResultsController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState,
 	                                          ElectionCalculationsState electionCalculationsState) {
@@ -55,7 +57,7 @@ public final class CalculateElectionResultsController {
 	}
 
 	@RequestMapping(value = "/showElectionCalculation", method = {GET})
-	public ModelAndView showElectionCalculation(DateTime dateTimeTheCalculationStarted) {
+	public ModelAndView showElectionCalculation(@RequestParam DateTime dateTimeTheCalculationStarted) {
 		return new ModelAndView("showElectionCalculation", "electionCalculation",
 		                        electionCalculationsState.getHistoryOfElectionCalculations()
 			                        .get(dateTimeTheCalculationStarted));

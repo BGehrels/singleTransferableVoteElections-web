@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ElectionCalculationsState {
-	private Map<DateTime, AsyncElectionCalculation> historyOfElectionCalculations = new HashMap<>();
+	private final Map<DateTime, AsyncElectionCalculation> historyOfElectionCalculations = new HashMap<>();
 
 	public void addElectionCalculation(AsyncElectionCalculation asyncElectionCalculation) {
 		historyOfElectionCalculations.put(new DateTime(), asyncElectionCalculation);

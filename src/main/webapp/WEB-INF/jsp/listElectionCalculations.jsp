@@ -29,7 +29,10 @@
         <h2>Laufende und Abgeschlossene Berechnungen</h2>
         <ul>
             <c:forEach var="electionCalculation" items="${electionCalculations}">
-                <li><a href="/showElectionCalculation?dateTimeTheCalculationStarted=<c:out value="${electionCalculation.key}"/>">Berechnung
+                <c:url value="/showElectionCalculation" var="url">
+                    <c:param name="dateTimeTheCalculationStarted" value="${electionCalculation.key}" />
+                </c:url>
+                <li><a href="${url}">Berechnung
                     vom <c:out value="${electionCalculation.key}"/></a></li>
             </c:forEach>
         </ul>

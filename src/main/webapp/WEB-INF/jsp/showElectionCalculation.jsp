@@ -14,7 +14,7 @@
 </header>
 <main>
     <h1>Bereits abgeschlossene Berechnungen</h1>
-    <c:forEach var="calculationResult" items="${resultModel}">
+    <c:forEach var="calculationResult" items="${electionCalculation.resultsOfFinishedCalculations}">
         <section>
             <h1><c:out value="${calculationResult.election.officeName}"/></h1>
 

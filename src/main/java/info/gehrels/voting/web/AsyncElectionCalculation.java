@@ -45,9 +45,8 @@ public final class AsyncElectionCalculation implements Runnable {
 				.calculateElectionResult(election, ImmutableList.copyOf(ballots));
 			String auditLog = auditLogBuilder.toString();
 			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLog));
+			this.result = resultModelBuilder.build();
 		}
-
-		this.result = resultModelBuilder.build();
 	}
 
 	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation() {
@@ -64,7 +63,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	public synchronized Snapshot getSnapshot() {
-		return new Snapshot(startDateTime);
+		return new Snapshot(startDateTime, result);
 	}
 
 	private NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum createQuorumCalculation() {
@@ -111,13 +110,19 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	public static final class Snapshot {
 		public final DateTime startDateTime;
+		private final ImmutableList<ElectionCalculationResultBean> resultsOfFinishedCalculations;
 
-		public Snapshot(DateTime startDateTime) {
+		public Snapshot(DateTime startDateTime, ImmutableList<ElectionCalculationResultBean> result) {
 			this.startDateTime = startDateTime;
+			this.resultsOfFinishedCalculations = result;
 		}
 
 		public DateTime getStartDateTime() {
 			return startDateTime;
+		}
+
+		public ImmutableList<ElectionCalculationResultBean> getResultsOfFinishedCalculations() {
+			return resultsOfFinishedCalculations;
 		}
 	}
 }

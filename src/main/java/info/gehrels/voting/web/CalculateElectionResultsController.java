@@ -54,9 +54,9 @@ public final class CalculateElectionResultsController {
 		                        electionCalculationsState.getHistoryOfElectionCalculations());
 	}
 
-	@RequestMapping(value = "/showElectionCalculationResults", method = {GET})
-	public ModelAndView showElectionCalculationResults(DateTime dateTimeTheCalculationStarted) {
-		return new ModelAndView("showElectionCalculationResults", "electionCalculationResults",
+	@RequestMapping(value = "/showElectionCalculation", method = {GET})
+	public ModelAndView showElectionCalculation(DateTime dateTimeTheCalculationStarted) {
+		return new ModelAndView("showElectionCalculation", "electionCalculation",
 		                        electionCalculationsState.getHistoryOfElectionCalculations()
 			                        .get(dateTimeTheCalculationStarted));
 	}

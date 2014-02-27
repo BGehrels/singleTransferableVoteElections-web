@@ -1,9 +1,11 @@
 package info.gehrels.voting.web;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import info.gehrels.voting.AmbiguityResolver;
+import info.gehrels.voting.AmbiguityResolver.AmbiguityResolverResult;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum;
 import info.gehrels.voting.genderedElections.ElectionCalculationWithFemaleExclusivePositions;
@@ -29,6 +31,8 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	private ImmutableList<ElectionCalculationResultBean> result;
 	private ElectionCalculationState state = ElectionCalculationState.NOT_YET_STARTED;
+	private Optional<AmbiguityResolverResult<GenderedCandidate>> ambiguityResulutionResult;
+	private Optional<AmbiguityResolutionTask> ambiguityResulutionTask;
 
 	public AsyncElectionCalculation(List<GenderedElection> elections,
 	                                ImmutableCollection<Ballot<GenderedCandidate>> ballots) {
@@ -42,7 +46,8 @@ public final class AsyncElectionCalculation implements Runnable {
 	public void run() {
 		ElectionCalculationState currentState = getState();
 		if (currentState != ElectionCalculationState.NOT_YET_STARTED) {
-			throw new IllegalStateException("Election calculations may only be started once. Current State: " + currentState);
+			throw new IllegalStateException(
+				"Election calculations may only be started once. Current State: " + currentState);
 		}
 
 		setState(ElectionCalculationState.RUNNING);
@@ -55,7 +60,7 @@ public final class AsyncElectionCalculation implements Runnable {
 			setResult(resultModelBuilder.build());
 		}
 
-		setState( ElectionCalculationState.FINISHED);
+		setState(ElectionCalculationState.FINISHED);
 	}
 
 	private synchronized void setResult(ImmutableList<ElectionCalculationResultBean> result) {
@@ -66,8 +71,16 @@ public final class AsyncElectionCalculation implements Runnable {
 		return state;
 	}
 
-	private synchronized  void setState(ElectionCalculationState state) {
+	private synchronized void setState(ElectionCalculationState state) {
 		this.state = state;
+		notifyAll();
+	}
+
+	public synchronized void setAmbiguityResulutionResult(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
+		this.ambiguityResulutionResult = Optional.fromNullable(ambiguityResolverResult);
+		if (ambiguityResulutionResult.isPresent()) {
+			setState(ElectionCalculationState.AMBIGUITY_RESOLVED);
+		}
 	}
 
 	private ElectionCalculationWithFemaleExclusivePositions createGenderedElectionCalculation() {
@@ -75,7 +88,7 @@ public final class AsyncElectionCalculation implements Runnable {
 			new STVElectionCalculationFactory<>(
 				createQuorumCalculation(),
 				new StringBuilderBackedSTVElectionCalculationListener<GenderedCandidate>(auditLogBuilder),
-				new TakeFirstOneAmbiguityResolver()),
+				new TakeFirstOneAmbiguityResolver(this)),
 			new StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener(auditLogBuilder));
 	}
 
@@ -84,7 +97,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	public synchronized Snapshot getSnapshot() {
-		return new Snapshot(startDateTime, state, result);
+		return new Snapshot(startDateTime, state, result, ambiguityResulutionTask);
 	}
 
 	private NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum createQuorumCalculation() {
@@ -99,6 +112,14 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	public DateTime getStartDateTime() {
 		return startDateTime;
+	}
+
+	public synchronized Optional<AmbiguityResolverResult<GenderedCandidate>> getAmbiguityResulutionResult() {
+		return ambiguityResulutionResult;
+	}
+
+	public synchronized Optional<AmbiguityResolutionTask> getAmbiguityResulutionTask() {
+		return ambiguityResulutionTask;
 	}
 
 	// TODO: Verfahren nach Satzung implementieren
@@ -122,22 +143,73 @@ public final class AsyncElectionCalculation implements Runnable {
 		 * Los; die Ziehung und die Eingabe des Ergebnisses in den Computer müssen mitgliederöffentlich erfolgen.
 		 */
 	private static final class TakeFirstOneAmbiguityResolver implements AmbiguityResolver<GenderedCandidate> {
+		private final AsyncElectionCalculation asyncElectionCalculation;
+
+		private TakeFirstOneAmbiguityResolver(AsyncElectionCalculation asyncElectionCalculation) {
+			this.asyncElectionCalculation = asyncElectionCalculation;
+		}
+
 		@Override
 		public AmbiguityResolverResult<GenderedCandidate> chooseOneOfMany(
 			ImmutableSet<GenderedCandidate> bestCandidates) {
-			return new AmbiguityResolverResult<>(bestCandidates.iterator().next(), "Einfach den ersten ausgewählt");
+
+			synchronized (asyncElectionCalculation) {
+				asyncElectionCalculation.setAmbuguityResulutionTask(new AmbiguityResolutionTask(bestCandidates, asyncElectionCalculation.getCurrentLog()));
+				while (asyncElectionCalculation.getState() != ElectionCalculationState.AMBIGUITY_RESOLVED) {
+					try {
+						asyncElectionCalculation.wait();
+					} catch (InterruptedException e) {
+						// TODO: Gaaaanz schlechte Idee...
+					}
+				}
+			}
+			return asyncElectionCalculation.getAmbiguityResulutionResult().get();
+		}
+
+	}
+
+	private String getCurrentLog() {
+		return auditLogBuilder.toString();
+	}
+
+	private synchronized void setAmbuguityResulutionTask(AmbiguityResolutionTask ambuguityResulutionTask) {
+		setState(ElectionCalculationState.MANUAL_AMBIGUITY_RESOLUTION_NECCESSARY);
+		this.ambiguityResulutionResult = Optional.absent();
+		this.ambiguityResulutionTask = Optional.of(ambuguityResulutionTask);
+	}
+
+	public static final class AmbiguityResolutionTask {
+
+		private final ImmutableSet<GenderedCandidate> candidatesToChooseFrom;
+		private final String currentLog;
+
+		public AmbiguityResolutionTask(ImmutableSet<GenderedCandidate> candidatesToChooseFrom, String currentLog) {
+			this.candidatesToChooseFrom = candidatesToChooseFrom;
+			this.currentLog = currentLog;
+		}
+
+		public ImmutableSet<GenderedCandidate> getCandidatesToChooseFrom() {
+			return candidatesToChooseFrom;
+		}
+
+		public String getCurrentLog() {
+			return currentLog;
 		}
 	}
 
 	public static final class Snapshot {
 		private final DateTime startDateTime;
 		private final ImmutableList<ElectionCalculationResultBean> resultsOfFinishedCalculations;
+		private final Optional<AmbiguityResolutionTask> ambiguityResulutionTask;
 		private final ElectionCalculationState state;
 
-		public Snapshot(DateTime startDateTime, ElectionCalculationState state, ImmutableList<ElectionCalculationResultBean> result) {
+		public Snapshot(DateTime startDateTime, ElectionCalculationState state,
+		                ImmutableList<ElectionCalculationResultBean> result,
+		                Optional<AmbiguityResolutionTask> ambiguityResulutionTask) {
 			this.startDateTime = startDateTime;
 			this.state = state;
 			this.resultsOfFinishedCalculations = result;
+			this.ambiguityResulutionTask = ambiguityResulutionTask;
 		}
 
 		public DateTime getStartDateTime() {
@@ -150,6 +222,10 @@ public final class AsyncElectionCalculation implements Runnable {
 
 		public ElectionCalculationState getState() {
 			return state;
+		}
+
+		public AmbiguityResolutionTask getAmbiguityResulutionTask() {
+			return ambiguityResulutionTask.orNull();
 		}
 	}
 

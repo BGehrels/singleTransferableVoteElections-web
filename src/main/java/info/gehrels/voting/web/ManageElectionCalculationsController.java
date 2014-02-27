@@ -7,10 +7,8 @@ import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
 import info.gehrels.voting.web.applicationState.BallotLayoutState;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import static info.gehrels.voting.web.BallotIterableDiffCalculator.calculateDiff;
@@ -18,14 +16,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
-public final class CalculateElectionResultsController {
+public final class ManageElectionCalculationsController {
 	private final BallotLayoutState ballotLayoutState;
 	private final CastBallotsState castBallotsState;
 	private final ElectionCalculationsState electionCalculationsState;
 
 
-	public CalculateElectionResultsController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState,
-	                                          ElectionCalculationsState electionCalculationsState) {
+	public ManageElectionCalculationsController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState,
+	                                            ElectionCalculationsState electionCalculationsState) {
 		this.ballotLayoutState = ballotLayoutState;
 		this.castBallotsState = castBallotsState;
 		this.electionCalculationsState = electionCalculationsState;
@@ -54,12 +52,5 @@ public final class CalculateElectionResultsController {
 	public ModelAndView listElectionCalculations() {
 		return new ModelAndView("listElectionCalculations", "electionCalculations",
 		                        electionCalculationsState.getHistoryOfElectionCalculations());
-	}
-
-	@RequestMapping(value = "/showElectionCalculation", method = {GET})
-	public ModelAndView showElectionCalculation(@RequestParam DateTime dateTimeTheCalculationStarted) {
-		return new ModelAndView("showElectionCalculation", "electionCalculation",
-		                        electionCalculationsState.getHistoryOfElectionCalculations()
-			                        .get(dateTimeTheCalculationStarted).getSnapshot());
 	}
 }

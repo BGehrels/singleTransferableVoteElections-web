@@ -37,7 +37,7 @@
 					<li><c:out value="${candidate.name}" /></li>
 				</c:forEach>
 			</ol>
-            <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="PREFERENCE" label="Präferenz"/>
+            <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="PREFERENCE" label="Präferenz" />
 			<form:input path="votesByElectionId[${electionStatus.index}].preferenceString" cssErrorClass="error" type="text" />
 			<form:errors path="votesByElectionId[${electionStatus.index}].preferenceString" cssClass="error" /><br />
             <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="NO" label="Nein" /><br/>

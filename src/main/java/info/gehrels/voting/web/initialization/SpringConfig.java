@@ -1,9 +1,10 @@
 package info.gehrels.voting.web.initialization;
 
 import info.gehrels.voting.web.AdministrateBallotLayoutController;
-import info.gehrels.voting.web.CalculateElectionResultsController;
+import info.gehrels.voting.web.ManageElectionCalculationsController;
 import info.gehrels.voting.web.CastVoteController;
 import info.gehrels.voting.web.DeleteBallotController;
+import info.gehrels.voting.web.ElectionCalculationController;
 import info.gehrels.voting.web.IndexPageController;
 import info.gehrels.voting.web.applicationState.BallotLayoutState;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
@@ -45,7 +46,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public AdministrateBallotLayoutController administrateBallotLayoutController() {
-		return new AdministrateBallotLayoutController(ballotLayoutState());
+		return new AdministrateBallotLayoutController(ballotLayoutState(), castBallotsState());
 	}
 
 	@Bean
@@ -56,6 +57,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public DeleteBallotController deleteBallotController() {
 		return new DeleteBallotController(castBallotsState());
+	}
+
+	@Bean
+	ElectionCalculationController showElectionCalculationController() {
+		return new ElectionCalculationController(electionCalculationsState());
 	}
 
 	@Bean
@@ -78,8 +84,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public CalculateElectionResultsController calculateElectionResultsController() {
-		return new CalculateElectionResultsController(ballotLayoutState(), castBallotsState(),
+	public ManageElectionCalculationsController calculateElectionResultsController() {
+		return new ManageElectionCalculationsController(ballotLayoutState(), castBallotsState(),
 		                                              electionCalculationsState());
 	}
 

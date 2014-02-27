@@ -46,6 +46,11 @@ public final class CastBallotsState {
 		}
 	}
 
+	public synchronized void reset() {
+		firstTryCastBallots.clear();
+		secondTryCastBallots.clear();
+	}
+
 	private static final class BallotIdPredicate implements Predicate<Ballot<GenderedCandidate>> {
 		private final long ballotId;
 

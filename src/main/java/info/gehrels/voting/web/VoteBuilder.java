@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 public final class VoteBuilder {
 	@NotNull
-	private Type type;
+	private Type type = Type.PREFERENCE;
 
 	@NotNull
 	private String preferenceString;

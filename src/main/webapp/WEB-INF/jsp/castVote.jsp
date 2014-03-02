@@ -19,22 +19,40 @@
                 $element.val(preferenceString);
             };
 
-            var handleChanges = function() {
+            var handleChanges = function () {
                 var val = $element.val();
+                resetError();
                 // TODO: Check for validity: [a-zA-Z]*
-                options.onChange(val);
+                try {
+                    options.onChange(val);
+                } catch (err) {
+                    error()
+                }
+            };
+
+            var resetError = function () {
+                $element.removeClass("error");
+                options.onResetError();
+            };
+
+            var error = function () {
+                $element.addClass("error");
+                options.onError();
             };
 
             $element.on("keyup", handleChanges);
             //handleChanges();
-            return {"showPreference": showPreference};
+            return {
+                "showPreference": showPreference,
+                "init" : handleChanges
+            };
         };
 
         wigm.error = function ($element) {
             wigm.$submitButton.attr("disabled", "disabled");
         };
 
-        wigm.resetError = function() {
+        wigm.resetError = function () {
             wigm.$submitButton.removeAttr("disabled");
         };
 
@@ -59,11 +77,10 @@
                 });
 
                 var resultString = preferenceArray.join("");
-                console.log(resultString);
                 options.onChange(resultString);
             };
 
-            var error = function($element) {
+            var error = function ($element) {
                 $element.addClass("error");
                 options.onError($element);
             };
@@ -73,13 +90,14 @@
                 options.onResetError();
             };
 
-            var showPreference = function(preferenceString) {
-                console.log(preferenceString);
-
+            var showPreference = function (preferenceString) {
+                $elements.val("");
                 for (var i = 0; i < preferenceString.length; i++) {
-                    console.log(preferenceString[i]);
-
-                    getFieldByCandidateIdx(charToCandidateIdx(preferenceString[i])).val(i + 1);
+                    var $candidateInput = getFieldByCandidateIdx(charToCandidateIdx(preferenceString[i]));
+                    if ($candidateInput.size() == 0) {
+                        throw preferenceString[i];
+                    }
+                    $candidateInput.val(i + 1);
                 }
             };
 
@@ -87,26 +105,21 @@
                 return String.fromCharCode(candidateIdx + 65);
             };
 
-            var charToCandidateIdx = function(candidateChar) {
-                return candidateChar.toUpperCase().charCodeAt(0)-65;
+            var charToCandidateIdx = function (candidateChar) {
+                return candidateChar.toUpperCase().charCodeAt(0) - 65;
             };
 
             var getFieldByCandidateIdx = function (candidateIdx) {
-                console.log("candidateIdx", candidateIdx);
-                var find = $elements.filter("[data-candidate-index=\"" + candidateIdx + "\"]");
-                // TODO: Prüfen, ob find leer ist
-                console.log(find);
-                return   find;
+                return $elements.filter("[data-candidate-index=\"" + candidateIdx + "\"]");
             };
 
             $elements.each(function (idx, $element) {
                 $($element).on("keyup", handleChanges).removeAttr("disabled");
             });
 
-            //handleChanges();
             return {
-                "resetError": resetError,
-                "showPreference": showPreference
+                "showPreference": showPreference,
+                "init" : handleChanges
             }
         };
 
@@ -114,14 +127,18 @@
             var preferenceList;
             // TODO: Alle möglichen Felder aktivieren
             wigm.$submitButton = $("input[type=\"submit\"]");
-            var stringField = wigm.candidatePreferenceStringField({"onChange": function(preferenceString) {
-                preferenceList.showPreference(preferenceString);
-            }});
+            var stringField = wigm.candidatePreferenceStringField({"onChange": function (preferenceString) {
+                                                                            preferenceList.showPreference(preferenceString);
+                                                                        },
+                                                                      "onResetError": wigm.resetError,
+                                                                      "onError": wigm.error});
             preferenceList = wigm.candidatePreferenceList({"listSelector": "#votesByElectionId0_htmlList",
-                                             "onChange": stringField.showPreference,
-                                             "onResetError": wigm.resetError,
-                                             "onError": wigm.error});
-        });
+                                                              "onChange": stringField.showPreference,
+                                                              "onResetError": wigm.resetError,
+                                                              "onError": wigm.error});
+            stringField.init();
+            preferenceList.init();
+        })
 
 
     </script>

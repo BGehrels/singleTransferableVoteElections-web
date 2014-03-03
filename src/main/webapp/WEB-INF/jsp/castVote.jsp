@@ -167,7 +167,7 @@
                     preferenceList.activate();
                     stringField.deactivate();
                 }
-            }
+            };
 
             wigm.$stringInputModeCheckbox.change(function () {
                 toggleInputMode($(this).is(':checked'));

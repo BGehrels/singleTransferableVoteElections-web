@@ -53,7 +53,7 @@
 		</c:forEach>
 		<section>
 			<form:button type="submit" name="addNewElection">Weiteres Amt hinzufügen</form:button>
-			<input type="submit" value="Speichern"/>
+			<input type="submit" value="Stimmzettel vollständig eingegeben"/>
 		</section>
 	</form:form>
 </main>

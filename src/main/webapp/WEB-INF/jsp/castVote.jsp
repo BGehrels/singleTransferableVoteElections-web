@@ -13,7 +13,7 @@
         var wigm = wigm || {};
 
         wigm.candidatePreferenceStringField = function (options) {
-            var $element = $("#votesByElectionId0\\.preferenceString");
+            var $element = options.$fieldElement;
 
             var showPreference = function (preferenceString) {
                 $element.val(preferenceString);
@@ -40,11 +40,20 @@
                 options.onError();
             };
 
+            var deactivate = function () {
+                $element.addClass("invisible");
+            };
+
+            var activate = function () {
+                $element.removeClass("invisible");
+            };
+
             $element.on("keyup", handleChanges);
-            //handleChanges();
             return {
                 "showPreference": showPreference,
-                "init" : handleChanges
+                "init" : handleChanges,
+                "activate" : activate,
+                "deactivate" : deactivate
             };
         };
 
@@ -57,7 +66,7 @@
         };
 
         wigm.candidatePreferenceList = function (options) {
-            var $elements = $(options.listSelector).find("input");
+            var $elements = options.$listElement.find("input");
 
             var handleChanges = function () {
                 resetError();
@@ -94,7 +103,7 @@
                 $elements.val("");
                 for (var i = 0; i < preferenceString.length; i++) {
                     var $candidateInput = getFieldByCandidateIdx(charToCandidateIdx(preferenceString[i]));
-                    if ($candidateInput.size() == 0) {
+                    if ($candidateInput.size() === 0) {
                         throw preferenceString[i];
                     }
                     $candidateInput.val(i + 1);
@@ -113,32 +122,69 @@
                 return $elements.filter("[data-candidate-index=\"" + candidateIdx + "\"]");
             };
 
+            var activate = function () {
+                $elements.removeClass("invisible");
+            };
+
+            var deactivate = function() {
+                $elements.addClass("invisible");
+            };
+
             $elements.each(function (idx, $element) {
                 $($element).on("keyup", handleChanges).removeAttr("disabled");
             });
 
             return {
                 "showPreference": showPreference,
-                "init" : handleChanges
+                "init" : handleChanges,
+                "activate" : activate,
+                "deactivate" : deactivate
             }
         };
 
-        $(document).ready(function () {
+        wigm.initSingleElection = function(electionElement) {
             var preferenceList;
-            // TODO: Alle möglichen Felder aktivieren
-            wigm.$submitButton = $("input[type=\"submit\"]");
-            var stringField = wigm.candidatePreferenceStringField({"onChange": function (preferenceString) {
-                                                                            preferenceList.showPreference(preferenceString);
-                                                                        },
+            var stringField = wigm.candidatePreferenceStringField({
+                                                                      "$fieldElement": $(electionElement).find(".preferenceString"),
+                                                                      "onChange": function (preferenceString) {
+                                                                          preferenceList.showPreference(preferenceString);
+                                                                      },
                                                                       "onResetError": wigm.resetError,
                                                                       "onError": wigm.error});
-            preferenceList = wigm.candidatePreferenceList({"listSelector": "#votesByElectionId0_htmlList",
+            preferenceList = wigm.candidatePreferenceList({
+                                                              "$listElement": $(electionElement).find("ol"),
                                                               "onChange": stringField.showPreference,
                                                               "onResetError": wigm.resetError,
                                                               "onError": wigm.error});
             stringField.init();
             preferenceList.init();
-        })
+
+            var toggleInputMode = function (isStringInputModeEnabled) {
+                if (isStringInputModeEnabled) {
+                    preferenceList.deactivate();
+                    stringField.activate();
+                } else {
+                    preferenceList.activate();
+                    stringField.deactivate();
+                }
+            }
+
+            wigm.$stringInputModeCheckbox.change(function () {
+                toggleInputMode($(this).is(':checked'));
+            });
+
+            toggleInputMode(wigm.$stringInputModeCheckbox.is(':checked'));
+        };
+
+
+        $(document).ready(function () {
+            wigm.$submitButton = $("input[type=\"submit\"]");
+            wigm.$stringInputModeCheckbox = $("#stringInputMode1");
+
+            $("section.election").each(function (idx, electionElement) {
+                wigm.initSingleElection(electionElement);
+            });
+        });
 
 
     </script>
@@ -150,6 +196,11 @@
         input.error {
             border-color: red;
         }
+
+        .invisible {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -163,34 +214,34 @@
             <form:label path="ballotId" cssErrorClass="error">Stimmzettelnummer</form:label>
             <form:input path="ballotId" cssErrorClass="error" type="number" required="required" autofocus="autofocus"/>
             <form:errors path="ballotId" cssClass="error"/><br/>
+            <form:label path="stringInputMode" cssErrorClass="error">Schnelleingabemodus</form:label>
+            <form:checkbox path="stringInputMode"/>
         </section>
         <c:forEach items="${ballotLayout.elections}" var="election" varStatus="electionStatus">
-            <h2><c:out value="${election.officeName}"/></h2>
-            <ol id="votesByElectionId${electionStatus.index}_htmlList" type="A">
-                <c:forEach items="${election.candidates}" varStatus="candidateStatus" var="candidate">
-                    <li>
-                        <input type="number" data-candidate-index="${candidateStatus.index}" disabled="disabled">
-                        <c:out value="${candidate.name}"/>
-                    </li>
-                </c:forEach>
-            </ol>
-            <ol type="A">
-                <c:forEach items="${election.candidates}" var="candidate">
-                    <li><c:out value="${candidate.name}"/></li>
-                </c:forEach>
-            </ol>
-            <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
-                              value="PREFERENCE" label="Präferenz"/>
-            <form:input path="votesByElectionId[${electionStatus.index}].preferenceString" cssErrorClass="error"
-                        type="text"/>
-            <form:errors path="votesByElectionId[${electionStatus.index}].preferenceString" cssClass="error"/><br/>
-            <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="NO"
-                              label="Nein"/><br/>
-            <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
-                              value="INVALID" label="Ungültig"/><br/>
-            <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
-                              value="NOT_VOTED" label="Keine Stimmabgabe"/>
+            <section class="election">
+                <h2><c:out value="${election.officeName}"/></h2>
+                <ol type="A">
+                    <c:forEach items="${election.candidates}" varStatus="candidateStatus" var="candidate">
+                        <li>
+                            <input type="number" size="2" data-candidate-index="${candidateStatus.index}" disabled="disabled" class="invisible">
+                            <c:out value="${candidate.name}"/>
+                        </li>
+                    </c:forEach>
+                </ol>
+                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
+                                  value="PREFERENCE" label="Präferenz"/>
+                <form:input path="votesByElectionId[${electionStatus.index}].preferenceString" cssErrorClass="error"
+                            type="text" cssClass="preferenceString"/>
+                <form:errors path="votesByElectionId[${electionStatus.index}].preferenceString" cssClass="error"/><br/>
+                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="NO"
+                                  label="Nein"/><br/>
+                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
+                                  value="INVALID" label="Ungültig"/><br/>
+                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
+                                  value="NOT_VOTED" label="Keine Stimmabgabe"/>
+            </section>
         </c:forEach>
+        </section>
         <section>
             <input type="submit" value="Hinzufügen &amp; nächsten Stimmzettel ausfüllen"/>
         </section>

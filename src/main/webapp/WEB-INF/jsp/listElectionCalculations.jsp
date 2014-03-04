@@ -38,5 +38,6 @@
         </ul>
     </c:if>
 </main>
+<footer><a href="/">Zurück zur Startseite</a></footer>
 </body>
 </html>

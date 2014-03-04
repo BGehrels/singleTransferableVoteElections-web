@@ -26,7 +26,7 @@
                 try {
                     options.onChange(val);
                 } catch (err) {
-                    error()
+                    error();
                 }
             };
 
@@ -197,6 +197,10 @@
             border-color: red;
         }
 
+        span.error {
+            color: red;
+        }
+
         .invisible {
             display: none;
         }
@@ -214,6 +218,7 @@
             <form:label path="ballotId" cssErrorClass="error">Stimmzettelnummer</form:label>
             <form:input path="ballotId" cssErrorClass="error" type="number" required="required" autofocus="autofocus"/>
             <form:errors path="ballotId" cssClass="error"/><br/>
+            <form:errors path="stringInputMode" cssClass="error"/>
             <form:label path="stringInputMode" cssErrorClass="error">Schnelleingabemodus</form:label>
             <form:checkbox path="stringInputMode"/>
         </section>
@@ -228,9 +233,11 @@
                         </li>
                     </c:forEach>
                 </ol>
+                <form:errors path="votesByElectionId[${electionStatus.index}].type" cssClass="error"/>
                 <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
                                   value="PREFERENCE" label="Präferenz"/>
-                <form:input path="votesByElectionId[${electionStatus.index}].preferenceString" cssErrorClass="error"
+                <form:input path="votesByElectionId[${electionStatus.index}].preferenceString"
+                            cssErrorClass="preferenceString error"
                             type="text" cssClass="preferenceString"/>
                 <form:errors path="votesByElectionId[${electionStatus.index}].preferenceString" cssClass="error"/><br/>
                 <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error" value="NO"

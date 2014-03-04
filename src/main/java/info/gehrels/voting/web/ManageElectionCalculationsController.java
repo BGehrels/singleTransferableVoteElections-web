@@ -31,20 +31,22 @@ public final class ManageElectionCalculationsController {
 
 	@RequestMapping(value = "/startElectionCalculation", method = {POST})
 	public ModelAndView startElectionCalculation() {
-		ImmutableCollection<Ballot<GenderedCandidate>> firstTryCastBallots = castBallotsState.getFirstTryCastBallots();
-		ImmutableCollection<Ballot<GenderedCandidate>> secondTryCastBallots = castBallotsState
-			.getSecondTryCastBallots();
-		BallotIterableDiff ballotIterableDiff = calculateDiff(firstTryCastBallots, secondTryCastBallots);
-		if (ballotIterableDiff.isDifferent()) {
-			return new ModelAndView("handleDifferingBallotCollections", "ballotIterableDiff", ballotIterableDiff);
+		if (ballotLayoutState.ballotLayout != null) {
+			ImmutableCollection<Ballot<GenderedCandidate>> firstTryCastBallots = castBallotsState
+				.getFirstTryCastBallots();
+			ImmutableCollection<Ballot<GenderedCandidate>> secondTryCastBallots = castBallotsState
+				.getSecondTryCastBallots();
+			BallotIterableDiff ballotIterableDiff = calculateDiff(firstTryCastBallots, secondTryCastBallots);
+			if (ballotIterableDiff.isDifferent()) {
+				return new ModelAndView("handleDifferingBallotCollections", "ballotIterableDiff", ballotIterableDiff);
+			}
+
+			AsyncElectionCalculation electionCalculation = new AsyncElectionCalculation(
+				ballotLayoutState.ballotLayout.getElections(),
+				firstTryCastBallots);
+			electionCalculationsState.addElectionCalculation(electionCalculation);
+			new Thread(electionCalculation).start();
 		}
-
-		AsyncElectionCalculation electionCalculation = new AsyncElectionCalculation(
-			ballotLayoutState.ballotLayout.getElections(),
-			firstTryCastBallots);
-		electionCalculationsState.addElectionCalculation(electionCalculation);
-		new Thread(electionCalculation).start();
-
 		return new ModelAndView("redirect:/listElectionCalculations");
 	}
 

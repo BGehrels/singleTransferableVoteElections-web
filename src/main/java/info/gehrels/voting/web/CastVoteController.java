@@ -30,7 +30,13 @@ public final class CastVoteController {
 	}
 
 	@RequestMapping(value = "/castVote", method = {POST, PUT})
-	public ModelAndView doCastVote(@Valid BallotBuilder ballotBuilder, BindingResult bindingResult, BallotInputTry firstOrSecondTry) {
+	public ModelAndView doCastVote(@Valid BallotBuilder ballotBuilder, BindingResult bindingResult,
+	                               BallotInputTry firstOrSecondTry) {
+		if (bindingResult.hasErrors()) {
+			return createModelAndView(ballotBuilder, firstOrSecondTry);
+		}
+
+		ballotBuilder.validate(bindingResult, "ballotBuilder");
 		if (bindingResult.hasErrors()) {
 			return createModelAndView(ballotBuilder, firstOrSecondTry);
 		}
@@ -38,11 +44,14 @@ public final class CastVoteController {
 		Ballot<GenderedCandidate> ballotFromForm = ballotBuilder.createBallotFromForm(ballotLayoutState.ballotLayout);
 		castBallotsState.add(firstOrSecondTry, ballotFromForm);
 
-		return new ModelAndView("redirect:/castVote?firstOrSecondTry=" + firstOrSecondTry + "&stringInputMode=" + ballotBuilder.isStringInputMode());
+		return new ModelAndView(
+			"redirect:/castVote?firstOrSecondTry=" + firstOrSecondTry + "&stringInputMode=" + ballotBuilder
+				.isStringInputMode());
 	}
 
 	@RequestMapping(value = "/castVote", method = {HEAD, GET})
-	public ModelAndView doGet(@RequestParam BallotInputTry firstOrSecondTry, @RequestParam(required = false) boolean stringInputMode) {
+	public ModelAndView doGet(@RequestParam BallotInputTry firstOrSecondTry,
+	                          @RequestParam(required = false) boolean stringInputMode) {
 		if (ballotLayoutState.ballotLayout == null) {
 			return new ModelAndView("redirect:/");
 		}

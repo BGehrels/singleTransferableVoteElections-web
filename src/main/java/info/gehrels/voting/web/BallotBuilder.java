@@ -7,6 +7,7 @@ import info.gehrels.voting.Ballot;
 import info.gehrels.voting.Vote;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
+import org.springframework.validation.BindingResult;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -59,5 +60,11 @@ public final class BallotBuilder {
 		}
 
 		return new Ballot<>(ballotId, preferenceSetBuilder.build());
+	}
+
+	public void validate(BindingResult bindingResult, String objectName) {
+		for (int i=0; i < votesByElectionId.size();i++) {
+			votesByElectionId.get(i).validate(objectName, "votesByElectionId[" + i + "]", bindingResult);
+		}
 	}
 }

@@ -28,19 +28,19 @@
 				<h1>${electionsStatus.index+1}. Amt</h1>
 
 				<form:label path="elections[${electionsStatus.index}].officeName" cssErrorClass="error">Name des Amtes</form:label>
-				<form:input path="elections[${electionsStatus.index}].officeName" required="required" />
+				<form:input path="elections[${electionsStatus.index}].officeName" required="required"  size="60" />
 				<form:errors path="elections[${electionsStatus.index}].officeName" cssClass="error" /><br />
 				<form:label path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" cssErrorClass="error">Anzahl Frauenplätze</form:label>
-				<form:input path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" type="number" required="required" min="0"/>
+				<form:input path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" type="number" required="required" min="0" size="3"/>
 				<form:errors path="elections[${electionsStatus.index}].numberOfFemaleExclusivePositions" cssClass="error" /><br />
 				<form:label path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" cssErrorClass="error">Anzahl offene Plätze</form:label>
-				<form:input path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" type="number" required="required" min="0"/>
+				<form:input path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" type="number" required="required" min="0" size="3"/>
 				<form:errors path="elections[${electionsStatus.index}].numberOfNonFemaleExclusivePositions" cssClass="error" /><br />
 
 				<h2>Kandidat*innen</h2>
 				<c:forEach items="${election.candidates}" varStatus="candidatesStatus">
 					<form:label path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].name" cssErrorClass="error">Name</form:label>
-					<form:input path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].name" required="required" />
+					<form:input path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].name" required="required" size="60" />
 					<label>weiblich</label>
 					<form:radiobutton path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].female" value="true" /> Ja
 					<form:radiobutton path="elections[${electionsStatus.index}].candidates[${candidatesStatus.index}].female" value="false" /> Nein

@@ -42,7 +42,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public IndexPageController indexPageController() {
-		return new IndexPageController();
+		return new IndexPageController(castBallotsState());
 	}
 
 	@Bean

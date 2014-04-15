@@ -59,7 +59,7 @@
  <p>You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  Elections Web Interface. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
 
- <p>You may find a current the source codes of this software at <a href="https://github.com/BGehrels">GitHub</a>.</p>
+ <p>You may find the source code of this software at <a href="https://github.com/BGehrels">GitHub</a>.</p>
 </footer>
 </body>
 </html>

@@ -1,3 +1,19 @@
+<%--
+ Copyright © 2014 Benjamin Gehrels
+
+ This file is part of The Single Transferable Vote Elections Web Interface.
+
+ The Single Transferable Vote Elections Web Interface is free software: you can redistribute it and/or modify it under
+ the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of
+ the License, or (at your option) any later version.
+
+ The Single Transferable Vote Elections Web Interface is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
+ Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
+--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page pageEncoding="UTF-8"%>
 <jsp:useBean id="numberOfCastBallots" scope="request" type="info.gehrels.voting.web.IndexPageController.NumberOfCastBallotsBean"/>
@@ -28,5 +44,22 @@
         <dd><c:out value="${numberOfCastBallots.secondTry}" /></dd>
     </dl>
 </aside>
+<footer>
+ <h1>Lizenz</h1>
+ <p>This file is part of The Single Transferable Vote Elections Web Interface.</p>
+
+ <p>The Single Transferable Vote Elections Web Interface is free software: you can redistribute it and/or modify it under
+ the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of
+ the License, or (at your option) any later version.</p>
+
+ <p>The Single Transferable Vote Elections Web Interface is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ Affero General Public License for more details.</p>
+
+ <p>You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
+ Elections Web Interface. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+
+ <p>You may find a current the source codes of this software at <a href="https://github.com/BGehrels">GitHub</a>.</p>
+</footer>
 </body>
 </html>

@@ -1,4 +1,5 @@
-<%--
+<!DOCTYPE HTML>
+<!--
  Copyright © 2014 Benjamin Gehrels et al.
 
  This file is part of The Single Transferable Vote Elections Web Interface.
@@ -12,20 +13,14 @@
  Affero General Public License for more details.
 
  You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
- Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
---%>
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<jsp:useBean id="ballotLayout" scope="request" type="info.gehrels.voting.web.BallotLayout"/>
-<jsp:useBean id="firstOrSecondTry" scope="request" type="info.gehrels.voting.web.BallotInputTry"/>
-<!DOCTYPE HTML>
+ Elections Web Interface. If not, see http://www.gnu.org/licenses/.
+-->
 <html>
 <head>
 <meta charset="UTF-8"/>
 <title>Stimmzetteleingabe - Wahlauszählungen nach der Weighted Inclusive Gregory Method</title>
 <script type="text/javascript" src="/jquery-2.1.0.js"></script>
-<script type="text/javascript">
+<script type="text/javascript">/* <![CDATA[ */
     var wigm = wigm || {};
 
     wigm.candidatePreferenceStringField = function (options) {
@@ -201,9 +196,7 @@
             wigm.initSingleElection(electionElement);
         });
     });
-
-
-</script>
+/* ]]> */</script>
 <style type="text/css">
     label.error {
         color: red;
@@ -228,49 +221,60 @@
     <h1>Stimmzettel eingeben</h1>
 </header>
 <main>
-    <form:form method="POST" action="/castVote" commandName="ballotBuilder">
-        <input type="hidden" name="firstOrSecondTry" value="${firstOrSecondTry}"/>
+    <form method="POST" action="/castVote" data-th-object="${ballotBuilder}">
+        <input type="hidden" name="firstOrSecondTry" data-th-value="${firstOrSecondTry}"/>
         <section>
-            <form:label path="ballotId" cssErrorClass="error">Stimmzettelnummer</form:label>
-            <form:input path="ballotId" cssErrorClass="error" type="number" required="required" autofocus="autofocus"/>
-            <form:errors path="ballotId" cssClass="error"/><br/>
-            <form:errors path="stringInputMode" cssClass="error"/>
-            <form:label path="stringInputMode" cssErrorClass="error">Schnelleingabemodus</form:label>
-            <form:checkbox path="stringInputMode"/>
+            <label for="ballotId">Stimmzettelnummer</label>
+            <input data-th-field="*{ballotId}" data-th-errorclass="error" type="number" required="required"
+                   autofocus="autofocus"/>
+            <span data-th-errors="*{ballotId}" class="error">Bitte eine Zahl eingeben!</span><br/>
+
+            <span data-th-errors="*{stringInputMode}" class="error">Bitte einen Eingabemodus auswählen</span>
+            <label for="stringInputMode1">Schnelleingabemodus</label>
+            <input type="checkbox" data-th-field="*{stringInputMode}"/>
         </section>
-        <c:forEach items="${ballotLayout.elections}" var="election" varStatus="electionStatus">
-            <section class="election">
-                <h2><c:out value="${election.officeName}"/></h2>
-                <form:errors path="votesByElectionId[${electionStatus.index}].type" cssClass="error"/>
-                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
-                                  value="PREFERENCE" label="Präferenz"/>
-                <form:input path="votesByElectionId[${electionStatus.index}].preferenceString"
-                            cssErrorClass="preferenceString error"
-                            type="text" cssClass="preferenceString"/>
-                <form:errors path="votesByElectionId[${electionStatus.index}].preferenceString" cssClass="error"/><br/>
-                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
-                                  value="NO"
-                                  label="Nein"/><br/>
-                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
-                                  value="INVALID" label="Ungültig"/><br/>
-                <form:radiobutton path="votesByElectionId[${electionStatus.index}].type" cssErrorClass="error"
-                                  value="NOT_VOTED" label="Keine Stimmabgabe"/>
-                <ol type="A">
-                    <c:forEach items="${election.candidates}" varStatus="candidateStatus" var="candidate">
-                        <li>
-                            <input type="number" size="2" data-candidate-index="${candidateStatus.index}"
-                                   disabled="disabled" class="invisible">
-                            <c:out value="${candidate.name}"/>
-                        </li>
-                    </c:forEach>
-                </ol>
-            </section>
-        </c:forEach>
+        <section data-th-each="election, electionStatus : ${ballotLayout.elections}" class="election">
+            <h2 data-th-text="${election.officeName}">Entenhausener Parlament</h2>
+            <span data-th-errors="*{votesByElectionId[__${electionStatus.index}__].type}" class="error"/>
+            <input type="radio" data-th-field="*{votesByElectionId[__${electionStatus.index}__].type}"
+                   data-th-errorclass="error"
+                   data-th-value="PREFERENCE"/>
+            <label data--for="${#ids.prev('votesByElectionId[__${electionStatus.index}__].type')}">Präferenz</label>
+            <input data-th-field="*{votesByElectionId[__${electionStatus.index}__].preferenceString}"
+                   data-th-errorclass="error" type="text" class="preferenceString"/>
+            <span data-th-errors="*{votesByElectionId[__${electionStatus.index}__].preferenceString}"
+                  class="error"/><br/>
+
+            <input type="radio" data-th-field="*{votesByElectionId[__${electionStatus.index}__].type}"
+                   data-th-errorclass="error"
+                   data-th-value="NO"/>
+            <label data--for="${#ids.prev('votesByElectionId[__${electionStatus.index}__].type')}">Nein</label>
+            <br/>
+
+            <input type="radio" data-th-field="*{votesByElectionId[__${electionStatus.index}__].type}"
+                   data-th-errorclass="error"
+                   data-th-value="INVALID"/>
+            <label data--for="${#ids.prev('votesByElectionId[__${electionStatus.index}__].type')}">Ungültig</label>
+            <br/>
+
+            <input type="radio" data-th-field="*{votesByElectionId[__${electionStatus.index}__].type}"
+                   data-th-errorclass="error"
+                   data-th-value="NOT_VOTED"/>
+            <label data--for="${#ids.prev('votesByElectionId[__${electionStatus.index}__].type')}">Keine Stimmabgabe</label>
+            <br/>
+
+            <ol type="A">
+                <li data-th-each="candidate,candidateStatus : ${election.candidates}">
+                    <input type="number" size="2" data-th-attr="data-candidate-index=${candidateStatus.index}"
+                           disabled="disabled" class="invisible" />
+                    <span data-th-text="${candidate.name}"></span>
+                </li>
+            </ol>
         </section>
         <section>
             <input type="submit" value="Hinzufügen &amp; nächsten Stimmzettel ausfüllen"/>
         </section>
-    </form:form>
+    </form>
 </main>
 <footer><a href="/">Zurück zur Startseite</a></footer>
 </body>

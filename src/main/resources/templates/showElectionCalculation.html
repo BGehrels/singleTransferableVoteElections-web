@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<!--
+ Copyright © 2014 Benjamin Gehrels
+
+ This file is part of The Single Transferable Vote Elections Web Interface.
+
+ The Single Transferable Vote Elections Web Interface is free software: you can redistribute it and/or modify it under
+ the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of
+ the License, or (at your option) any later version.
+
+ The Single Transferable Vote Elections Web Interface is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
+ Elections Web Interface. If not, see http://www.gnu.org/licenses/.
+-->
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Ergebnisberechnungen vom <span
+            data-th-text="${electionCalculation.startDateTime}">1998-05-14T02:34:09.045</span> - Wahlauszählungen nach
+        der
+        Weighted Inclusive Gregory Method</title>
+</head>
+<body>
+<header>
+    <h1>Ergebnisberechnungen vom <span
+            data-th-text="${electionCalculation.startDateTime}">1998-05-14T02:34:09.045</span></h1>
+</header>
+<main>
+    <section>
+        <h1>Status</h1>
+
+        <p data-th-text="${electionCalculation.state.description}">Beschreibungstext</p>
+    </section>
+    <th-block data-th-if="${electionCalculation.state == T(info.gehrels.voting.web.ElectionCalculationState).MANUAL_AMBIGUITY_RESOLUTION_NECCESSARY}">
+        <h1>Manuelle Auswahl von gewinnenden/verlierenden Kandidierenden</h1>
+
+        <form method="POST"
+              action="@{/resolveAmbiguity(dateTimeTheCalculationStarted=${electionCalculation.startDateTime})}"
+              data-th-object="${ambiguityResolverResultBuilder}">
+            <div data-th-each="candidate : ${electionCalculation.ambiguityResulutionTask.candidatesToChooseFrom}">
+                <input type="radio" data-th-field="*{candidateName}" data-th-value="${candidate.name}"
+                       required="required"/>
+                <label data-th-for="${#ids.prev('candidateName')}" data-th-text="${candidate.name}">Petra
+                    Musterfrau</label>
+            </div>
+            <span data-th-errors="*{candidateName}" class="error">Es ist ein Fehler aufgetreten</span>
+            <label for="comment">Kommentar:</label>
+            <input data-th-field="*{comment}" required="required"/>
+            <span data-th-errors="*{comment}" class="error">Bitte einen Kommentar eingeben.</span>
+            <br/>
+            <input type="submit"/>
+        </form>
+        <h2>Bisheriges Ablaufprotokoll</h2>
+        <pre data-th-text="${electionCalculation.ambiguityResulutionTask.currentLog}">Protokolldaten en masse</pre>
+    </th-block>
+    <th-block data-th-unless="${electionCalculation.resultsOfFinishedCalculations.empty}">
+        <h1>Bereits abgeschlossene Berechnungen</h1>
+        <section data-th-each="calculationResult : ${electionCalculation.resultsOfFinishedCalculations}">
+            <h1 data-th-text="${calculationResult.election.officeName}">Entenhausener Regionalparlament</h1>
+
+            <h2>Auf die
+                <th-block data-th-text="${calculationResult.election.numberOfFemaleExclusivePositions}"/>
+                Frauenplätze
+                wurden gewählt:
+            </h2>
+            <ul>
+                <li data-th-each="electedCandidate : ${calculationResult.electionResult.candidatesElectedInFemaleOnlyRun}" data-th-text="${electedCandidate.name}">
+                    Petra Musterfrau
+                </li>
+            </ul>
+            <h2>Auf die
+                <th-block data-th-text="${calculationResult.election.numberOfNotFemaleExclusivePositions}"/>
+                offenen
+                Plätze wurden gewählt:
+            </h2>
+            <ul>
+                    <li data-th-each="electedCandidate : ${calculationResult.electionResult.candidatesElectedInNonFemaleOnlyRun}" data-th-text="${electedCandidate.name}">
+                        Peter Musterkind
+                    </li>
+            </ul>
+            <h2>Detailiertes Ablaufprotokoll</h2>
+            <pre data-th-text="${calculationResult.auditLog}">Protokolldaten en masse</pre>
+        </section>
+    </th-block>
+</main>
+<footer><a href="/">Zurück zur Startseite</a></footer>
+</body>
+</html>

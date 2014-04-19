@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<!--
+ Copyright © 2014 Benjamin Gehrels
+
+ This file is part of The Single Transferable Vote Elections Web Interface.
+
+ The Single Transferable Vote Elections Web Interface is free software: you can redistribute it and/or modify it under
+ the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of
+ the License, or (at your option) any later version.
+
+ The Single Transferable Vote Elections Web Interface is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
+ Elections Web Interface. If not, see http://www.gnu.org/licenses/.
+-->
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<title>Stimmzettellayout verwalten - Wahlauszählungen nach der Weighted Inclusive Gregory Method</title>
+	<style type="text/css">
+		form .error {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+<header>
+	<h1>Stimmzettelmuster</h1>
+</header>
+<main>
+	<form method="post" action="/administrateBallotLayout" data-th-object="${ballotLayoutBuilderBean}">
+        <section data-th-each="election,electionsStatus : *{elections}">
+            <h1 data-th-text="${electionsStatus.count} + '. Amt'">1. Amt</h1>
+
+            <label data-th-for="'elections' + ${electionsStatus.index} + '.officeName'">Name des Amtes:</label>
+            <input data-th-field="*{elections[__${electionsStatus.index}__].officeName}" required="required" size="60"/>
+            <span data-th-errors="*{elections[__${electionsStatus.index}__].officeName}" class="error">Bitte einen Wert eingeben.</span><br />
+
+            <label data-th-for="'elections' + ${electionsStatus.index} + '.numberOfFemaleExclusivePositions'">Anzahl Frauenplätze:</label>
+            <input data-th-field="*{elections[__${electionsStatus.index}__].numberOfFemaleExclusivePositions}" type="number" required="required" min="0" size="3"/>
+            <span data-th-errors="*{elections[__${electionsStatus.index}__].numberOfFemaleExclusivePositions}" class="error">Bitte eine Zahl eingeben.</span><br />
+
+            <label data-th-for="'elections' + ${electionsStatus.index} + '.numberOfNonFemaleExclusivePositions'">Anzahl offene Plätze:</label>
+            <input data-th-field="*{elections[__${electionsStatus.index}__].numberOfNonFemaleExclusivePositions}" type="number" required="required" min="0" size="3"/>
+            <span data-th-errors="*{elections[__${electionsStatus.index}__].numberOfNonFemaleExclusivePositions}" class="error">Bitte eine Zahl eingeben.</span><br />
+
+            <h2>Kandidat*innen</h2>
+            <div data-th-each="candidate,candidatesStatus : *{elections[__${electionsStatus.index}__].candidates}">
+                <label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.name'">Name:</label>
+                <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].name}" required="required" size="60" />
+                weiblich
+                <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" type="radio" value="true" /><label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.female1'">Ja</label>
+                <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" type="radio" value="false" /><label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.female2'">Nein</label>
+                <span data-th-errors="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].name}" class="error">Bitte einen Namen eingeben</span>
+                <span data-th-errors="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" class="error">Bitte ein Geschlecht auswählen</span><br />
+                <br/>
+            </div>
+            <button name="addNewCandidate" data-th-value="${electionsStatus.index}">Weitere_n Kandidat_in hinzufügen</button>
+        </section>
+		<section>
+			<input type="submit" name="addNewElection" value="Weiteres Amt hinzufügen"/>
+			<input type="submit" value="Stimmzettel vollständig eingegeben"/>
+		</section>
+	</form>
+</main>
+<footer><a href="/">Zurück zur Startseite</a></footer>
+</body>
+</html>

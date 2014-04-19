@@ -21,16 +21,24 @@ import info.gehrels.voting.web.applicationState.CastBallotsState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.Formatter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import java.util.EnumSet;
+
+import static javax.servlet.DispatcherType.REQUEST;
 
 
 @Configuration
 @EnableAutoConfiguration
-public class SpringConfig {
+public class SpringConfig implements ServletContextInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringConfig.class, args);
@@ -96,4 +104,10 @@ public class SpringConfig {
 		return new DateTimeFormatter();
 	}
 
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+		filter.setEncoding("UTF-8");
+		servletContext.addFilter("characterEncodingFilter", filter).addMappingForUrlPatterns(EnumSet.of(REQUEST), false, "/*");
+	}
 }

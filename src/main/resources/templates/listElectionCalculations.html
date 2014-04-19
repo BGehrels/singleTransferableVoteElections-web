@@ -1,4 +1,5 @@
-<%--
+<!DOCTYPE HTML>
+<!--
  Copyright © 2014 Benjamin Gehrels
 
  This file is part of The Single Transferable Vote Elections Web Interface.
@@ -13,12 +14,7 @@
 
  You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
---%>
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="electionCalculations" scope="request"
-             type="java.util.Map<org.joda.time.DateTime, info.gehrels.voting.web.AsyncElectionCalculation>"/>
-<!DOCTYPE HTML>
+-->
 <html>
 <head>
     <meta charset="UTF-8"/>
@@ -41,18 +37,15 @@
     <form action="/startElectionCalculation" method="POST">
         <input type="submit" value="Ergebnisberechnung jetzt starten"/>
     </form>
-    <c:if test="${not empty electionCalculations}">
-        <h2>Laufende und Abgeschlossene Berechnungen</h2>
+    <section data-th-unless="${electionCalculations.empty}">
+        <h1>Laufende und Abgeschlossene Berechnungen</h1>
         <ul>
-            <c:forEach var="electionCalculation" items="${electionCalculations}">
-                <c:url value="/showElectionCalculation" var="url">
-                    <c:param name="dateTimeTheCalculationStarted" value="${electionCalculation.key}" />
-                </c:url>
-                <li><a href="${url}">Berechnung
-                    vom <c:out value="${electionCalculation.key}"/></a></li>
-            </c:forEach>
+            <li data-th-each="electionCalculation : ${electionCalculations}">
+                <a data-th-href="@{/showElectionCalculation(dateTimeTheCalculationStarted=${electionCalculation.key})}">Berechnung
+                vom <span data-th-text="${electionCalculation.key}">1998-05-03T17:05:32.045Z</span></a>
+            </li>
         </ul>
-    </c:if>
+    </section>
 </main>
 <footer><a href="/">Zurück zur Startseite</a></footer>
 </body>

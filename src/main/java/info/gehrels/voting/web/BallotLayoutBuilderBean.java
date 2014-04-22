@@ -44,6 +44,13 @@ public final class BallotLayoutBuilderBean {
 		elections.add(new GenderedElectionBuilderBean());
 	}
 
+	public void deleteElection(int electionIndex) {
+		// Keep at least one Election
+		if (elections.size() > 1) {
+			elections.remove(electionIndex);
+		}
+	}
+
 	public BallotLayout createBallotLayout() {
 		BallotLayout ballotLayout = new BallotLayout();
 		for (GenderedElectionBuilderBean genderedElectionBuilderBean : elections) {

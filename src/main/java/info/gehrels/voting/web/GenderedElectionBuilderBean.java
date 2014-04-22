@@ -85,4 +85,11 @@ public final class GenderedElectionBuilderBean {
 	public void addNewCandidate() {
 		candidates.add(candidates.size(), new GenderedCandidateBuilderBean());
 	}
+
+	public void deleteCandidate(int i) {
+		// keep at least one candidate
+		if (candidates.size() > 1) {
+			candidates.remove(i);
+		}
+	}
 }

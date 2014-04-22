@@ -58,6 +58,19 @@ public final class AdministrateBallotLayoutController {
 		return createModelAndView(form);
 	}
 
+	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"deleteElection"})
+	public ModelAndView deleteElection(@RequestParam("deleteElection") int electionIndex, @Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
+		form.getElections().remove(electionIndex);
+		return createModelAndView(form);
+	}
+
+	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"deleteCandidate"})
+	public ModelAndView deleteOffice(@RequestParam String deleteCandidate, @Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
+		String[] splited = deleteCandidate.split("_");
+		form.getElections().get(Integer.parseInt(splited[0])).deleteCandidate(Integer.parseInt(splited[1]));
+		return createModelAndView(form);
+	}
+
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
 	public ModelAndView saveBallotLayout(@Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {

@@ -54,13 +54,15 @@
                 <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" type="radio" value="true" /><label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.female1'">Ja</label>
                 <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" type="radio" value="false" /><label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.female2'">Nein</label>
                 <span data-th-errors="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].name}" class="error">Bitte einen Namen eingeben</span>
-                <span data-th-errors="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" class="error">Bitte ein Geschlecht auswählen</span><br />
+                <span data-th-errors="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" class="error">Bitte ein Geschlecht auswählen</span>
+                <button type="submit" formnovalidate="formnovalidate" name="deleteCandidate" data-th-value="${electionsStatus.index} + '_' + ${candidatesStatus.index}">löschen</button>
                 <br/>
             </div>
-            <button name="addNewCandidate" data-th-value="${electionsStatus.index}">Weitere_n Kandidat_in hinzufügen</button>
+            <button name="addNewCandidate" type="submit" data-th-value="${electionsStatus.index}" formnovalidate="formnovalidate">Weitere_n Kandidat_in hinzufügen</button>
+            <button name="deleteElection" type="submit" data-th-value="${electionsStatus.index}" formnovalidate="formnovalidate">Amt löschen</button>
         </section>
 		<section>
-			<input type="submit" name="addNewElection" value="Weiteres Amt hinzufügen"/>
+			<button type="submit" name="addNewElection" value="addNewElection">Weiteres Amt hinzufügen</button>
 			<input type="submit" value="Stimmzettel vollständig eingegeben"/>
 		</section>
 	</form>

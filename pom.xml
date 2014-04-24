@@ -10,7 +10,10 @@
 	<name>Single Transferable Vote Elections - Web Interface</name>
 	<url>https://github.com/BGehrels/singleTransferableVoteElections-web</url>
 
-	<description>Calculates Single Transferable Vote election results using the Weighted Inclusive Gregory Method
+	<description>
+		A pretty simple web interface to calculate Single Transferable Vote elections. It has been developed for GRÜNE
+		JUGEND Bundesverband, the youth organisation of the german Green Party. The only available language is therefore
+		german, but that should not be too hard to change.
 	</description>
 
 	<licenses>

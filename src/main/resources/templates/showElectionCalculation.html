@@ -38,7 +38,7 @@
         <h1>Manuelle Auswahl von gewinnenden/verlierenden Kandidierenden</h1>
 
         <form method="POST"
-              action="@{/resolveAmbiguity(dateTimeTheCalculationStarted=${electionCalculation.startDateTime})}"
+              data-th-action="@{/resolveAmbiguity(dateTimeTheCalculationStarted=${electionCalculation.startDateTime})}"
               data-th-object="${ambiguityResolverResultBuilder}">
             <div data-th-each="candidate : ${electionCalculation.ambiguityResulutionTask.candidatesToChooseFrom}">
                 <input type="radio" data-th-field="*{candidateName}" data-th-value="${candidate.name}"
@@ -48,7 +48,7 @@
             </div>
             <span data-th-errors="*{candidateName}" class="error">Es ist ein Fehler aufgetreten</span>
             <label for="comment">Kommentar:</label>
-            <input data-th-field="*{comment}" required="required"/>
+            <input data-th-field="*{comment}" size="100" required="required"/>
             <span data-th-errors="*{comment}" class="error">Bitte einen Kommentar eingeben.</span>
             <br/>
             <input type="submit"/>
@@ -56,7 +56,7 @@
         <h2>Bisheriges Ablaufprotokoll</h2>
         <pre data-th-text="${electionCalculation.ambiguityResulutionTask.currentLog}">Protokolldaten en masse</pre>
     </th-block>
-    <th-block data-th-unless="${electionCalculation.resultsOfFinishedCalculations.empty}">
+    <th-block data-th-unless="${#lists.isEmpty(electionCalculation.resultsOfFinishedCalculations)}">
         <h1>Bereits abgeschlossene Berechnungen</h1>
         <section data-th-each="calculationResult : ${electionCalculation.resultsOfFinishedCalculations}">
             <h1 data-th-text="${calculationResult.election.officeName}">Entenhausener Regionalparlament</h1>

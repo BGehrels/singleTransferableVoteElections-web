@@ -37,9 +37,6 @@ public final class BallotBuilder {
 	@Valid @NotNull
 	private List<VoteBuilder> votesByElectionId;
 
-
-	private boolean stringInputMode = false;
-
 	public Integer getBallotId() {
 		return ballotId;
 	}
@@ -54,14 +51,6 @@ public final class BallotBuilder {
 
 	public void setVotesByElectionId(List<VoteBuilder> votesByElectionId) {
 		this.votesByElectionId = votesByElectionId;
-	}
-
-	public boolean isStringInputMode() {
-		return stringInputMode;
-	}
-
-	public void setStringInputMode(boolean stringInputMode) {
-		this.stringInputMode = stringInputMode;
 	}
 
 	public Ballot<GenderedCandidate> createBallotFromForm(BallotLayout ballotLayout) {

@@ -26,7 +26,7 @@
     wigm.candidatePreferenceStringField = function (options) {
         var $element = options.$fieldElement;
 
-        var showPreference = function (preferenceString) {
+        var savePreference = function (preferenceString) {
             $element.val(preferenceString);
         };
 
@@ -42,12 +42,10 @@
         };
 
         var resetError = function () {
-            $element.removeClass("error");
             options.onResetError();
         };
 
         var error = function () {
-            $element.addClass("error");
             options.onError();
         };
 
@@ -55,15 +53,10 @@
             $element.addClass("invisible");
         };
 
-        var activate = function () {
-            $element.removeClass("invisible");
-        };
 
-        $element.on("keyup", handleChanges);
         return {
-            "showPreference": showPreference,
+            "savePreference": savePreference,
             "init": handleChanges,
-            "activate": activate,
             "deactivate": deactivate
         };
     };
@@ -106,39 +99,16 @@
         };
 
         var resetError = function () {
-            $elements.removeClass("error")
+            $elements.removeClass("error");
             options.onResetError();
-        };
-
-        var showPreference = function (preferenceString) {
-            $elements.val("");
-            for (var i = 0; i < preferenceString.length; i++) {
-                var $candidateInput = getFieldByCandidateIdx(charToCandidateIdx(preferenceString[i]));
-                if ($candidateInput.size() === 0) {
-                    throw preferenceString[i];
-                }
-                $candidateInput.val(i + 1);
-            }
         };
 
         var candidateIdxToChar = function (candidateIdx) {
             return String.fromCharCode(candidateIdx + 65);
         };
 
-        var charToCandidateIdx = function (candidateChar) {
-            return candidateChar.toUpperCase().charCodeAt(0) - 65;
-        };
-
-        var getFieldByCandidateIdx = function (candidateIdx) {
-            return $elements.filter("[data-candidate-index=\"" + candidateIdx + "\"]");
-        };
-
         var activate = function () {
             $elements.removeClass("invisible");
-        };
-
-        var deactivate = function () {
-            $elements.addClass("invisible");
         };
 
         $elements.each(function (idx, $element) {
@@ -146,10 +116,8 @@
         });
 
         return {
-            "showPreference": showPreference,
             "init": handleChanges,
-            "activate": activate,
-            "deactivate": deactivate
+            "activate": activate
         }
     };
 
@@ -157,40 +125,27 @@
         var preferenceList;
         var stringField = wigm.candidatePreferenceStringField({
                                                                   "$fieldElement": $(electionElement).find(".preferenceString"),
-                                                                  "onChange": function (preferenceString) {
-                                                                      preferenceList.showPreference(preferenceString);
-                                                                  },
                                                                   "onResetError": wigm.resetError,
                                                                   "onError": wigm.error});
         preferenceList = wigm.candidatePreferenceList({
                                                           "$listElement": $(electionElement).find("ol"),
-                                                          "onChange": stringField.showPreference,
+                                                          "onChange": stringField.savePreference,
                                                           "onResetError": wigm.resetError,
                                                           "onError": wigm.error});
         stringField.init();
         preferenceList.init();
 
-        var toggleInputMode = function (isStringInputModeEnabled) {
-            if (isStringInputModeEnabled) {
-                preferenceList.deactivate();
-                stringField.activate();
-            } else {
-                preferenceList.activate();
-                stringField.deactivate();
-            }
+        var activateMultiFieldInputMode = function () {
+            preferenceList.activate();
+            stringField.deactivate();
         };
 
-        wigm.$stringInputModeCheckbox.change(function () {
-            toggleInputMode($(this).is(':checked'));
-        });
-
-        toggleInputMode(wigm.$stringInputModeCheckbox.is(':checked'));
+        activateMultiFieldInputMode();
     };
 
 
     $(document).ready(function () {
         wigm.$submitButton = $("input[type=\"submit\"]");
-        wigm.$stringInputModeCheckbox = $("#stringInputMode1");
 
         $("section.election").each(function (idx, electionElement) {
             wigm.initSingleElection(electionElement);
@@ -228,10 +183,6 @@
             <input data-th-field="*{ballotId}" data-th-errorclass="error" type="number" required="required"
                    autofocus="autofocus"/>
             <span data-th-errors="*{ballotId}" class="error">Bitte eine Zahl eingeben!</span><br/>
-
-            <span data-th-errors="*{stringInputMode}" class="error">Bitte einen Eingabemodus auswählen</span>
-            <label for="stringInputMode1">Schnelleingabemodus</label>
-            <input type="checkbox" data-th-field="*{stringInputMode}"/>
         </section>
         <section data-th-each="election, electionStatus : ${ballotLayout.elections}" class="election">
             <h2 data-th-text="${election.officeName}">Entenhausener Parlament</h2>

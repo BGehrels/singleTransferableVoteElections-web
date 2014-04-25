@@ -60,20 +60,16 @@ public final class CastVoteController {
 		Ballot<GenderedCandidate> ballotFromForm = ballotBuilder.createBallotFromForm(ballotLayoutState.ballotLayout);
 		castBallotsState.add(firstOrSecondTry, ballotFromForm);
 
-		return new ModelAndView(
-			"redirect:/castVote?firstOrSecondTry=" + firstOrSecondTry + "&stringInputMode=" + ballotBuilder
-				.isStringInputMode());
+		return new ModelAndView("redirect:/castVote?firstOrSecondTry=" + firstOrSecondTry);
 	}
 
 	@RequestMapping(value = "/castVote", method = {HEAD, GET})
-	public ModelAndView doGet(@RequestParam BallotInputTry firstOrSecondTry,
-	                          @RequestParam(required = false) boolean stringInputMode) {
+	public ModelAndView doGet(@RequestParam BallotInputTry firstOrSecondTry) {
 		if (ballotLayoutState.ballotLayout == null) {
 			return new ModelAndView("redirect:/");
 		}
 
 		BallotBuilder ballotBuilder = new BallotBuilder();
-		ballotBuilder.setStringInputMode(stringInputMode);
 		return createModelAndView(ballotBuilder, firstOrSecondTry);
 	}
 

@@ -3,7 +3,7 @@
 
 	<groupId>info.gehrels.voting</groupId>
 	<artifactId>singleTransferableVoteElections-web</artifactId>
-	<version>2.3-SNAPSHOT</version>
+	<version>2.3-testing</version>
 	<packaging>jar</packaging>
 
 	<name>Single Transferable Vote Elections - Web Interface</name>
@@ -21,6 +21,8 @@
 			<distribution>repo</distribution>
 			<url>http://www.gnu.org/licenses/agpl-3.0.html</url>
 			<comments>
+				Modified 2014 - Florian Wilsch
+
 				Copyright © 2014 Benjamin Gehrels et al.
 
 				This file is part of The Single Transferable Vote Elections Web Interface.
@@ -39,20 +41,7 @@
 		</license>
 	</licenses>
 
-	<developers>
-		<developer>
-			<name>Benjamin Gehrels</name>
-			<email>singleTransferableVoteElections-web.pom.xml@gehrels.info</email>
-		</developer>
-	</developers>
-
-	<scm>
-		<connection>scm:git:git@github.com:BGehrels/singleTransferableVoteElections-web</connection>
-		<url>scm:git:git@github.com:BGehrels/singleTransferableVoteElections-web</url>
-		<developerConnection>scm:git:git@github.com:BGehrels/singleTransferableVoteElections-web</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
-
+	
 	<properties>
 		<start-class>info.gehrels.voting.web.SpringConfig</start-class>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -160,21 +149,6 @@
 				</executions>
 			</plugin>
 
-			<!-- Sign the resulting artifacts using GPG -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 
 			<!-- Deploying an executable jar into nexus won't make any sense -->
 			<plugin>

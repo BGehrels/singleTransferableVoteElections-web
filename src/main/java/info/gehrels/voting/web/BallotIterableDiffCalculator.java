@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -44,16 +45,16 @@ public final class BallotIterableDiffCalculator {
 
 	public static <T extends Candidate> BallotIterableDiff calculateDiff(Iterable<Ballot<T>> ballotSetA,
 	                                                                Iterable<Ballot<T>> ballotSetB) {
-		Set<Long> setAsDuplicateIds = findDuplicateIds(ballotSetA);
-		Set<Long> setBsDuplicateIds = findDuplicateIds(ballotSetB);
+		Set<Long> setAsDuplicateIds = new TreeSet<Long>(findDuplicateIds(ballotSetA));
+		Set<Long> setBsDuplicateIds = new TreeSet<Long>(findDuplicateIds(ballotSetB));
 
-		Set<Long> inAButNotInB = inAButNotInB(ballotSetA, ballotSetB);
+		Set<Long> inAButNotInB = new TreeSet<Long>(inAButNotInB(ballotSetA, ballotSetB));
 		inAButNotInB.removeAll(setAsDuplicateIds);
 
-		Set<Long> inBButNotInA = inAButNotInB(ballotSetB, ballotSetA);
+		Set<Long> inBButNotInA = new TreeSet<Long>(inAButNotInB(ballotSetB, ballotSetA));
 		inBButNotInA.removeAll(setBsDuplicateIds);
 
-		Set<Long> differentBetweenTheTwoSets = differentBetweenSetAAndSetB(ballotSetA, ballotSetB);
+		Set<Long> differentBetweenTheTwoSets = new TreeSet<Long>(differentBetweenSetAAndSetB(ballotSetA, ballotSetB));
 		differentBetweenTheTwoSets.removeAll(setAsDuplicateIds);
 		differentBetweenTheTwoSets.removeAll(setBsDuplicateIds);
 		differentBetweenTheTwoSets.removeAll(inAButNotInB);

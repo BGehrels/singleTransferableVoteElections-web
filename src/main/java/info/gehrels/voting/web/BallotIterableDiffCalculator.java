@@ -18,6 +18,7 @@ package info.gehrels.voting.web;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -119,22 +120,22 @@ public final class BallotIterableDiffCalculator {
 	}
 
 	public static final class BallotIterableDiff {
-		private final ImmutableSet<Long> setAsDuplicateIds;
-		private final ImmutableSet<Long> setBsDuplicateIds;
-		private final ImmutableSet<Long> inAButNotInB;
-		private final ImmutableSet<Long> inBButNotInA;
-		private final ImmutableSet<Long> differentBetweenTheTwoSets;
+		private final ImmutableSortedSet<Long> setAsDuplicateIds;
+		private final ImmutableSortedSet<Long> setBsDuplicateIds;
+		private final ImmutableSortedSet<Long> inAButNotInB;
+		private final ImmutableSortedSet<Long> inBButNotInA;
+		private final ImmutableSortedSet<Long> differentBetweenTheTwoSets;
 
 		private BallotIterableDiff(Set<Long> setAsDuplicateIds,
 		                           Set<Long> setBsDuplicateIds,
 		                           Set<Long> inAButNotInB,
 		                           Set<Long> inBButNotInA,
 		                           Set<Long> differentBetweenTheTwoSets) {
-			this.setAsDuplicateIds = ImmutableSet.copyOf(setAsDuplicateIds);
-			this.setBsDuplicateIds = ImmutableSet.copyOf(setBsDuplicateIds);
-			this.inAButNotInB = ImmutableSet.copyOf(inAButNotInB);
-			this.inBButNotInA = ImmutableSet.copyOf(inBButNotInA);
-			this.differentBetweenTheTwoSets = ImmutableSet.copyOf(differentBetweenTheTwoSets);
+			this.setAsDuplicateIds = ImmutableSortedSet.copyOf(setAsDuplicateIds);
+			this.setBsDuplicateIds = ImmutableSortedSet.copyOf(setBsDuplicateIds);
+			this.inAButNotInB = ImmutableSortedSet.copyOf(inAButNotInB);
+			this.inBButNotInA = ImmutableSortedSet.copyOf(inBButNotInA);
+			this.differentBetweenTheTwoSets = ImmutableSortedSet.copyOf(differentBetweenTheTwoSets);
 		}
 
 		public boolean isDifferent() {
@@ -149,23 +150,23 @@ public final class BallotIterableDiffCalculator {
 			       differentBetweenTheTwoSets.isEmpty();
 		}
 
-		public ImmutableSet<Long> getSetAsDuplicateIds() {
+		public ImmutableSortedSet<Long> getSetAsDuplicateIds() {
 			return setAsDuplicateIds;
 		}
 
-		public ImmutableSet<Long> getSetBsDuplicateIds() {
+		public ImmutableSortedSet<Long> getSetBsDuplicateIds() {
 			return setBsDuplicateIds;
 		}
 
-		public ImmutableSet<Long> getInAButNotInB() {
+		public ImmutableSortedSet<Long> getInAButNotInB() {
 			return inAButNotInB;
 		}
 
-		public ImmutableSet<Long> getInBButNotInA() {
+		public ImmutableSortedSet<Long> getInBButNotInA() {
 			return inBButNotInA;
 		}
 
-		public ImmutableSet<Long> getDifferentBetweenTheTwoSets() {
+		public ImmutableSortedSet<Long> getDifferentBetweenTheTwoSets() {
 			return differentBetweenTheTwoSets;
 		}
 	}

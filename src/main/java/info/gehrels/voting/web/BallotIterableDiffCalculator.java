@@ -169,5 +169,13 @@ public final class BallotIterableDiffCalculator {
 		public ImmutableSortedSet<Long> getDifferentBetweenTheTwoSets() {
 			return differentBetweenTheTwoSets;
 		}
+
+		public boolean isBallotDifferentOrDuplicate(long ballotId) {
+			return setAsDuplicateIds.contains(ballotId) ||
+			       setBsDuplicateIds.contains(ballotId) ||
+			       inAButNotInB.contains(ballotId) ||
+			       inBButNotInA.contains(ballotId) ||
+			       differentBetweenTheTwoSets.contains(ballotId);
+		}
 	}
 }

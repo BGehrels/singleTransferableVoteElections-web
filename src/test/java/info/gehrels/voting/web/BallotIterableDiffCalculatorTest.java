@@ -56,6 +56,7 @@ public final class BallotIterableDiffCalculatorTest {
 
 		assertThat(ballotIterableDiff.isEqual(), is(true));
 		assertThat(ballotIterableDiff.isDifferent(), is(false));
+		assertThat(ballotIterableDiff.isBallotDifferentOrDuplicate(5), is(false));
 	}
 
 	@Test
@@ -72,6 +73,7 @@ public final class BallotIterableDiffCalculatorTest {
 		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
 		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
 		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
+		assertThat(ballotIterableDiff.isBallotDifferentOrDuplicate(5), is(true));
 	}
 
 	@Test
@@ -88,6 +90,7 @@ public final class BallotIterableDiffCalculatorTest {
 		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
 		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
 		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
+		assertThat(ballotIterableDiff.isBallotDifferentOrDuplicate(5), is(true));
 	}
 
 	@Test
@@ -103,6 +106,7 @@ public final class BallotIterableDiffCalculatorTest {
 		assertThat(ballotIterableDiff.getInAButNotInB(), contains(5L));
 		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
 		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
+		assertThat(ballotIterableDiff.isBallotDifferentOrDuplicate(5), is(true));
 	}
 
 	@Test
@@ -118,6 +122,7 @@ public final class BallotIterableDiffCalculatorTest {
 		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
 		assertThat(ballotIterableDiff.getInBButNotInA(), contains(5L));
 		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), is(empty()));
+		assertThat(ballotIterableDiff.isBallotDifferentOrDuplicate(5), is(true));
 	}
 
 	@Test
@@ -134,6 +139,7 @@ public final class BallotIterableDiffCalculatorTest {
 		assertThat(ballotIterableDiff.getInAButNotInB(), is(empty()));
 		assertThat(ballotIterableDiff.getInBButNotInA(), is(empty()));
 		assertThat(ballotIterableDiff.getDifferentBetweenTheTwoSets(), contains(5L));
+		assertThat(ballotIterableDiff.isBallotDifferentOrDuplicate(5), is(true));
 	}
 
 	private Ballot<Candidate> createBallot(long id, Candidate... candidate) {

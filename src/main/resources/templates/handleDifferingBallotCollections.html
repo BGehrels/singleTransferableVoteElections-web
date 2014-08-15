@@ -25,15 +25,15 @@
     <h1>Wahlberechnung nicht möglich</h1>
 
     <p>Es gibt noch Abweichungen zwischen der Ersteingabe der Stimmzettel und der Kontrolleingabe. Es besteht nun die
-        Möglichkeit, einzelne erfasste Stimmzettel wieder zu löschen, um sie erneut zu erfassen.</p>
+        Möglichkeit, diese Stimmzettel zu löschen, um sie erneut zu erfassen.</p>
 
-    <form method="POST" action="/deleteBallot">
+    <form method="POST" action="/deleteBallots">
         <section data-th-unless="${ballotIterableDiff.setAsDuplicateIds.empty}">
             <h2>Bei der Ersteingabe mehrfach eingegebene Stimmzettel</h2>
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.setAsDuplicateIds}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>
-                    <button type="submit" name="ballotId" data-th-value="${ballotId}">Stimmzettel löschen</button>
+                    <input type="hidden" name="ballotIds" data-th-value="${ballotId}"/>
                 </li>
             </ul>
         </section>
@@ -43,7 +43,7 @@
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.setBsDuplicateIds}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>
-                    <button type="submit" name="ballotId" data-th-value="${ballotId}">Stimmzettel löschen</button>
+                    <input type="hidden" name="ballotIds" data-th-value="${ballotId}"/>
                 </li>
             </ul>
         </section>
@@ -53,7 +53,7 @@
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.inAButNotInB}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>
-                    <button type="submit" name="ballotId" data-th-value="${ballotId}">Stimmzettel löschen</button>
+                    <input type="hidden" name="ballotIds" data-th-value="${ballotId}"/>
                 </li>
             </ul>
         </section>
@@ -63,7 +63,7 @@
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.inBButNotInA}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>
-                    <button type="submit" name="ballotId" data-th-value="${ballotId}">Stimmzettel löschen</button>
+                    <input type="hidden" name="ballotIds" data-th-value="${ballotId}"/>
                 </li>
             </ul>
         </section>
@@ -73,9 +73,15 @@
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.differentBetweenTheTwoSets}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>
-                    <button type="submit" name="ballotId" data-th-value="${ballotId}">Stimmzettel löschen</button>
+                    <input type="hidden" name="ballotIds" data-th-value="${ballotId}"/>
                 </li>
             </ul>
+        </section>
+
+        <section>
+            <h2>Löschen der fehlerhaften Stimmzettel</h2>
+            <p>Bitte suche dir die oben aufgeführten Stimmzettel heraus und bilde daraus einen seperaten Stapel. Drücke erst dann den Löschen-Knopf, wenn du alle gefunden hast. <strong>Diese Liste lässt sich danach nicht erneut aufrufen.</strong></p>
+            <p><input type="submit" value="Alle fehlerhaften Stimmzettel unwiderbringlich löschen und erneut eingeben."/></p>
         </section>
     </form>
 </main>

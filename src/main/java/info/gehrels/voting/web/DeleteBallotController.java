@@ -16,6 +16,7 @@
  */
 package info.gehrels.voting.web;
 
+import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +30,19 @@ public final class DeleteBallotController {
 	private final CastBallotsState castBallotsState;
 
 	public DeleteBallotController(CastBallotsState castBallotsState) {
-
 		this.castBallotsState = castBallotsState;
 	}
-	@RequestMapping(value = "/deleteBallot", method = {POST, PUT})
-	public String deleteBallotById(@RequestParam long ballotId) {
-		castBallotsState.deleteById(ballotId);
+
+	@RequestMapping(value = "/deleteBallots", method = {POST, PUT})
+	public String deleteBallotsById(@RequestParam long[] ballotIds) {
+		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
+			.calculateDiff(castBallotsState.getFirstTryCastBallots(), castBallotsState.getSecondTryCastBallots());
+		for (long ballotId : ballotIds) {
+			// We check here again to prevent forged requests.
+			if (ballotIterableDiff.isBallotDifferentOrDuplicate(ballotId)) {
+				castBallotsState.deleteById(ballotId);
+			}
+		}
 
 		return "redirect:/";
 	}

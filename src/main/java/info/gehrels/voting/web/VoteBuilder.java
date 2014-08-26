@@ -86,10 +86,14 @@ public final class VoteBuilder {
 
 	public void validate(String objectName, String fieldPrefix, BindingResult bindingResult) {
 		if (type == Type.PREFERENCE) {
-			if (allNullOrEmpty(preferencesByCandidateIdx)|| containsDuplicates(preferencesByCandidateIdx)) {
+			if (allNullOrEmpty(preferencesByCandidateIdx)) {
 				bindingResult.addError(
-					new FieldError(objectName, fieldPrefix + ".preferencesByCandidateIdx", "", true, new String[]{"emptyOrDuplicatePreference"}, new Object[]{},
-					               "You must enter a duplicate free preference if you have selected it."));
+					new FieldError(objectName, fieldPrefix + ".preferencesByCandidateIdx", "", true, new String[]{"emptyPreference"}, new Object[]{},
+					               "You must enter a preference if you have selected it."));
+			} else if (containsDuplicates(preferencesByCandidateIdx)) {
+				bindingResult.addError(
+					new FieldError(objectName, fieldPrefix + ".preferencesByCandidateIdx", "", true, new String[]{"duplicatesInPreference"}, new Object[]{},
+					               "You must enter a duplicate free preference."));
 			}
 		}
 	}

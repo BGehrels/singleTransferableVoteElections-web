@@ -18,23 +18,26 @@ package info.gehrels.voting.web;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
-import com.google.common.collect.Iterables;
 import info.gehrels.voting.Vote;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public final class VoteBuilder {
-	public static final Object[] EMPTY = new Object[0];
 	@NotNull
 	private Type type = Type.PREFERENCE;
 
+	@Valid
 	@NotNull
-	private String preferenceString;
+	private List<PreferenceBuilder> preferencesByCandidateIdx = new ArrayList<>();
 
 	public Type getType() {
 		return type;
@@ -44,12 +47,12 @@ public final class VoteBuilder {
 		this.type = type;
 	}
 
-	public String getPreferenceString() {
-		return preferenceString;
+	public List<PreferenceBuilder> getPreferencesByCandidateIdx() {
+		return preferencesByCandidateIdx;
 	}
 
-	public void setPreferenceString(String preferenceString) {
-		this.preferenceString = preferenceString;
+	public void setPreferencesByCandidateIdx(List<PreferenceBuilder> preferencesByCandidateIdx) {
+		this.preferencesByCandidateIdx = preferencesByCandidateIdx;
 	}
 
 	public Optional<Vote<GenderedCandidate>> createVote(GenderedElection genderedElection) {
@@ -68,34 +71,48 @@ public final class VoteBuilder {
 	}
 
 	private Vote<GenderedCandidate> createPreferenceVote(GenderedElection genderedElection) {
-		Builder<GenderedCandidate> preferenceBuilder = ImmutableSet.builder();
-		for (char c : preferenceString.toUpperCase().toCharArray()) {
-			int candidateIndex = c - 'A';
-			preferenceBuilder.add(Iterables.get(genderedElection.getCandidates(), candidateIndex));
+		SortedMap<Long, GenderedCandidate> candidatesByPreferences = new TreeMap<>();
+
+		for (int i = 0; (i < genderedElection.getCandidates().size()) && (i < preferencesByCandidateIdx.size()); i++) {
+			PreferenceBuilder preference = preferencesByCandidateIdx.get(i);
+			if (preference.getValue() != null) {
+				candidatesByPreferences
+					.put(preference.getValue(), genderedElection.getCandidates().asList().get(i));
+			}
 		}
-		return Vote.createPreferenceVote(genderedElection, preferenceBuilder.build());
+
+		return Vote.createPreferenceVote(genderedElection, ImmutableSet.copyOf(candidatesByPreferences.values()));
 	}
 
 	public void validate(String objectName, String fieldPrefix, BindingResult bindingResult) {
-		if ((type == Type.PREFERENCE) && preferenceString.isEmpty()) {
-			bindingResult.addError(
-				new FieldError(objectName, fieldPrefix + ".preferenceString", preferenceString, false,
-				               new String[]{"emptyPreference"}, EMPTY,
-				               "You must enter a preference if you selected it."));
-		}
-
-		if (containsDuplicateChars(preferenceString)) {
-			bindingResult.addError(
-				new FieldError(objectName, fieldPrefix + ".preferenceString", preferenceString, false,
-				               new String[]{"duplicateCandidate"}, EMPTY,
-				               "The Preference must not contain duplicate entries"));
+		if (type == Type.PREFERENCE) {
+			if (allNullOrEmpty(preferencesByCandidateIdx)|| containsDuplicates(preferencesByCandidateIdx)) {
+				bindingResult.addError(
+					new FieldError(objectName, fieldPrefix + ".preferencesByCandidateIdx", "", true, new String[]{"emptyOrDuplicatePreference"}, new Object[]{},
+					               "You must enter a duplicate free preference if you have selected it."));
+			}
 		}
 	}
 
-	private static boolean containsDuplicateChars(String preferenceString) {
-		for (int i = 0; i < preferenceString.length(); i++) {
-			for (int j = i + 1; j < preferenceString.length(); j++) {
-				if (preferenceString.charAt(i) == preferenceString.charAt(j)) {
+	private boolean allNullOrEmpty(List<PreferenceBuilder> preferenceBuilders) {
+		for (PreferenceBuilder preferenceBuilder : preferenceBuilders) {
+			if (!isEmptyPreference(preferenceBuilder)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean isEmptyPreference(PreferenceBuilder preferenceBuilder) {
+		return preferenceBuilder == null || preferenceBuilder.getValue() == null;
+	}
+
+
+	private boolean containsDuplicates(List<PreferenceBuilder> list) {
+		for (int i = 0; i < list.size(); i++) {
+			for (int j = i + 1; j < list.size(); j++) {
+				if (!isEmptyPreference(list.get(i)) && list.get(i).equals(list.get(j))) {
 					return true;
 				}
 			}

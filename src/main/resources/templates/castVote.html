@@ -180,7 +180,7 @@
         <input type="hidden" name="firstOrSecondTry" data-th-value="${firstOrSecondTry}"/>
         <section>
             <label for="ballotId">Stimmzettelnummer</label>
-            <input data-th-field="*{ballotId}" data-th-errorclass="error" type="number" required="required"
+            <input data-th-field="*{ballotId}" data-th-errorclass="error" type="number" required="required" min="0"
                    autofocus="autofocus"/>
             <span data-th-errors="*{ballotId}" class="error">Bitte eine Zahl eingeben!</span><br/>
         </section>
@@ -191,10 +191,7 @@
                    data-th-errorclass="error"
                    data-th-value="PREFERENCE"/>
             <label data--for="${#ids.prev('votesByElectionId[__${electionStatus.index}__].type')}">Präferenz</label>
-            <input data-th-field="*{votesByElectionId[__${electionStatus.index}__].preferenceString}"
-                   data-th-errorclass="error" type="text" class="preferenceString"/>
-            <span data-th-errors="*{votesByElectionId[__${electionStatus.index}__].preferenceString}"
-                  class="error"/><br/>
+            <br/>
 
             <input type="radio" data-th-field="*{votesByElectionId[__${electionStatus.index}__].type}"
                    data-th-errorclass="error"
@@ -214,11 +211,17 @@
             <label data--for="${#ids.prev('votesByElectionId[__${electionStatus.index}__].type')}">Keine Stimmabgabe</label>
             <br/>
 
+            <span data-th-errors="*{votesByElectionId[__${electionStatus.index}__].preferencesByCandidateIdx}"
+                                       class="error"/>
             <ol type="A">
                 <li data-th-each="candidate,candidateStatus : ${election.candidates}">
-                    <input type="number" size="2" data-th-attr="data-candidate-index=${candidateStatus.index}"
-                           disabled="disabled" class="invisible" />
                     <span data-th-text="${candidate.name}"></span>
+                    <input data-th-field="*{votesByElectionId[__${electionStatus.index}__].preferencesByCandidateIdx[__${candidateStatus.index}__].value}"
+                           type="number" size="2" min="0" data-th-errorclass="error" />
+                    <span data-th-errors="*{votesByElectionId[__${electionStatus.index}__].preferencesByCandidateIdx[__${candidateStatus.index}__]}"
+                                               class="error"/>
+                    <span data-th-errors="*{votesByElectionId[__${electionStatus.index}__].preferencesByCandidateIdx[__${candidateStatus.index}__].value}"
+                           class="error"/>
                 </li>
             </ol>
         </section>

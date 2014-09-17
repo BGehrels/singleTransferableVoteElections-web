@@ -2,6 +2,5 @@
 - Drucklayout
 - Logmeldung beim start, unter welchen URLs das Frontend erreichbar ist
 - Sonstiges Logging auf WARN stellen
-- Bei Stimmabgabe ohne eingegebenem Stimmzettellayout auf Startseite zurückspringen
 - Visualisierung
 - JSON-Download

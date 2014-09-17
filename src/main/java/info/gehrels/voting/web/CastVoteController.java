@@ -48,6 +48,10 @@ public final class CastVoteController {
 	@RequestMapping(value = "/castVote", method = {POST, PUT})
 	public ModelAndView doCastVote(@Valid BallotBuilder ballotBuilder, BindingResult bindingResult,
 	                               BallotInputTry firstOrSecondTry) {
+		if (ballotLayoutState.ballotLayout == null) {
+			return new ModelAndView("redirect:/");
+		}
+
 		if (bindingResult.hasErrors()) {
 			return createModelAndView(ballotBuilder, firstOrSecondTry);
 		}

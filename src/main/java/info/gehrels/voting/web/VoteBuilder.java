@@ -95,6 +95,12 @@ public final class VoteBuilder {
 					new FieldError(objectName, fieldPrefix + ".preferencesByCandidateIdx", "", true, new String[]{"duplicatesInPreference"}, new Object[]{},
 					               "You must enter a duplicate free preference."));
 			}
+		} else {
+			if (!allNullOrEmpty(preferencesByCandidateIdx)) {
+				bindingResult.addError(
+					new FieldError(objectName, fieldPrefix + ".preferencesByCandidateIdx", "", true, new String[]{"noPreferenceAllowed"}, new Object[]{},
+					               "You must not enter a preference for no, invalid or non casted votes."));
+			}
 		}
 	}
 
@@ -109,7 +115,7 @@ public final class VoteBuilder {
 	}
 
 	private boolean isEmptyPreference(PreferenceBuilder preferenceBuilder) {
-		return preferenceBuilder == null || preferenceBuilder.getValue() == null;
+		return (preferenceBuilder == null) || (preferenceBuilder.getValue() == null);
 	}
 
 

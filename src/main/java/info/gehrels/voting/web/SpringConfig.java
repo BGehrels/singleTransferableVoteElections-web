@@ -16,6 +16,7 @@
  */
 package info.gehrels.voting.web;
 
+import com.google.common.collect.ImmutableMap;
 import info.gehrels.voting.web.applicationState.BallotLayoutState;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
@@ -39,9 +40,16 @@ import static javax.servlet.DispatcherType.REQUEST;
 @Configuration
 @EnableAutoConfiguration
 public class SpringConfig implements ServletContextInitializer {
-
-    public static void main(String[] args) {
-        SpringApplication.run(SpringConfig.class, args);
+    public static void main(String... args) {
+	    SpringApplication springApplication = new SpringApplication(SpringConfig.class);
+	    springApplication.setShowBanner(false);
+	    springApplication.setDefaultProperties(
+		    ImmutableMap.<String, Object>builder()
+			    .put("logging.level.", "WARN")
+			    .put("logging.level.ServerStarted", "INFO")
+			    .build());
+	    springApplication.addListeners(new ServerStartedMessagePrintingListener());
+		springApplication.run(args);
     }
 
 	@Bean
@@ -110,4 +118,5 @@ public class SpringConfig implements ServletContextInitializer {
 		filter.setEncoding("UTF-8");
 		servletContext.addFilter("characterEncodingFilter", filter).addMappingForUrlPatterns(EnumSet.of(REQUEST), false, "/*");
 	}
+
 }

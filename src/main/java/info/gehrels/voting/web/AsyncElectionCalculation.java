@@ -28,9 +28,10 @@ import info.gehrels.voting.genderedElections.ElectionCalculationWithFemaleExclus
 import info.gehrels.voting.genderedElections.ElectionCalculationWithFemaleExclusivePositions.Result;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
-import info.gehrels.voting.genderedElections.StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener;
 import info.gehrels.voting.singleTransferableVote.STVElectionCalculationFactory;
-import info.gehrels.voting.singleTransferableVote.StringBuilderBackedSTVElectionCalculationListener;
+import info.gehrels.voting.web.auditLogging.AuditLog;
+import info.gehrels.voting.web.auditLogging.AuditLogBuildingElectionCalculationListener;
+import info.gehrels.voting.web.auditLogging.StringAuditLog;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	private final List<GenderedElection> elections;
 	private final ImmutableCollection<Ballot<GenderedCandidate>> ballots;
 	private final ElectionCalculationWithFemaleExclusivePositions electionCalculation;
-	private final StringBuilder auditLogBuilder;
+	private final AuditLogBuildingElectionCalculationListener auditLogBuilder = new AuditLogBuildingElectionCalculationListener();
 	private final ImmutableList.Builder<ElectionCalculationResultBean> resultModelBuilder = ImmutableList.builder();
 	private final DateTime startDateTime = DateTime.now();
 
@@ -54,7 +55,6 @@ public final class AsyncElectionCalculation implements Runnable {
 	                                ImmutableCollection<Ballot<GenderedCandidate>> ballots) {
 		this.elections = elections;
 		this.ballots = ballots;
-		this.auditLogBuilder = new StringBuilder();
 		this.electionCalculation = createGenderedElectionCalculation();
 	}
 
@@ -68,15 +68,20 @@ public final class AsyncElectionCalculation implements Runnable {
 
 		setState(ElectionCalculationState.RUNNING);
 		for (GenderedElection election : elections) {
-			reset(auditLogBuilder);
 			Result electionResult = electionCalculation
 				.calculateElectionResult(election, ImmutableList.copyOf(ballots));
-			String auditLog = auditLogBuilder.toString();
-			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLog));
+			String auditLogString = convertToString(auditLogBuilder.buildAndReset());
+			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLogString));
 			setResult(resultModelBuilder.build());
 		}
 
 		setState(ElectionCalculationState.FINISHED);
+	}
+
+	private String convertToString(AuditLog auditLog) {
+		StringAuditLog stringAuditLog = new StringAuditLog();
+		auditLog.replay(stringAuditLog);
+		return stringAuditLog.toString();
 	}
 
 	private synchronized void setResult(ImmutableList<ElectionCalculationResultBean> result) {
@@ -103,13 +108,9 @@ public final class AsyncElectionCalculation implements Runnable {
 		return new ElectionCalculationWithFemaleExclusivePositions(
 			new STVElectionCalculationFactory<>(
 				createQuorumCalculation(),
-				new StringBuilderBackedSTVElectionCalculationListener<GenderedCandidate>(auditLogBuilder),
-				new TakeFirstOneAmbiguityResolver(this)),
-			new StringBuilderBackedElectionCalculationWithFemaleExclusivePositionsListener(auditLogBuilder));
-	}
-
-	private void reset(StringBuilder stringBuilder) {
-		stringBuilder.setLength(0);
+				auditLogBuilder,
+				new BlockUntilFetchedAsyncHttpUserInputAmbiguityResolver(this)),
+			auditLogBuilder);
 	}
 
 	public synchronized Snapshot getSnapshot() {
@@ -158,10 +159,10 @@ public final class AsyncElectionCalculation implements Runnable {
 		 * Sofern Zufallsauswahlen gemäß § 18 Nr. 7, 8 erforderlich sind, entscheidet das von der Tagungsleitung zu ziehende
 		 * Los; die Ziehung und die Eingabe des Ergebnisses in den Computer müssen mitgliederöffentlich erfolgen.
 		 */
-	private static final class TakeFirstOneAmbiguityResolver implements AmbiguityResolver<GenderedCandidate> {
+	private static final class BlockUntilFetchedAsyncHttpUserInputAmbiguityResolver implements AmbiguityResolver<GenderedCandidate> {
 		private final AsyncElectionCalculation asyncElectionCalculation;
 
-		private TakeFirstOneAmbiguityResolver(AsyncElectionCalculation asyncElectionCalculation) {
+		private BlockUntilFetchedAsyncHttpUserInputAmbiguityResolver(AsyncElectionCalculation asyncElectionCalculation) {
 			this.asyncElectionCalculation = asyncElectionCalculation;
 		}
 
@@ -185,7 +186,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	private String getCurrentLog() {
-		return auditLogBuilder.toString();
+		return convertToString(auditLogBuilder.build());
 	}
 
 	private synchronized void setAmbuguityResulutionTask(AmbiguityResolutionTask ambuguityResulutionTask) {

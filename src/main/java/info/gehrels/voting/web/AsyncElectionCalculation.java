@@ -70,18 +70,12 @@ public final class AsyncElectionCalculation implements Runnable {
 		for (GenderedElection election : elections) {
 			Result electionResult = electionCalculation
 				.calculateElectionResult(election, ImmutableList.copyOf(ballots));
-			String auditLogString = convertToString(auditLogBuilder.buildAndReset());
-			resultModelBuilder.add(new ElectionCalculationResultBean(election, electionResult, auditLogString));
+			AuditLog auditLog = auditLogBuilder.buildAndReset();
+			resultModelBuilder.add(new ElectionCalculationResultBean(startDateTime, election, electionResult, auditLog));
 			setResult(resultModelBuilder.build());
 		}
 
 		setState(ElectionCalculationState.FINISHED);
-	}
-
-	private String convertToString(AuditLog auditLog) {
-		StringAuditLog stringAuditLog = new StringAuditLog();
-		auditLog.replay(stringAuditLog);
-		return stringAuditLog.toString();
 	}
 
 	private synchronized void setResult(ImmutableList<ElectionCalculationResultBean> result) {
@@ -185,8 +179,8 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	}
 
-	private String getCurrentLog() {
-		return convertToString(auditLogBuilder.build());
+	private AuditLog getCurrentLog() {
+		return auditLogBuilder.build();
 	}
 
 	private synchronized void setAmbuguityResulutionTask(AmbiguityResolutionTask ambuguityResulutionTask) {
@@ -200,9 +194,9 @@ public final class AsyncElectionCalculation implements Runnable {
 		private final ImmutableSet<GenderedCandidate> candidatesToChooseFrom;
 		private final String currentLog;
 
-		public AmbiguityResolutionTask(ImmutableSet<GenderedCandidate> candidatesToChooseFrom, String currentLog) {
+		public AmbiguityResolutionTask(ImmutableSet<GenderedCandidate> candidatesToChooseFrom, AuditLog currentLog) {
 			this.candidatesToChooseFrom = candidatesToChooseFrom;
-			this.currentLog = currentLog;
+			this.currentLog = convertToString(currentLog);
 		}
 
 		public ImmutableSet<GenderedCandidate> getCandidatesToChooseFrom() {
@@ -211,6 +205,13 @@ public final class AsyncElectionCalculation implements Runnable {
 
 		public String getCurrentLog() {
 			return currentLog;
+		}
+
+
+		private String convertToString(AuditLog auditLog) {
+			StringAuditLog stringAuditLog = new StringAuditLog();
+			auditLog.replay(stringAuditLog);
+			return stringAuditLog.toString();
 		}
 	}
 
@@ -235,6 +236,15 @@ public final class AsyncElectionCalculation implements Runnable {
 
 		public ImmutableList<ElectionCalculationResultBean> getResultsOfFinishedCalculations() {
 			return resultsOfFinishedCalculations;
+		}
+
+		public Optional<ElectionCalculationResultBean> getResultOfFinishedCalculation(String officeName) {
+			for (ElectionCalculationResultBean resultOfFinishedCalculation : resultsOfFinishedCalculations) {
+				if (resultOfFinishedCalculation.getElection().getOfficeName().equals(officeName)) {
+					return Optional.of(resultOfFinishedCalculation);
+				}
+			}
+			return Optional.absent();
 		}
 
 		public ElectionCalculationState getState() {

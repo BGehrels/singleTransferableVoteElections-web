@@ -3,3 +3,5 @@
 - Visualisierung
 - JSON-Download
 - Am Anfang des Wahlgangs einmal Die Anzahl der Abgegebenen, Gültigen, ungültigen, Nein-Stimmen und Präferenz-Stimmen ausgeben
+- Best candidates -> worst candidates bei Ambiguity Resolution
+- Im Audit logging heißt beim candidateDROPPED event der Parameter inkonsistent voteDistributionBeforeSTRIKING

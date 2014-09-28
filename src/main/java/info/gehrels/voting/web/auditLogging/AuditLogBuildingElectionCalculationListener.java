@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableSet;
 import info.gehrels.voting.AmbiguityResolver.AmbiguityResolverResult;
 import info.gehrels.voting.Ballot;
-import info.gehrels.voting.Candidate;
 import info.gehrels.voting.Election;
 import info.gehrels.voting.genderedElections.ElectionCalculationWithFemaleExclusivePositionsListener;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
@@ -63,7 +62,7 @@ public final class AuditLogBuildingElectionCalculationListener
 	}
 
 	@Override
-	public void redistributingExcessiveFractionOfVoteWeight(final Candidate winner,
+	public void redistributingExcessiveFractionOfVoteWeight(final GenderedCandidate winner,
 	                                                        final BigFraction excessiveFractionOfVoteWeight) {
 		entries.add(new Entry() {
 			@Override

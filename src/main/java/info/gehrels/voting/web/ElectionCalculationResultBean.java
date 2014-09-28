@@ -18,13 +18,19 @@ package info.gehrels.voting.web;
 
 import info.gehrels.voting.genderedElections.ElectionCalculationWithFemaleExclusivePositions.Result;
 import info.gehrels.voting.genderedElections.GenderedElection;
+import info.gehrels.voting.web.auditLogging.AuditLog;
+import info.gehrels.voting.web.auditLogging.StringAuditLog;
+import org.joda.time.DateTime;
 
 public class ElectionCalculationResultBean {
+	private final DateTime startDateTime;
 	private final GenderedElection election;
 	private final Result electionResult;
-	private final String auditLog;
+	private final AuditLog auditLog;
 
-	public ElectionCalculationResultBean(GenderedElection election, Result electionResult, String auditLog) {
+	public ElectionCalculationResultBean(DateTime startDateTime, GenderedElection election, Result electionResult,
+	                                     AuditLog auditLog) {
+		this.startDateTime = startDateTime;
 		this.election = election;
 		this.electionResult = electionResult;
 		this.auditLog = auditLog;
@@ -38,7 +44,18 @@ public class ElectionCalculationResultBean {
 		return electionResult;
 	}
 
-	public String getAuditLog() {
+	public AuditLog getAuditLog() {
 		return auditLog;
+	}
+
+
+	public String getAuditLogAsString() {
+		StringAuditLog stringAuditLog = new StringAuditLog();
+		auditLog.replay(stringAuditLog);
+		return stringAuditLog.toString();
+	}
+
+	public DateTime getStartDateTime() {
+		return startDateTime;
 	}
 }

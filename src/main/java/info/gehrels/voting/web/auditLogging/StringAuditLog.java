@@ -98,7 +98,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 	}
 
 	@Override
-	public void redistributingExcessiveFractionOfVoteWeight(Candidate winner,
+	public void redistributingExcessiveFractionOfVoteWeight(GenderedCandidate winner,
 	                                                        BigFraction excessiveFractionOfVoteWeight) {
 		formatLine("Es werden %f%% des Stimmgewichts von %s weiterverteilt.",
 		           excessiveFractionOfVoteWeight.percentageValue(), winner.getName());

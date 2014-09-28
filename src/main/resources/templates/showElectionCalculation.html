@@ -80,7 +80,8 @@
                     </li>
             </ul>
             <h2>Detailiertes Ablaufprotokoll</h2>
-            <pre data-th-text="${calculationResult.auditLog}">Protokolldaten en masse</pre>
+            <p><a data-th-href="@{/downloadElectionCalculationAsJson(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName})}">Maschinenlesbare Fassung herunterladen (JSON)</a></p>
+            <pre data-th-text="${calculationResult.auditLogAsString}">Protokolldaten en masse</pre>
         </section>
     </th-block>
 </main>

@@ -59,7 +59,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
 		<thymeleaf.version>2.1.3.RELEASE</thymeleaf.version>
-	</properties>
+        <selenium-java.version>2.43.1</selenium-java.version>
+    </properties>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -114,11 +115,23 @@
 		    <artifactId>json</artifactId>
 		    <version>20140107</version>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium-java.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-htmlunit-driver</artifactId>
+            <version>${selenium-java.version}</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<dependencyManagement>

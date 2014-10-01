@@ -28,11 +28,12 @@ public class HtmlUnitIT {
 
     @Test
     public void sampleTest() throws MalformedURLException {
-        WebDriver driver = new FirefoxDriver();
+        WebDriver driver = new HtmlUnitDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
 
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
         AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
 
+        driver.close();
     }
 }

@@ -1,15 +1,20 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
+import com.google.common.base.Predicate;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.lift.find.PageTitleFinder;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class IndexPage {
+    public static final String ADMINISTRATE_BALLOT_LAYOUT_LINK = "Stimmzettellayout erstellen/bearbeiten (löscht eventuell bereits eingegebene Stimmen)";
+
     private WebDriver webDriver;
 
-    @FindBy(linkText = "Stimmzettellayout erstellen/bearbeiten (löscht eventuell bereits eingegebene Stimmen)")
+    @FindBy(linkText = ADMINISTRATE_BALLOT_LAYOUT_LINK)
     private WebElement administrateBallotLayoutLink;
 
     @FindBy(linkText = "Stimmen eingeben (Ersteingabe)")
@@ -23,6 +28,12 @@ public class IndexPage {
 
     public IndexPage(WebDriver webDriver) {
         this.webDriver = webDriver;
+        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
+            @Override
+            public boolean apply(WebDriver input) {
+                return input.findElement(By.linkText(ADMINISTRATE_BALLOT_LAYOUT_LINK)).isDisplayed();
+            }
+        });
     }
 
     public AdministrateBallotLayoutPage clickAdministrateBallotLayoutLink() {

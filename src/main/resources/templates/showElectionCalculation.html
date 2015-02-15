@@ -30,7 +30,7 @@
     <section>
         <h1>Status</h1>
 
-        <p data-th-text="${electionCalculation.state.description}">Beschreibungstext</p>
+        <p data-th-text="${electionCalculation.state.description}" id="status-text">Beschreibungstext</p>
     </section>
     <th-block data-th-if="${electionCalculation.state == T(info.gehrels.voting.web.ElectionCalculationState).MANUAL_AMBIGUITY_RESOLUTION_NECCESSARY}">
         <h1>Manuelle Auswahl von gewinnenden/verlierenden Kandidierenden</h1>

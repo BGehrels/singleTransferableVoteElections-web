@@ -33,17 +33,17 @@ import java.util.TreeMap;
 
 public final class VoteBuilder {
 	@NotNull
-	private Type type = Type.PREFERENCE;
+	private VoteType type = VoteType.PREFERENCE;
 
 	@Valid
 	@NotNull
 	private List<PreferenceBuilder> preferencesByCandidateIdx = new ArrayList<>();
 
-	public Type getType() {
+	public VoteType getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(VoteType type) {
 		this.type = type;
 	}
 
@@ -85,7 +85,7 @@ public final class VoteBuilder {
 	}
 
 	public void validate(String objectName, String fieldPrefix, BindingResult bindingResult) {
-		if (type == Type.PREFERENCE) {
+		if (type == VoteType.PREFERENCE) {
 			if (allNullOrEmpty(preferencesByCandidateIdx)) {
 				bindingResult.addError(
 					new FieldError(objectName, fieldPrefix + ".preferencesByCandidateIdx", "", true, new String[]{"emptyPreference"}, new Object[]{},
@@ -131,7 +131,4 @@ public final class VoteBuilder {
 		return false;
 	}
 
-	private enum Type {
-		PREFERENCE, NO, NOT_VOTED, INVALID
-	}
 }

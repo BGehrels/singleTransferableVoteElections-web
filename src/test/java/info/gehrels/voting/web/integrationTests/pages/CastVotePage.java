@@ -1,11 +1,13 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
+import com.google.common.base.Predicate;
 import info.gehrels.voting.web.VoteType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -21,8 +23,15 @@ public final class CastVotePage {
     @FindBy(linkText = "Zurück zur Startseite")
     private WebElement backToIndexPageLink;
 
-    public CastVotePage(WebDriver webDriver) {
+    public CastVotePage(final WebDriver webDriver) {
         this.webDriver = webDriver;
+        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
+            @Override
+            public boolean apply(WebDriver input) {
+                WebElement element = webDriver.findElement(By.name("ballotId"));
+                return element.isDisplayed() && element.getText().isEmpty();
+            }
+        });
     }
 
     public void setBallotId(int id) {
@@ -31,15 +40,21 @@ public final class CastVotePage {
         ballotIdField.sendKeys(Integer.toString(id));
     }
 
-    public void setVoteType(int officeIdx, VoteType voteType) {
-        List<WebElement> elements = webDriver.findElements(By.name("votesByElectionId[" + officeIdx + "].type"));
+    public void setVoteType(String officeName, VoteType voteType) {
+        List<WebElement> elements = findOfficeSection(officeName).findElements(By.xpath(".//input[@type='radio']"));
         WebElementUtils.findByValue(elements, voteType.toString()).click();
     }
 
-    public void setPreference(int officeIdx, int candidateIdx, int preference) {
-        WebElement element = webDriver.findElement(By.name("votesByElectionId[" + officeIdx + "].preferencesByCandidateIdx[" + candidateIdx + "].value"));
-        element.clear();
-        element.sendKeys(Integer.toString(preference));
+    public void setPreference(String officeName, String candidateName, int preference) {
+        WebElement officeSection = findOfficeSection(officeName);
+        WebElement candidatePreference =
+                findCandidateListItem(officeSection, candidateName).findElement(By.tagName("input"));
+        candidatePreference.clear();
+        candidatePreference.sendKeys(Integer.toString(preference));
+    }
+
+    private WebElement findCandidateListItem(WebElement officeSection, String candidateName) {
+        return officeSection.findElement(By.xpath(".//li/span[contains(text(), '" + candidateName + "')]/.."));
     }
 
     public CastVotePage clickCastVote() {
@@ -47,9 +62,13 @@ public final class CastVotePage {
         return PageFactory.initElements(webDriver, CastVotePage.class);
     }
 
-    public IndexPage clickBackToIndePage() {
+    public IndexPage clickBackToIndexPage() {
          backToIndexPageLink.click();
         return PageFactory.initElements(webDriver, IndexPage.class);
 
+    }
+
+    private WebElement findOfficeSection(String officeName) {
+        return webDriver.findElement(By.xpath("//section[@class='election']/h2[contains(text(), '" + officeName + "')]/.."));
     }
 }

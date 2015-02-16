@@ -65,4 +65,9 @@ public final class AdministrateBallotLayoutPage {
         ballotLayoutCompletedButton.click();
         return PageFactory.initElements(webDriver, IndexPage.class);
     }
+
+    public AdministrateBallotLayoutPage clickAddCandidate(int officeIndex) {
+        webDriver.findElement(By.xpath("//*[@name='addNewCandidate' and @value='" + officeIndex + "']")).click();
+        return PageFactory.initElements(webDriver, AdministrateBallotLayoutPage.class);
+    }
 }

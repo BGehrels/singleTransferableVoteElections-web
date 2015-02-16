@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +30,7 @@ import static org.hamcrest.Matchers.contains;
 @SpringApplicationConfiguration(classes = SpringConfig.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public final class HtmlUnitIT {
+public final class HappyPathIT {
     public static final String CANDIDATE_NAME = "The Candidate";
     public static final String OFFICE_NAME = "The Office";
     @Value("${local.server.port}")
@@ -39,8 +38,9 @@ public final class HtmlUnitIT {
     private WebDriver driver;
 
     @Before
-    public void setUp() {
+    public void setUp() throws MalformedURLException {
         driver = new HtmlUnitDriver();
+        driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
     @After
@@ -49,10 +49,9 @@ public final class HtmlUnitIT {
     }
 
     @Test
-    public void singleElectionSingleCandidateSingleVoteWalkthrough() throws MalformedURLException {
-        driver.navigate().to(new URL("http", "localhost", port, "/"));
-
+    public void singleElectionSingleCandidateSingleVoteWalkthrough() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+
         AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
         administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
         administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
@@ -60,27 +59,24 @@ public final class HtmlUnitIT {
         administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME);
         administrateBallotLayoutPage.setCandidateFemale(0, 0, true);
         indexPage = administrateBallotLayoutPage.clickBallotLayoutCompleted();
-        CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
-        castVotePage.setBallotId(1);
-        castVotePage.setVoteType(0, VoteType.PREFERENCE);
-        castVotePage.setPreference(0, 0, 1);
-        castVotePage = castVotePage.clickCastVote();
-        indexPage = castVotePage.clickBackToIndePage();
-        castVotePage = indexPage.clickCastVotesSecondTryLink();
-        castVotePage.setBallotId(1);
-        castVotePage.setVoteType(0, VoteType.PREFERENCE);
-        castVotePage.setPreference(0,0,1);
-        castVotePage.clickCastVote();
-        indexPage = castVotePage.clickBackToIndePage();
+
+        indexPage = castTheVote(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
+        indexPage = castTheVote(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
 
         ManageElectionCalculationsPage manageElectionCalculationsPage = indexPage.clickElectionCalculationLink();
-        manageElectionCalculationsPage = manageElectionCalculationsPage.clickStartNewElectionCalculation();
+        manageElectionCalculationsPage = manageElectionCalculationsPage.clickStartNewElectionCalculation(ManageElectionCalculationsPage.class);
         ElectionCalculationPage electionCalculationPage = manageElectionCalculationsPage.clickElectionCalculation();
-        while (!electionCalculationPage.electionCalculatinHasFinished()) {
-            electionCalculationPage = electionCalculationPage.refresh();
-        }
+        electionCalculationPage = electionCalculationPage.waitForElectionCalculationToBeFinished();
 
         assertThat(electionCalculationPage.getElectedFemaleCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME));
 
+    }
+
+    private CastVotePage castTheVote(CastVotePage castVotePage) {
+        castVotePage.setBallotId(1);
+        castVotePage.setVoteType(OFFICE_NAME, VoteType.PREFERENCE);
+        castVotePage.setPreference(OFFICE_NAME, CANDIDATE_NAME, 1);
+        castVotePage = castVotePage.clickCastVote();
+        return castVotePage;
     }
 }

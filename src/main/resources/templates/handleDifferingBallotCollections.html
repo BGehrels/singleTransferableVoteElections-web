@@ -49,7 +49,7 @@
         </section>
 
         <section data-th-unless="${ballotIterableDiff.inAButNotInB.empty}">
-            <h2>Stimmen der Ersteingabe, die bei der Kontrolleingabe ausgelassen wurden</h2>
+            <h2>Stimmzettel der Ersteingabe, die bei der Kontrolleingabe ausgelassen wurden</h2>
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.inAButNotInB}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>
@@ -59,7 +59,7 @@
         </section>
 
         <section data-th-unless="${ballotIterableDiff.inBButNotInA.empty}">
-            <h2>Stimmen der Kontrolleingabe, die bei der Ersteingabe ausgelassen wurden</h2>
+            <h2>Stimmzettel der Kontrolleingabe, die bei der Ersteingabe ausgelassen wurden</h2>
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.inBButNotInA}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>
@@ -69,7 +69,7 @@
         </section>
 
         <section data-th-unless="${ballotIterableDiff.differentBetweenTheTwoSets.empty}">
-            <h2>Stimmen bei denen sich die Ersteingabe und die Kontrolleingabe unterscheiden</h2>
+            <h2>Stimmzettel bei denen sich die Ersteingabe und die Kontrolleingabe unterscheiden</h2>
             <ul>
                 <li data-th-each="ballotId : ${ballotIterableDiff.differentBetweenTheTwoSets}">
                     <span data-th-text="'Nr. ' + ${ballotId}">Nr. 123</span>

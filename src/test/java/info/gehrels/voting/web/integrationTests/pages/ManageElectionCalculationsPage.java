@@ -1,11 +1,14 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
+import com.google.common.base.Predicate;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ManageElectionCalculationsPage {
+public final class ManageElectionCalculationsPage {
 
     @FindBy(xpath = "//input[@type='submit']")
     private WebElement startNewElectionCalculation;
@@ -19,9 +22,9 @@ public class ManageElectionCalculationsPage {
         this.webDriver = webDriver;
     }
 
-    public ManageElectionCalculationsPage clickStartNewElectionCalculation() {
+    public <T> T clickStartNewElectionCalculation(Class<T> expectedResult) {
         startNewElectionCalculation.click();
-        return PageFactory.initElements(webDriver, ManageElectionCalculationsPage.class);
+        return PageFactory.initElements(webDriver, expectedResult);
     }
 
     public ElectionCalculationPage clickElectionCalculation() {

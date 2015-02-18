@@ -14,4 +14,11 @@ public class WebElementUtils {
 
         throw new IllegalStateException("There is no radio button with value " + value + " in " + radioButtons);
     }
+
+    public static WebElement setInputText(WebElement webElement, String text) {
+        webElement.clear();
+        webElement.click();
+        webElement.sendKeys(text);
+        return webElement;
+    }
 }

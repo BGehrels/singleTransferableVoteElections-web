@@ -42,7 +42,7 @@ public final class HandleDifferingBallotsIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new HtmlUnitDriver();
+        driver = new FirefoxDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
@@ -74,8 +74,9 @@ public final class HandleDifferingBallotsIT {
         indexPage = enterVoteThatIsOnlyInSecondTry(indexPage, 2);
         indexPage = enterVoteThatIsDifferingBetweenFirstAndSecondTry(indexPage, 1);
 
-        DifferingBallotsPage differingBallotsPage =
-                indexPage.clickElectionCalculationLink().clickStartNewElectionCalculation(DifferingBallotsPage.class);
+        DifferingBallotsPage differingBallotsPage = indexPage
+                .clickElectionCalculationLink()
+                .clickStartNewElectionCalculation(DifferingBallotsPage.class);
         assertThat(differingBallotsPage.getFirstTryDuplicates(), contains(5));
         assertThat(differingBallotsPage.getSecondTryDuplicates(), contains(4));
         assertThat(differingBallotsPage.getOnlyInFirstTry(), contains(3));
@@ -83,7 +84,10 @@ public final class HandleDifferingBallotsIT {
         assertThat(differingBallotsPage.getDifferentBetweenFirstAndSecondTry(), contains(1));
 
         indexPage = differingBallotsPage.clickDeleteAllConflictingBallots();
-        indexPage.clickElectionCalculationLink().clickStartNewElectionCalculation(ManageElectionCalculationsPage.class).clickElectionCalculation();
+        indexPage
+                .clickElectionCalculationLink()
+                .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
+                .clickElectionCalculation();
     }
 
     private IndexPage enterVoteThatIsDifferingBetweenFirstAndSecondTry(IndexPage indexPage, int ballotId) {
@@ -95,21 +99,27 @@ public final class HandleDifferingBallotsIT {
         castVotePage.setVoteType(OFFICE_NAME, VoteType.PREFERENCE);
         castVotePage.setPreference(OFFICE_NAME, CANDIDATE_NAME_1, 2);
         castVotePage.setPreference(OFFICE_NAME, CANDIDATE_NAME_2, 1);
-        return castVotePage.clickCastVote().clickBackToIndexPage();
+        return castVotePage
+                .clickCastVote()
+                .clickBackToIndexPage();
     }
 
     private IndexPage enterVoteThatIsOnlyInSecondTry(IndexPage indexPage, int ballotId) {
         CastVotePage castVotePage = indexPage.clickCastVotesSecondTryLink();
         castVotePage.setBallotId(ballotId);
         castVotePage.setVoteType(OFFICE_NAME, VoteType.NO);
-        return castVotePage.clickCastVote().clickBackToIndexPage();
+        return castVotePage
+                .clickCastVote()
+                .clickBackToIndexPage();
     }
 
     private IndexPage enterVoteThatIsOnlyInFirstTry(IndexPage indexPage, int ballotId) {
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
         castVotePage.setBallotId(ballotId);
         castVotePage.setVoteType(OFFICE_NAME, VoteType.INVALID);
-        return castVotePage.clickCastVote().clickBackToIndexPage();
+        return castVotePage
+                .clickCastVote()
+                .clickBackToIndexPage();
     }
 
     private IndexPage enterSecondTryDuplicateAndFirstTryUniqueVote(IndexPage indexPage, int ballotId) {
@@ -130,7 +140,9 @@ public final class HandleDifferingBallotsIT {
         castVotePage.setBallotId(ballotId);
         castVotePage.setVoteType(OFFICE_NAME, VoteType.PREFERENCE);
         castVotePage.setPreference(OFFICE_NAME, CANDIDATE_NAME_1, 1);
-        return castVotePage.clickCastVote().clickBackToIndexPage();
+        return castVotePage
+                .clickCastVote()
+                .clickBackToIndexPage();
     }
 
     private IndexPage enterFirstTryDuplicateAndSecondTryUniqueVote(IndexPage indexPage, int ballotId) {
@@ -151,6 +163,8 @@ public final class HandleDifferingBallotsIT {
         castVotePage.setBallotId(ballotId);
         castVotePage.setVoteType(OFFICE_NAME, VoteType.PREFERENCE);
         castVotePage.setPreference(OFFICE_NAME, CANDIDATE_NAME_2, 1);
-        return castVotePage.clickCastVote().clickBackToIndexPage();
+        return castVotePage
+                .clickCastVote()
+                .clickBackToIndexPage();
     }
 }

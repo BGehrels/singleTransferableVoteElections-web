@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static info.gehrels.voting.web.integrationTests.pages.WebElementUtils.setInputText;
+
 public final class CastVotePage {
     private final WebDriver webDriver;
 
@@ -35,9 +37,7 @@ public final class CastVotePage {
     }
 
     public void setBallotId(int id) {
-        WebElement ballotIdField = webDriver.findElement(By.name("ballotId"));
-        ballotIdField.clear();
-        ballotIdField.sendKeys(Integer.toString(id));
+        setInputText(webDriver.findElement(By.name("ballotId")), Integer.toString(id));
     }
 
     public void setVoteType(String officeName, VoteType voteType) {
@@ -49,8 +49,7 @@ public final class CastVotePage {
         WebElement officeSection = findOfficeSection(officeName);
         WebElement candidatePreference =
                 findCandidateListItem(officeSection, candidateName).findElement(By.tagName("input"));
-        candidatePreference.clear();
-        candidatePreference.sendKeys(Integer.toString(preference));
+        setInputText(candidatePreference, Integer.toString(preference));
     }
 
     private WebElement findCandidateListItem(WebElement officeSection, String candidateName) {

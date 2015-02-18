@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static info.gehrels.voting.web.integrationTests.pages.WebElementUtils.setInputText;
+
 public final class AdministrateBallotLayoutPage {
     private final WebDriver webDriver;
 
@@ -29,27 +31,19 @@ public final class AdministrateBallotLayoutPage {
     }
 
     public void setOfficeName(int officeIndex, String officeName) {
-        WebElement element = webDriver.findElement(By.name("elections[" + officeIndex + "].officeName"));
-        element.clear();
-        element.sendKeys(officeName);
+        setInputText(webDriver.findElement(By.name("elections[" + officeIndex + "].officeName")), officeName);
     }
 
     public void setNumberOfFemaleExclusivePositions(int officeIndex, int value) {
-        WebElement element = webDriver.findElement(By.name("elections[" + officeIndex + "].numberOfFemaleExclusivePositions"));
-        element.clear();
-        element.sendKeys(Integer.toString(value));
+        setInputText(webDriver.findElement(By.name("elections[" + officeIndex + "].numberOfFemaleExclusivePositions")), Integer.toString(value));
     }
 
     public void setNumberOfNonFemaleExclusivePositions(int officeIndex, int value) {
-        WebElement element = webDriver.findElement(By.name("elections[" + officeIndex + "].numberOfNonFemaleExclusivePositions"));
-        element.clear();
-        element.sendKeys(Integer.toString(value));
+        setInputText(webDriver.findElement(By.name("elections[" + officeIndex + "].numberOfNonFemaleExclusivePositions")), Integer.toString(value));
     }
 
     public void setCandidateName(int officeIndex, int candidateIdx, String candidateName) {
-        WebElement element = webDriver.findElement(By.name("elections[" + officeIndex + "].candidates[" + candidateIdx + "].name"));
-        element.clear();
-        element.sendKeys(candidateName);
+        setInputText(webDriver.findElement(By.name("elections[" + officeIndex + "].candidates[" + candidateIdx + "].name")), candidateName);
     }
 
     public void setCandidateFemale(int officeIndex, int candidateIdx, boolean female) {

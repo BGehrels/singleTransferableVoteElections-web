@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class IndexPage {
     public static final String ADMINISTRATE_BALLOT_LAYOUT_LINK = "Stimmzettellayout erstellen/bearbeiten (löscht eventuell bereits eingegebene Stimmen)";
 
-    private WebDriver webDriver;
+    private final WebDriver webDriver;
 
     @FindBy(linkText = ADMINISTRATE_BALLOT_LAYOUT_LINK)
     private WebElement administrateBallotLayoutLink;

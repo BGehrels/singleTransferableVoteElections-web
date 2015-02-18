@@ -9,8 +9,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public final class ManageElectionCalculationsPage {
+    public static final String INPUT_TYPE_SUBMIT = "//input[@type='submit']";
 
-    @FindBy(xpath = "//input[@type='submit']")
+    @FindBy(xpath = INPUT_TYPE_SUBMIT)
     private WebElement startNewElectionCalculation;
 
     @FindBy(xpath = "//li/a")
@@ -18,8 +19,15 @@ public final class ManageElectionCalculationsPage {
 
     private final WebDriver webDriver;
 
-    public ManageElectionCalculationsPage(WebDriver webDriver) {
+    public ManageElectionCalculationsPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
+        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
+            @Override
+            public boolean apply(WebDriver input) {
+                return webDriver.findElement(By.xpath(INPUT_TYPE_SUBMIT)).isDisplayed();
+            }
+                                               }
+        );
     }
 
     public <T> T clickStartNewElectionCalculation(Class<T> expectedResult) {

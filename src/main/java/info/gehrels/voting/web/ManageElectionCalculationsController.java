@@ -17,15 +17,22 @@
 package info.gehrels.voting.web;
 
 import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.ImmutableSortedMap.Builder;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
 import info.gehrels.voting.web.applicationState.BallotLayoutState;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
+import org.joda.time.DateTime;
+import org.joda.time.ReadableInstant;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 import static info.gehrels.voting.web.BallotIterableDiffCalculator.calculateDiff;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -66,9 +73,12 @@ public final class ManageElectionCalculationsController {
 		return new ModelAndView("redirect:/listElectionCalculations");
 	}
 
-	@RequestMapping(value = "/listElectionCalculations", method = {GET})
+	@RequestMapping(value = "/listElectionCalculations", method = GET)
 	public ModelAndView listElectionCalculations() {
-		return new ModelAndView("listElectionCalculations", "electionCalculations",
-		                        electionCalculationsState.getHistoryOfElectionCalculations());
+        Builder<ReadableInstant, AsyncElectionCalculation> sortedMapBuilder = ImmutableSortedMap.reverseOrder();
+        for (Map.Entry<DateTime, AsyncElectionCalculation> dateTimeAsyncElectionCalculationEntry : electionCalculationsState.getHistoryOfElectionCalculations().entrySet()) {
+            sortedMapBuilder.put(dateTimeAsyncElectionCalculationEntry.getKey(), dateTimeAsyncElectionCalculationEntry.getValue());
+        }
+        return new ModelAndView("listElectionCalculations", "electionCalculations", sortedMapBuilder.build());
 	}
 }

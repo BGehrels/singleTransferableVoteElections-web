@@ -14,7 +14,7 @@ public final class ManageElectionCalculationsPage {
     @FindBy(xpath = INPUT_TYPE_SUBMIT)
     private WebElement startNewElectionCalculation;
 
-    @FindBy(xpath = "//li/a")
+    @FindBy(xpath = "//li/a[1]")
     private WebElement firstElectionCalculation;
 
     private final WebDriver webDriver;

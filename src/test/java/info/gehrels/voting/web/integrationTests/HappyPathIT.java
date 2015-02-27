@@ -31,7 +31,8 @@ import static org.hamcrest.Matchers.contains;
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public final class HappyPathIT {
-    public static final String CANDIDATE_NAME = "The Candidate";
+    public static final String CANDIDATE_NAME_1 = "The Candidate";
+    public static final String CANDIDATE_NAME_2 = "The second Candidate";
     public static final String OFFICE_NAME = "The Office";
     @Value("${local.server.port}")
     int port;
@@ -56,27 +57,37 @@ public final class HappyPathIT {
         administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
         administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
         administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
-        administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME);
+        administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
         administrateBallotLayoutPage.setCandidateFemale(0, 0, true);
+        administrateBallotLayoutPage = administrateBallotLayoutPage.clickAddCandidate(0);
+        administrateBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
+        administrateBallotLayoutPage.setCandidateFemale(0, 1, false);
+
         indexPage = administrateBallotLayoutPage.clickBallotLayoutCompleted();
 
-        indexPage = castTheVote(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
-        indexPage = castTheVote(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
+        indexPage = castSomeVotesOfEachType(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
+        indexPage = castSomeVotesOfEachType(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
 
         ManageElectionCalculationsPage manageElectionCalculationsPage = indexPage.clickElectionCalculationLink();
         manageElectionCalculationsPage = manageElectionCalculationsPage.clickStartNewElectionCalculation(ManageElectionCalculationsPage.class);
         ElectionCalculationPage electionCalculationPage = manageElectionCalculationsPage.clickElectionCalculation();
         electionCalculationPage = electionCalculationPage.waitForElectionCalculationToBeFinished();
 
-        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME));
-
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME_1));
+            assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME_2));
     }
 
-    private CastVotePage castTheVote(CastVotePage castVotePage) {
-        castVotePage.setBallotId(1);
-        castVotePage.setVoteType(OFFICE_NAME, VoteType.PREFERENCE);
-        castVotePage.setPreference(OFFICE_NAME, CANDIDATE_NAME, 1);
-        castVotePage = castVotePage.clickCastVote();
+    private CastVotePage castSomeVotesOfEachType(CastVotePage castVotePage) {
+        castVotePage = castVotePage.castPreferenceVote(1, OFFICE_NAME, CANDIDATE_NAME_1);
+        castVotePage = castVotePage.castPreferenceVote(2, OFFICE_NAME, CANDIDATE_NAME_2);
+        castVotePage = castVotePage.castPreferenceVote(3, OFFICE_NAME, CANDIDATE_NAME_1, CANDIDATE_NAME_2);
+        castVotePage = castVotePage.castPreferenceVote(4, OFFICE_NAME, CANDIDATE_NAME_1, CANDIDATE_NAME_2);
+        castVotePage = castVotePage.castPreferenceVote(5, OFFICE_NAME, CANDIDATE_NAME_2, CANDIDATE_NAME_1);
+        castVotePage = castVotePage.castPreferenceVote(6, OFFICE_NAME, CANDIDATE_NAME_1, CANDIDATE_NAME_2);
+        castVotePage = castVotePage.castNonPreferenceVote(7, OFFICE_NAME, VoteType.NOT_VOTED);
+        castVotePage = castVotePage.castNonPreferenceVote(8, OFFICE_NAME, VoteType.NO);
+        castVotePage = castVotePage.castNonPreferenceVote(9, OFFICE_NAME, VoteType.INVALID);
+
         return castVotePage;
     }
 }

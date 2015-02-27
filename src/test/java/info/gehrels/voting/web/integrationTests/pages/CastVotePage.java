@@ -36,6 +36,25 @@ public final class CastVotePage {
         });
     }
 
+    public CastVotePage castPreferenceVote(int ballotId, String officeName, String... candidateNamesOrNull) {
+        setBallotId(ballotId);
+
+        for (int i = 0; i < candidateNamesOrNull.length; i++) {
+            String candidateNameOrNull = candidateNamesOrNull[i];
+            if (candidateNameOrNull != null) {
+                setPreference(officeName, candidateNameOrNull, i+1);
+            }
+        }
+
+        return clickCastVote();
+    }
+
+    public CastVotePage castNonPreferenceVote(int ballotId, String officeName, VoteType voteType) {
+        setBallotId(ballotId);
+        setVoteType(officeName, voteType);
+        return clickCastVote();
+    }
+
     public void setBallotId(int id) {
         setInputText(webDriver.findElement(By.name("ballotId")), Integer.toString(id));
     }

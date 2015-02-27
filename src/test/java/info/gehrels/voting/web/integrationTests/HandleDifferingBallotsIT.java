@@ -93,15 +93,15 @@ public final class HandleDifferingBallotsIT {
 
     private IndexPage enterVoteThatIsWithoutAnyProblemsAndVotesFor(IndexPage indexPage, int ballotId, String candidateName) {
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, candidateName);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, candidateName);
         castVotePage = castVotePage.clickBackToIndexPage().clickCastVotesSecondTryLink();
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, candidateName);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, candidateName);
         return castVotePage.clickBackToIndexPage();
     }
 
     private IndexPage enterVoteThatIsDifferingBetweenFirstAndSecondTry(IndexPage indexPage, int ballotId) {
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
-        castVotePage = castNonPreferenceVote(ballotId, castVotePage, VoteType.NOT_VOTED);
+        castVotePage = castVotePage.castNonPreferenceVote(ballotId, OFFICE_NAME, VoteType.NOT_VOTED);
         castVotePage = castVotePage.clickBackToIndexPage().clickCastVotesSecondTryLink();
         castVotePage.setBallotId(ballotId);
         castVotePage.setVoteType(OFFICE_NAME, VoteType.PREFERENCE);
@@ -112,25 +112,25 @@ public final class HandleDifferingBallotsIT {
 
     private IndexPage enterVoteThatIsOnlyInSecondTry(IndexPage indexPage, int ballotId) {
         CastVotePage castVotePage = indexPage.clickCastVotesSecondTryLink();
-        castVotePage = castNonPreferenceVote(ballotId, castVotePage, VoteType.NO);
+        castVotePage = castVotePage.castNonPreferenceVote(ballotId, OFFICE_NAME, VoteType.NO);
         return castVotePage.clickBackToIndexPage();
     }
 
     private IndexPage enterVoteThatIsOnlyInFirstTry(IndexPage indexPage, int ballotId) {
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
-        castVotePage = castNonPreferenceVote(ballotId, castVotePage, VoteType.INVALID);
+        castVotePage = castVotePage.castNonPreferenceVote(ballotId, OFFICE_NAME, VoteType.INVALID);
         return castVotePage
                 .clickBackToIndexPage();
     }
 
     private IndexPage enterSecondTryDuplicateAndFirstTryUniqueVote(IndexPage indexPage, int ballotId) {
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, CANDIDATE_NAME_1);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, CANDIDATE_NAME_1);
 
         castVotePage = castVotePage.clickBackToIndexPage().clickCastVotesSecondTryLink();
 
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, CANDIDATE_NAME_1);
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, CANDIDATE_NAME_1);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, CANDIDATE_NAME_1);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, CANDIDATE_NAME_1);
 
         return castVotePage.clickBackToIndexPage();
     }
@@ -138,27 +138,13 @@ public final class HandleDifferingBallotsIT {
     private IndexPage enterFirstTryDuplicateAndSecondTryUniqueVote(IndexPage indexPage, int ballotId) {
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
 
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, CANDIDATE_NAME_2);
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, CANDIDATE_NAME_2);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, CANDIDATE_NAME_2);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, CANDIDATE_NAME_2);
 
         castVotePage = castVotePage.clickBackToIndexPage().clickCastVotesSecondTryLink();
 
-        castVotePage = castSingleCandidatePreferenceVote(ballotId, castVotePage, CANDIDATE_NAME_2);
+        castVotePage = castVotePage.castPreferenceVote(ballotId, OFFICE_NAME, CANDIDATE_NAME_2);
         return castVotePage.clickBackToIndexPage();
     }
 
-    private CastVotePage castSingleCandidatePreferenceVote(int ballotId, CastVotePage castVotePage, String candidateName) {
-        castVotePage.setBallotId(ballotId);
-        castVotePage.setVoteType(OFFICE_NAME, VoteType.PREFERENCE);
-        castVotePage.setPreference(OFFICE_NAME, candidateName, 1);
-        castVotePage = castVotePage.clickCastVote();
-        return castVotePage;
-    }
-
-    private CastVotePage castNonPreferenceVote(int ballotId, CastVotePage castVotePage, VoteType voteType) {
-        castVotePage.setBallotId(ballotId);
-        castVotePage.setVoteType(OFFICE_NAME, voteType);
-        castVotePage = castVotePage.clickCastVote();
-        return castVotePage;
-    }
 }

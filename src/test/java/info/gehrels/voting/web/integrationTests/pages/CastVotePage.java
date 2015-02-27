@@ -38,15 +38,19 @@ public final class CastVotePage {
 
     public CastVotePage castPreferenceVote(int ballotId, String officeName, String... candidateNamesOrNull) {
         setBallotId(ballotId);
+        setPreferences(officeName, candidateNamesOrNull);
+        return clickCastVote();
+    }
 
+    public CastVotePage setPreferences(String officeName, String... candidateNamesOrNull) {
         for (int i = 0; i < candidateNamesOrNull.length; i++) {
             String candidateNameOrNull = candidateNamesOrNull[i];
             if (candidateNameOrNull != null) {
-                setPreference(officeName, candidateNameOrNull, i+1);
+                setPreference(officeName, candidateNameOrNull, i + 1);
             }
         }
 
-        return clickCastVote();
+        return this;
     }
 
     public CastVotePage castNonPreferenceVote(int ballotId, String officeName, VoteType voteType) {
@@ -55,13 +59,15 @@ public final class CastVotePage {
         return clickCastVote();
     }
 
-    public void setBallotId(int id) {
+    public CastVotePage setBallotId(int id) {
         setInputText(webDriver.findElement(By.name("ballotId")), Integer.toString(id));
+        return this;
     }
 
-    public void setVoteType(String officeName, VoteType voteType) {
+    public CastVotePage setVoteType(String officeName, VoteType voteType) {
         List<WebElement> elements = findOfficeSection(officeName).findElements(By.xpath(".//input[@type='radio']"));
         WebElementUtils.findByValue(elements, voteType.toString()).click();
+        return this;
     }
 
     public void setPreference(String officeName, String candidateName, int preference) {

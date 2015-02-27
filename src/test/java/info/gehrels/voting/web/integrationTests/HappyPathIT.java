@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -25,22 +26,27 @@ import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = SpringConfig.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public final class HappyPathIT {
-    public static final String CANDIDATE_NAME_1 = "The Candidate";
-    public static final String CANDIDATE_NAME_2 = "The second Candidate";
-    public static final String OFFICE_NAME = "The Office";
+    private static final String CANDIDATE_NAME_1 = "The Candidate";
+    private static final String CANDIDATE_NAME_2 = "The second Candidate";
+    private static final String CANDIDATE_NAME_3 = "The third candidate";
+    private static final String OFFICE_NAME_1 = "The Office";
+    private static final String OFFICE_NAME_2 = "The second office";
+
     @Value("${local.server.port}")
     int port;
     private WebDriver driver;
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new FirefoxDriver();
+        driver = new HtmlUnitDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
@@ -50,18 +56,13 @@ public final class HappyPathIT {
     }
 
     @Test
-    public void singleElectionSingleCandidateSingleVoteWalkthrough() {
+    public void twoElectionsDifferentCandidatesWalkthrough() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
-        administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
-        administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
-        administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
-        administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
-        administrateBallotLayoutPage.setCandidateFemale(0, 0, true);
-        administrateBallotLayoutPage = administrateBallotLayoutPage.clickAddCandidate(0);
-        administrateBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
-        administrateBallotLayoutPage.setCandidateFemale(0, 1, false);
+        administrateBallotLayoutPage = createFirstElection(administrateBallotLayoutPage);
+        administrateBallotLayoutPage.clickAddElection();
+        createSecondElection(administrateBallotLayoutPage);
 
         indexPage = administrateBallotLayoutPage.clickBallotLayoutCompleted();
 
@@ -73,20 +74,42 @@ public final class HappyPathIT {
         ElectionCalculationPage electionCalculationPage = manageElectionCalculationsPage.clickElectionCalculation();
         electionCalculationPage = electionCalculationPage.waitForElectionCalculationToBeFinished();
 
-        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME_1));
-            assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME_2));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME_1), contains(CANDIDATE_NAME_1));
+        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME_1), contains(CANDIDATE_NAME_2));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME_2), is(empty()));
+        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME_2), contains(CANDIDATE_NAME_3));
+    }
+
+    private AdministrateBallotLayoutPage createFirstElection(AdministrateBallotLayoutPage administrateBallotLayoutPage) {
+        administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME_1);
+        administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
+        administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
+        administrateBallotLayoutPage.setCandidateFemale(0, 0, true);
+        administrateBallotLayoutPage = administrateBallotLayoutPage.clickAddCandidate(0);
+        administrateBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
+        administrateBallotLayoutPage.setCandidateFemale(0, 1, false);
+        return administrateBallotLayoutPage;
+    }
+
+    private void createSecondElection(AdministrateBallotLayoutPage administrateBallotLayoutPage) {
+        administrateBallotLayoutPage.setOfficeName(1, OFFICE_NAME_2);
+        administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(1, 0);
+        administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(1, 1);
+        administrateBallotLayoutPage.setCandidateName(1, 0, CANDIDATE_NAME_3);
+        administrateBallotLayoutPage.setCandidateFemale(1, 0, true);
     }
 
     private CastVotePage castSomeVotesOfEachType(CastVotePage castVotePage) {
-        castVotePage = castVotePage.castPreferenceVote(1, OFFICE_NAME, CANDIDATE_NAME_1);
-        castVotePage = castVotePage.castPreferenceVote(2, OFFICE_NAME, CANDIDATE_NAME_2);
-        castVotePage = castVotePage.castPreferenceVote(3, OFFICE_NAME, CANDIDATE_NAME_1, CANDIDATE_NAME_2);
-        castVotePage = castVotePage.castPreferenceVote(4, OFFICE_NAME, CANDIDATE_NAME_1, CANDIDATE_NAME_2);
-        castVotePage = castVotePage.castPreferenceVote(5, OFFICE_NAME, CANDIDATE_NAME_2, CANDIDATE_NAME_1);
-        castVotePage = castVotePage.castPreferenceVote(6, OFFICE_NAME, CANDIDATE_NAME_1, CANDIDATE_NAME_2);
-        castVotePage = castVotePage.castNonPreferenceVote(7, OFFICE_NAME, VoteType.NOT_VOTED);
-        castVotePage = castVotePage.castNonPreferenceVote(8, OFFICE_NAME, VoteType.NO);
-        castVotePage = castVotePage.castNonPreferenceVote(9, OFFICE_NAME, VoteType.INVALID);
+        castVotePage = castVotePage.setBallotId(1).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();
+        castVotePage = castVotePage.setBallotId(2).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_2).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();
+        castVotePage = castVotePage.setBallotId(3).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1, CANDIDATE_NAME_2).setVoteType(OFFICE_NAME_2, VoteType.NO).clickCastVote();
+        castVotePage = castVotePage.setBallotId(4).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1, CANDIDATE_NAME_2).setVoteType(OFFICE_NAME_2, VoteType.INVALID).clickCastVote();
+        castVotePage = castVotePage.setBallotId(5).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_2, CANDIDATE_NAME_1).setVoteType(OFFICE_NAME_2, VoteType.NOT_VOTED).clickCastVote();
+        castVotePage = castVotePage.setBallotId(6).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1, CANDIDATE_NAME_2).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
+        castVotePage = castVotePage.setBallotId(7).setVoteType(OFFICE_NAME_1, VoteType.NOT_VOTED).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
+        castVotePage = castVotePage.setBallotId(8).setVoteType(OFFICE_NAME_1, VoteType.NO).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
+        castVotePage = castVotePage.setBallotId(9).setVoteType(OFFICE_NAME_1, VoteType.INVALID).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
 
         return castVotePage;
     }

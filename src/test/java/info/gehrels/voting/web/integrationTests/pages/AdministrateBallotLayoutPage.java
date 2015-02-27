@@ -19,6 +19,9 @@ public final class AdministrateBallotLayoutPage {
     @FindBy(xpath = "//input[@type='submit']")
     private WebElement ballotLayoutCompletedButton;
 
+    @FindBy(name = "addNewElection")
+    private WebElement addElection;
+
     public AdministrateBallotLayoutPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
 
@@ -62,6 +65,11 @@ public final class AdministrateBallotLayoutPage {
 
     public AdministrateBallotLayoutPage clickAddCandidate(int officeIndex) {
         webDriver.findElement(By.xpath("//*[@name='addNewCandidate' and @value='" + officeIndex + "']")).click();
+        return PageFactory.initElements(webDriver, AdministrateBallotLayoutPage.class);
+    }
+
+    public AdministrateBallotLayoutPage clickAddElection() {
+        addElection.click();
         return PageFactory.initElements(webDriver, AdministrateBallotLayoutPage.class);
     }
 }

@@ -58,6 +58,7 @@ public final class AmbigiuityResolutionIT {
     @Test
     public void createAmbigiousSituatinAndResolveIt() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+
         AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
         administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
         administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
@@ -68,23 +69,28 @@ public final class AmbigiuityResolutionIT {
         administrateBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
         administrateBallotLayoutPage.setCandidateFemale(0, 1, false);
         indexPage = administrateBallotLayoutPage.clickBallotLayoutCompleted();
+
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
         castVotePage = castVote(castVotePage, 1, 1, 2);
         castVotePage = castVotePage.clickBackToIndexPage().clickCastVotesSecondTryLink();
         castVotePage = castVote(castVotePage, 1, 1, 2);
+
         castVotePage = castVote(castVotePage, 2, 2, 1);
         castVotePage = castVotePage.clickBackToIndexPage().clickCastVotesFirstTryLink();
         castVotePage = castVote(castVotePage, 2, 2, 1);
+
         ElectionCalculationPage electionCalculationPage =
                 castVotePage
                         .clickBackToIndexPage()
                         .clickElectionCalculationLink()
                         .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
                         .clickElectionCalculation();
+
         electionCalculationPage = electionCalculationPage.waitUntilAmbiguityResolutionIsNeccessary();
         electionCalculationPage.chooseCandidate(CANDIDATE_NAME_2);
         electionCalculationPage.setDescription(AMBIGUITY_RESOLUTION_DESCRIPTION);
         electionCalculationPage = electionCalculationPage.submitAmbiguityResolution();
+
         electionCalculationPage.waitForElectionCalculationToBeFinished();
         assertThat(electionCalculationPage.getWinningNonFemaleExclusiveCandidate(OFFICE_NAME), contains(CANDIDATE_NAME_1));
         assertThat(electionCalculationPage.getProtocol(OFFICE_NAME), containsString(AMBIGUITY_RESOLUTION_DESCRIPTION));

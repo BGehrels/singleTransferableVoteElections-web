@@ -46,7 +46,7 @@ public final class AmbigiuityResolutionIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new FirefoxDriver();
+        driver = new HtmlUnitDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 

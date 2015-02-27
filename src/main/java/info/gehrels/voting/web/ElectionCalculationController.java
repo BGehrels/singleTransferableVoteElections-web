@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -73,7 +74,8 @@ public final class ElectionCalculationController {
     @RequestMapping(value = "/resolveAmbiguity", method = POST)
     public ModelAndView resolveAmbiguity(@RequestParam DateTime dateTimeTheCalculationStarted,
                                          @Valid AmbiguityResolverResultBuilderBean ambiguityResolverResultBuilder,
-                                         BindingResult bindingResult) {
+                                         BindingResult bindingResult,
+                                         RedirectAttributes redirectAttributes) {
         AsyncElectionCalculation asyncElectionCalculation = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted);
         Snapshot snapshot = asyncElectionCalculation.getSnapshot();
@@ -93,11 +95,8 @@ public final class ElectionCalculationController {
             return createModelAndView(snapshot, ambiguityResolverResultBuilder);
         } else {
             asyncElectionCalculation.setAmbiguityResulutionResult(build);
-            RedirectView redirectView = new RedirectView("/showElectionCalculation");
-            redirectView.setExposeModelAttributes(true);
-            RedirectAttributesModelMap redirectAttributesModelMap = new RedirectAttributesModelMap();
-            redirectAttributesModelMap.put("dateTimeTheCalculationStarted", dateTimeTheCalculationStarted);
-            return new ModelAndView(redirectView, redirectAttributesModelMap);
+            redirectAttributes.addAttribute("dateTimeTheCalculationStarted", dateTimeTheCalculationStarted);
+            return new ModelAndView("redirect:/showElectionCalculation");
         }
     }
 

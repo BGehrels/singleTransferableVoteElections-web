@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
@@ -69,7 +68,7 @@ public final class HappyPathIT {
         ElectionCalculationPage electionCalculationPage = manageElectionCalculationsPage.clickElectionCalculation();
         electionCalculationPage = electionCalculationPage.waitForElectionCalculationToBeFinished();
 
-        assertThat(electionCalculationPage.getElectedFemaleCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME));
 
     }
 

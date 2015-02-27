@@ -48,10 +48,23 @@ public final class ElectionCalculationPage {
     }
 
 
-    public List<String> getElectedFemaleCandidateNames(String officeName) {
+    public List<String> getFemaleExclusiveElectedCandidateNames(String officeName) {
         List<WebElement> li = webDriver.findElements(By.xpath(
                 "//h1[contains(text(), '" + officeName + "')]/parent::section" +
                         "/h2[contains(text(), 'Frauen')]/following-sibling::ul[1]/li"));
+        Builder<String> builder = ImmutableList.builder();
+        for (WebElement webElement : li) {
+            builder.add(webElement.getText());
+        }
+
+        return builder.build();
+    }
+
+
+    public List<String> getNonFemaleExclusiveElectedCandidateNames(String officeName) {
+        List<WebElement> li = webDriver.findElements(By.xpath(
+                "//h1[contains(text(), '" + officeName + "')]/parent::section" +
+                        "/h2[contains(text(), 'offen')]/following-sibling::ul[1]/li"));
         Builder<String> builder = ImmutableList.builder();
         for (WebElement webElement : li) {
             builder.add(webElement.getText());

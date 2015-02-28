@@ -80,7 +80,13 @@
                     </li>
             </ul>
             <h2>Detailiertes Ablaufprotokoll</h2>
-            <p><a data-th-href="@{/downloadElectionCalculationAsJson(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName})}">Maschinenlesbare Fassung herunterladen (JSON)</a></p>
+            <nav>
+                <ul>
+                    <li><a data-th-href="@{/downloadElectionCalculationAsJson(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName})}">Maschinenlesbare Fassung herunterladen (JSON)</a></li>
+                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=true)}">Graphisches Ablaufprotokoll für die Frauenplätze (pre-alpha)</a></li>
+                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=false)}">Graphisches Ablaufprotokoll für die offenen Plätze (pre-alpha)</a></li>
+                </ul>
+            </nav>
             <pre data-th-text="${calculationResult.auditLogAsString}">Protokolldaten en masse</pre>
         </section>
     </th-block>

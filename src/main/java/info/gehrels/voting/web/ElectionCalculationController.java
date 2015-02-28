@@ -22,6 +22,7 @@ import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.AsyncElectionCalculation.Snapshot;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import info.gehrels.voting.web.auditLogging.JsonAuditLog;
+import info.gehrels.voting.web.svg.SvgCreatingAuditLogListener;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -69,6 +70,28 @@ public final class ElectionCalculationController {
         JsonAuditLog jsonAuditLog = new JsonAuditLog();
         resultOfFinishedCalculation.get().getAuditLog().replay(jsonAuditLog);
         return jsonAuditLog.getResult().toString();
+    }
+
+    @RequestMapping(value = "/downloadElectionCalculationAsSvg", method = GET, produces = "image/svg+xml")
+    @ResponseBody
+    public String downloadElectionCalculationAsSvg(@RequestParam DateTime dateTimeTheCalculationStarted, String office, boolean femaleExclusiveRun) {
+        Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
+                .get(dateTimeTheCalculationStarted).getSnapshot();
+
+        Optional<ElectionCalculationResultBean> resultOfFinishedCalculation = snapshot
+                .getResultOfFinishedCalculation(office);
+        if (!resultOfFinishedCalculation.isPresent()) {
+            throw new IllegalArgumentException("The given Office name does not exist");
+        }
+        SvgCreatingAuditLogListener svgCreatingAuditLogListener = new SvgCreatingAuditLogListener();
+        resultOfFinishedCalculation.get().getAuditLog().replay(svgCreatingAuditLogListener);
+        String result;
+        if (femaleExclusiveRun) {
+            result = svgCreatingAuditLogListener.getFemaleExclusiveRunSvg();
+        } else {
+            result = svgCreatingAuditLogListener.getNonFemaleExclusiveRunSvg();
+        }
+        return result;
     }
 
     @RequestMapping(value = "/resolveAmbiguity", method = POST)

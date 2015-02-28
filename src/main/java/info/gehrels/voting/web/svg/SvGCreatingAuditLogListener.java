@@ -35,12 +35,12 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
 
     @Override
     public void startFemaleExclusiveElectionRun() {
-        this.femaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(true);
+        this.femaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(election, true);
     }
 
     @Override
     public void startNonFemaleExclusiveElectionRun() {
-        this.nonFemaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(false);
+        this.nonFemaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(election, false);
 
     }
 

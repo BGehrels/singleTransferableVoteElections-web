@@ -1,8 +1,11 @@
 package info.gehrels.voting.web.svg;
 
+import info.gehrels.voting.genderedElections.GenderedElection;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.svg.SVGDocument;
+import org.w3c.dom.svg.SVGSVGElement;
 
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -12,14 +15,17 @@ import java.io.StringWriter;
 
 public final class ElectionCalculationSvgDocumentBuilder {
 
-    private boolean femaleExclusive;
-    private final Document document;
+    private final SVGDocument document;
 
-    public ElectionCalculationSvgDocumentBuilder(boolean femaleExclusive) {
-        this.femaleExclusive = femaleExclusive;
-
+    public ElectionCalculationSvgDocumentBuilder(GenderedElection election, boolean femaleExclusive) {
         DOMImplementation impl = new SVGDOMImplementation();
-        document = impl.createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
+        document = (SVGDocument) impl.createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
+        SVGSVGElement root = document.getRootElement();
+        Element text = document.createElement("text");
+        text.setAttribute("x", "0");
+        text.setAttribute("y", "20");
+        text.setTextContent("Wahlergebnisermittlung " + election.getOfficeName() + (femaleExclusive ? " (Frauenplätze)" : "(offene Plätze)"));
+        root.appendChild(text);
     }
 
     public String build() {

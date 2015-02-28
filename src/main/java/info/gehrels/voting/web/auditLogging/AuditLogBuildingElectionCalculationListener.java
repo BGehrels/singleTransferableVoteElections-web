@@ -18,7 +18,6 @@ package info.gehrels.voting.web.auditLogging;
 
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableSet;
 import info.gehrels.voting.AmbiguityResolver.AmbiguityResolverResult;
 import info.gehrels.voting.Ballot;
@@ -36,9 +35,6 @@ public final class AuditLogBuildingElectionCalculationListener
 	implements STVElectionCalculationListener<GenderedCandidate>,
 	ElectionCalculationWithFemaleExclusivePositionsListener {
 	private ImmutableList.Builder<Entry> entries = ImmutableList.builder();
-
-	// TODO: In zwei interfaces spalten? Eigenes Interface fürs replay?
-	// TODO: Per "close" immutable machen?
 
 	@Override
 	public void numberOfElectedPositions(final long numberOfElectedCandidates, final long numberOfSeatsToElect) {
@@ -228,7 +224,7 @@ public final class AuditLogBuildingElectionCalculationListener
 	}
 
 	public AuditLog buildAndReset() {
-		Builder<Entry> currentEntries = entries;
+		ImmutableList.Builder<Entry> currentEntries = entries;
 		entries = ImmutableList.builder();
 		return new AuditLog(currentEntries.build());
 	}

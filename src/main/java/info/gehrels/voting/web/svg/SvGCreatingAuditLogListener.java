@@ -14,89 +14,88 @@ import info.gehrels.voting.singleTransferableVote.VoteState;
 import org.apache.commons.math3.fraction.BigFraction;
 
 public final class SvgCreatingAuditLogListener implements STVElectionCalculationListener<GenderedCandidate>, ElectionCalculationWithFemaleExclusivePositionsListener {
-    private GenderedElection election;
     private ElectionCalculationSvgDocumentBuilder femaleExclusiveRun;
     private ElectionCalculationSvgDocumentBuilder nonFemaleExclusiveRun;
 
+    boolean weAreStillInFemaleExclusiveRun = true;
+
     @Override
     public void startElectionCalculation(GenderedElection election, ImmutableCollection<Ballot<GenderedCandidate>> ballots) {
-        this.election = election;
-    }
-
-    @Override
-    public void reducedNonFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats, long numberOfElectedFemaleExclusiveSeats, long numberOfOpenNonFemaleExclusiveSeats, long numberOfElectableNonFemaleExclusiveSeats) {
-
-    }
-
-    @Override
-    public void candidateNotQualified(GenderedCandidate candidate, NonQualificationReason reason) {
-
+        femaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(election, true);
+        nonFemaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(election, false);
     }
 
     @Override
     public void startFemaleExclusiveElectionRun() {
-        this.femaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(election, true);
+        femaleExclusiveRun.started();
+    }
+
+    @Override
+    public void candidateNotQualified(GenderedCandidate candidate, NonQualificationReason reason) {
+        if (weAreStillInFemaleExclusiveRun) {
+            femaleExclusiveRun.candidateNotQualified(candidate);
+        } else {
+            nonFemaleExclusiveRun.candidateNotQualified(candidate);
+        }
+    }
+
+    @Override
+    public void reducedNonFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats, long numberOfElectedFemaleExclusiveSeats, long numberOfOpenNonFemaleExclusiveSeats, long numberOfElectableNonFemaleExclusiveSeats) {
     }
 
     @Override
     public void startNonFemaleExclusiveElectionRun() {
-        this.nonFemaleExclusiveRun = new ElectionCalculationSvgDocumentBuilder(election, false);
-
+        weAreStillInFemaleExclusiveRun = false;
+        nonFemaleExclusiveRun.started();
     }
 
     @Override
     public void numberOfElectedPositions(long numberOfElectedCandidates, long numberOfSeatsToElect) {
-
     }
 
     @Override
     public void electedCandidates(ImmutableSet<GenderedCandidate> electedCandidates) {
-
     }
 
     @Override
     public void candidateDropped(VoteDistribution<GenderedCandidate> voteDistributionBeforeStriking, GenderedCandidate candidate) {
-
+        getBuilder().dropCandidate(candidate);
     }
 
     @Override
     public void voteWeightRedistributionCompleted(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, VoteDistribution<GenderedCandidate> voteDistribution) {
-
+        getBuilder().voteWeightRedistributionCompleted(originalVoteStates, newVoteStates, voteDistribution);
     }
 
     @Override
     public void delegatingToExternalAmbiguityResolution(ImmutableSet<GenderedCandidate> bestCandidates) {
-
     }
 
     @Override
     public void externalyResolvedAmbiguity(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
-
     }
 
     @Override
     public void candidateIsElected(GenderedCandidate winner, BigFraction numberOfVotes, BigFraction quorum) {
-
+        getBuilder().markCandidateElected(winner, numberOfVotes, quorum);
     }
 
     @Override
     public void nobodyReachedTheQuorumYet(BigFraction quorum) {
-
     }
 
     @Override
     public void noCandidatesAreLeft() {
-
     }
 
     @Override
     public void calculationStarted(Election<GenderedCandidate> election, VoteDistribution<GenderedCandidate> voteDistribution) {
-
+        getBuilder().initialVoteDistribution(voteDistribution);
     }
 
     @Override
     public void quorumHasBeenCalculated(long numberOfValidBallots, long numberOfSeats, BigFraction quorum) {
-
+        getBuilder().setQuorum(numberOfValidBallots, numberOfSeats, quorum);
     }
 
     @Override
@@ -110,5 +109,13 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
 
     public String getNonFemaleExclusiveRunSvg() {
         return nonFemaleExclusiveRun.build();
+    }
+
+    private ElectionCalculationSvgDocumentBuilder getBuilder() {
+        if (weAreStillInFemaleExclusiveRun) {
+            return femaleExclusiveRun;
+        } else {
+            return nonFemaleExclusiveRun;
+        }
     }
 }

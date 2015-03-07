@@ -11,9 +11,6 @@ class FirstHeadline {
     }
 
     public Element build(SVGDocument document, int baseX, int baseY) {
-        return SvgElements.createTextElement(
-                document,
-                baseX, baseY,
-                "Wahlergebnisermittlung " + officeName);
+        return new TextElement(document).withX((double) baseX).withY((double) (baseY + 20)).withText(officeName).build();
     }
 }

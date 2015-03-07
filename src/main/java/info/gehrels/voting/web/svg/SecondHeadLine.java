@@ -23,13 +23,11 @@ public final class SecondHeadLine {
 
 
     public Element build(SVGDocument document, int baseX, int baseY) {
-        return SvgElements.createTextElement(
-                document,
-                baseX, baseY,
-                numberOfSeats + " " + (femaleExclusive ? "Frauenplätze" : "offene Plätze") +
-                        ", davon sind " + numberOfElectablePostitions + " zu besetzen. " +
-                        "Es gibt " + numberOfValidBallots + " abgegebene gültige Stimmzettel und " +
-                        invalidVotes + " ungültige Stimmen." +
-                        (quorum != null ? " Das Quorum liegt daher bei " + Double.toString(quorum.doubleValue()) : "") + ".");
+        String textContent = numberOfSeats + " " + (femaleExclusive ? "Frauenplätze" : "offene Plätze") +
+                ", davon sind " + numberOfElectablePostitions + " zu besetzen. " +
+                "Es gibt " + numberOfValidBallots + " abgegebene gültige Stimmzettel und " +
+                invalidVotes + " ungültige Stimmen." +
+                (quorum != null ? " Das Quorum liegt daher bei " + Double.toString(quorum.doubleValue()) : "") + ".";
+        return new TextElement(document).withX((double) baseX).withY((double) (baseY + 20)).withText(textContent).build();
     }
 }

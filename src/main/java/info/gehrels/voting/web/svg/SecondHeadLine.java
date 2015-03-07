@@ -30,6 +30,6 @@ public final class SecondHeadLine {
                         ", davon sind " + numberOfElectablePostitions + " zu besetzen. " +
                         "Es gibt " + numberOfValidBallots + " abgegebene gültige Stimmzettel und " +
                         invalidVotes + " ungültige Stimmen." +
-                        (quorum != null ? " Das Quorum liegt daher bei " + Double.toString(quorum.doubleValue()) : ""));
+                        (quorum != null ? " Das Quorum liegt daher bei " + Double.toString(quorum.doubleValue()) : "") + ".");
     }
 }

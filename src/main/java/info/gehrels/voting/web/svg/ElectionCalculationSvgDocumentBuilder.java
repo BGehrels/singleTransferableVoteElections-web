@@ -46,13 +46,25 @@ public final class ElectionCalculationSvgDocumentBuilder {
         DOMImplementation impl = new SVGDOMImplementation();
         SVGDocument document = (SVGDocument) impl.createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
         SVGSVGElement root = document.getRootElement();
-        root.appendChild(firstHeadline.build(document, 0, 0));;
+        root.appendChild(firstHeadline.build(document, 0, 0));
         root.appendChild(secondHeadLine.build(document, 0, 25));
 
-        int i = 0;
+        BigFraction maxNumberOfVotes = BigFraction.ZERO;
         for (VoteDistributionSvg voteDistribution : voteDistributions) {
-            root.appendChild(voteDistribution.build(document, 0, (60 + (2 * 20 * i)), electableCandidates));
-            i++;
+            if (maxNumberOfVotes.compareTo(voteDistribution.getMaxNumberOfLocalVotes()) < 0) {
+                maxNumberOfVotes = voteDistribution.getMaxNumberOfLocalVotes();
+            }
+            voteDistribution.getMaxNumberOfLocalVotes();
+        }
+
+        for (VoteDistributionSvg voteDistribution : voteDistributions) {
+            voteDistribution.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
+        }
+
+        double y = 35;
+        for (VoteDistributionSvg voteDistribution : voteDistributions) {
+            root.appendChild(voteDistribution.build(document, 0, y));
+            y += voteDistribution.getHeight() * 3;
         }
 
         StringWriter writer = new StringWriter();
@@ -73,7 +85,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     public void voteWeightRedistributionCompleted(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, VoteDistribution<GenderedCandidate> voteDistribution) {
-        voteDistributions.add(new VoteDistributionSvg(voteDistribution, quorum));
+        voteDistributions.add(new VoteDistributionSvg(voteDistribution,electableCandidates, quorum));
     }
 
     public void markCandidateElected(GenderedCandidate winner, BigFraction numberOfVotes, BigFraction quorum) {
@@ -87,7 +99,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     public void initialVoteDistribution(VoteDistribution<GenderedCandidate> voteDistribution) {
-        voteDistributions.add(new VoteDistributionSvg(voteDistribution, quorum));
+        voteDistributions.add(new VoteDistributionSvg(voteDistribution, electableCandidates, quorum));
         secondHeadLine = new SecondHeadLine(numberOfSeats, femaleExclusive, numberOfElectablePostitions, numberOfValidBallots, voteDistribution.invalidVotes, quorum);
     }
 

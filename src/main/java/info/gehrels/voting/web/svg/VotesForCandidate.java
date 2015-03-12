@@ -5,11 +5,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public final class VotesForCandidate {
     public static final BigFraction SEVENTY = new BigFraction(70);
     private final BigFraction numberOfVotes;
     private final BigFraction quorum;
+    private final Collection<VoteFlow> incomingFlows = new ArrayList<>();
+    private final Collection<VoteFlow> outgoingFlows = new ArrayList<>();
+
     private BigFraction globalMaxNumberOfVotes;
 
     VotesForCandidate(BigFraction numberOfVotes, BigFraction quorum) {
@@ -53,7 +58,7 @@ public final class VotesForCandidate {
             Element numberOfVotesBar = document.createElement("rect");
             numberOfVotesBar.setAttribute("x", "1");
             numberOfVotesBar.setAttribute("y", "1");
-            numberOfVotesBar.setAttribute("width", String.valueOf(numberOfVotes.multiply(getScale()).doubleValue()));
+            numberOfVotesBar.setAttribute("width", String.valueOf(getVotesBarWidth(numberOfVotes)));
             numberOfVotesBar.setAttribute("height", String.valueOf(getBarHeight().doubleValue()));
             numberOfVotesBar.setAttribute("style", "fill:red; stroke:none");
             svg.appendChild(numberOfVotesBar);
@@ -77,5 +82,41 @@ public final class VotesForCandidate {
                     .build());
         }
         return svg;
+    }
+
+    private double getVotesBarWidth(BigFraction numberOfVotes) {
+        return numberOfVotes.multiply(getScale()).doubleValue();
+    }
+
+    public void registerOutgoingFlow(VoteFlow voteFlow) {
+        outgoingFlows.add(voteFlow);
+    }
+
+    public void registerIncomingFlow(VoteFlow voteFlow) {
+        incomingFlows.add(voteFlow);
+    }
+
+    public void initializeVoteFlows(double baseX, double baseY) {
+        if (numberOfVotes != null) {
+            double upperBarEnd = baseY + 1;
+            double lowerBarEnd = upperBarEnd + getBarHeight().doubleValue();
+            double rightFlowEnd = baseX + 1 + getVotesBarWidth(numberOfVotes);
+
+            for (VoteFlow incomingFlow : incomingFlows) {
+                double votesBarWidth = getVotesBarWidth(incomingFlow.getVoteWeight());
+                double leftFlowEnd = rightFlowEnd - votesBarWidth;
+                incomingFlow.setTargetCoordinates(leftFlowEnd, rightFlowEnd, upperBarEnd);
+                rightFlowEnd = leftFlowEnd;
+            }
+
+            rightFlowEnd = 1 + getVotesBarWidth(numberOfVotes);
+
+            for (VoteFlow outgoingFlow : outgoingFlows) {
+                double votesBarWidth = getVotesBarWidth(outgoingFlow.getVoteWeight());
+                double leftFlowEnd = rightFlowEnd - votesBarWidth;
+                outgoingFlow.setSourceCoordinates(leftFlowEnd, rightFlowEnd, lowerBarEnd);
+                rightFlowEnd = leftFlowEnd;
+            }
+        }
     }
 }

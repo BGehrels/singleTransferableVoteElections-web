@@ -1,5 +1,6 @@
 package info.gehrels.voting.web.svg;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
@@ -16,8 +17,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public final class ElectionCalculationSvgDocumentBuilder {
     private final long numberOfSeats;
@@ -25,6 +25,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     private final boolean femaleExclusive;
     private final List<GenderedCandidate> electableCandidates;
     private final FirstHeadline firstHeadline;
+    private final Collection<VoteFlow> voteFlows = new ArrayList<>();
 
     private long numberOfElectablePostitions;
     private long numberOfValidBallots;
@@ -54,17 +55,21 @@ public final class ElectionCalculationSvgDocumentBuilder {
             if (maxNumberOfVotes.compareTo(voteDistribution.getMaxNumberOfLocalVotes()) < 0) {
                 maxNumberOfVotes = voteDistribution.getMaxNumberOfLocalVotes();
             }
-            voteDistribution.getMaxNumberOfLocalVotes();
         }
 
         for (VoteDistributionSvg voteDistribution : voteDistributions) {
             voteDistribution.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
+            voteDistribution.initializeVoteFlows();
         }
 
         double y = 35;
         for (VoteDistributionSvg voteDistribution : voteDistributions) {
             root.appendChild(voteDistribution.build(document, 0, y));
             y += voteDistribution.getHeight() * 3;
+        }
+
+        for (VoteFlow voteFlow : voteFlows) {
+            root.appendChild(voteFlow.build(document));
         }
 
         StringWriter writer = new StringWriter();
@@ -86,6 +91,65 @@ public final class ElectionCalculationSvgDocumentBuilder {
 
     public void voteWeightRedistributionCompleted(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, VoteDistribution<GenderedCandidate> voteDistribution) {
         voteDistributions.add(new VoteDistributionSvg(voteDistribution,electableCandidates, quorum));
+
+        Collection<VoteFlow> calculatedVoteFlows = calculateVoteFlows(originalVoteStates, newVoteStates);
+        for (VoteFlow voteFlow : calculatedVoteFlows) {
+            voteFlows.add(voteFlow);
+            voteDistributions.get(voteDistributions.size()-2).registerOutgoingFlow(voteFlow);
+            voteDistributions.get(voteDistributions.size()-1).registerIncomingFlow(voteFlow);
+        }
+    }
+
+    private Collection<VoteFlow> calculateVoteFlows(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates) {
+        Map<GenderedCandidate, Map<Optional<GenderedCandidate>, VoteFlow>> calculatedVoteFlows = new HashMap<>();
+        for (VoteState<GenderedCandidate> originalVoteState : originalVoteStates) {
+            VoteState<GenderedCandidate> newVoteState = getById(newVoteStates, originalVoteState.getBallotId());
+            if (!sameState(originalVoteState, newVoteState)) {
+                VoteFlow voteFlow = getOrCreateVoteFlow(calculatedVoteFlows, originalVoteState.getPreferredCandidate().get(), newVoteState.getPreferredCandidate()).addVoteWeight(newVoteState.getVoteWeight());
+                voteFlow.addVoteWeight(newVoteState.getVoteWeight());
+            }
+        }
+        return flatten(calculatedVoteFlows);
+    }
+
+    private Collection<VoteFlow> flatten(Map<GenderedCandidate, Map<Optional<GenderedCandidate>, VoteFlow>> calculatedVoteFlows) {
+        Collection<Map<Optional<GenderedCandidate>, VoteFlow>> values = calculatedVoteFlows.values();
+        Collection<VoteFlow> result = new ArrayList<>();
+        for (Map<Optional<GenderedCandidate>, VoteFlow> value : values) {
+            result.addAll(value.values());
+        }
+        return result;
+    }
+
+    private VoteFlow getOrCreateVoteFlow(Map<GenderedCandidate, Map<Optional<GenderedCandidate>, VoteFlow>> voteFlows, GenderedCandidate oldPreferredCandidate, Optional<GenderedCandidate> newPreferredCandidate) {
+        Map<Optional<GenderedCandidate>, VoteFlow> genderedCandidateVoteFlowMap = voteFlows.get(oldPreferredCandidate);
+        if (genderedCandidateVoteFlowMap == null) {
+            genderedCandidateVoteFlowMap = new HashMap<>();
+            voteFlows.put(oldPreferredCandidate, genderedCandidateVoteFlowMap);
+        }
+
+        VoteFlow voteFlow = genderedCandidateVoteFlowMap.get(newPreferredCandidate);
+        if (voteFlow == null) {
+            voteFlow = new VoteFlow(oldPreferredCandidate, newPreferredCandidate);
+            genderedCandidateVoteFlowMap.put(newPreferredCandidate, voteFlow);
+        }
+        return voteFlow;
+    }
+
+    private boolean sameState(VoteState<GenderedCandidate> originalVoteState, VoteState<GenderedCandidate> newVoteState) {
+        return (originalVoteState.isInvalid() == newVoteState.isInvalid()) &&
+        (originalVoteState.isNoVote() == newVoteState.isNoVote()) &&
+        originalVoteState.getPreferredCandidate().equals(newVoteState.getPreferredCandidate());
+    }
+
+    private VoteState<GenderedCandidate> getById(ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, long ballotId) {
+        for (VoteState<GenderedCandidate> newVoteState : newVoteStates) {
+            if (newVoteState.getBallotId() == ballotId) {
+                return newVoteState;
+            }
+        }
+
+        throw new IllegalArgumentException("Ballot No. " + ballotId + " does not exist");
     }
 
     public void markCandidateElected(GenderedCandidate winner, BigFraction numberOfVotes, BigFraction quorum) {

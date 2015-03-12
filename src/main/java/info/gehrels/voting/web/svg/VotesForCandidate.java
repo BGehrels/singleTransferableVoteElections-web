@@ -12,6 +12,9 @@ public final class VotesForCandidate {
     public static final BigFraction SEVENTY = new BigFraction(70);
     private final BigFraction numberOfVotes;
     private final BigFraction quorum;
+    private double baseX;
+    private double baseY;
+    private double width;
     private final Collection<VoteFlow> incomingFlows = new ArrayList<>();
     private final Collection<VoteFlow> outgoingFlows = new ArrayList<>();
 
@@ -22,70 +25,65 @@ public final class VotesForCandidate {
         this.quorum = quorum;
     }
 
+    public void initializeSizing(double baseX, double baseY, double width) {
+        this.baseX = baseX;
+        this.baseY = baseY;
+        this.width = width;
+    }
+
     public BigFraction getNumberOfVotes() {
-        return numberOfVotes != null ? numberOfVotes : BigFraction.ZERO;
+        return numberOfVotes != null ? numberOfVotes : BigFraction.ZERO; // TODO: fühlt sich nach workaround an.
     }
 
     public void setGlobalMaxNumberOfVotes(BigFraction maxNumberOfVotes) {
         this.globalMaxNumberOfVotes = maxNumberOfVotes;
     }
 
-    public double getWidth() {
-        return getBarWidth().add(2).doubleValue();
-    }
-
-    private BigFraction getBarWidth() {
-        return globalMaxNumberOfVotes.multiply(getScale());
-    }
-
     public double getHeight() {
-        return getBarHeight().add(2).doubleValue(); // stroke 2 x 1px
+        return getBarHeight();
     }
 
-    private BigFraction getBarHeight() {
-        return getBarWidth().divide(7);
+    private double getBarHeight() {
+        return width / 7;
     }
 
-    private BigFraction getScale() {
-        return (globalMaxNumberOfVotes.compareTo(SEVENTY) > 0) ? BigFraction.ONE : SEVENTY.divide(globalMaxNumberOfVotes);
+    private double getWidthPerVote() {
+        return width / globalMaxNumberOfVotes.doubleValue();
     }
 
-    public Element build(SVGDocument document, double baseX, double baseY) {
-        Element svg = document.createElement("svg");
-        svg.setAttribute("x", String.valueOf(baseX));
-        svg.setAttribute("y", String.valueOf(baseY));
+    public Element build(SVGDocument document) {
+        Element svg = document.createElement("g");
         if (numberOfVotes != null) {
             Element numberOfVotesBar = document.createElement("rect");
-            numberOfVotesBar.setAttribute("x", "1");
-            numberOfVotesBar.setAttribute("y", "1");
-            numberOfVotesBar.setAttribute("width", String.valueOf(getVotesBarWidth(numberOfVotes)));
-            numberOfVotesBar.setAttribute("height", String.valueOf(getBarHeight().doubleValue()));
+            numberOfVotesBar.setAttribute("x", String.valueOf(baseX));
+            numberOfVotesBar.setAttribute("y", String.valueOf(baseY));
+            numberOfVotesBar.setAttribute("width", String.valueOf(getBarWidth(numberOfVotes)));
+            numberOfVotesBar.setAttribute("height", String.valueOf(getBarHeight()));
             numberOfVotesBar.setAttribute("style", "fill:red; stroke:none");
             svg.appendChild(numberOfVotesBar);
 
-            BigFraction quorumWidth = quorum.multiply(getScale());
             Element quorumBorder = document.createElement("rect");
-            quorumBorder.setAttribute("x", "1");
-            quorumBorder.setAttribute("y", "1");
-            quorumBorder.setAttribute("width", String.valueOf(quorumWidth.doubleValue()));
-            quorumBorder.setAttribute("height", String.valueOf(getBarHeight().doubleValue()));
+            quorumBorder.setAttribute("x", String.valueOf(baseX));
+            quorumBorder.setAttribute("y", String.valueOf(baseY));
+            quorumBorder.setAttribute("width", String.valueOf(getBarWidth(quorum)));
+            quorumBorder.setAttribute("height", String.valueOf(getBarHeight()));
             quorumBorder.setAttribute("fill-opacity", "0");
             quorumBorder.setAttribute("stroke", "black");
             svg.appendChild(quorumBorder);
 
             svg.appendChild(new TextElement(document)
-                    .withX(1 + quorumWidth.divide(2).doubleValue())
-                    .withY(1 + getBarHeight().doubleValue() - getBarHeight().divide(10).doubleValue() -1)
+                    .withX(baseX + (getBarWidth(quorum) / 2))
+                    .withY(baseY + getBarHeight() - (getBarHeight() / 5))
                     .withText(numberOfVotes.bigDecimalValue(1, BigDecimal.ROUND_HALF_UP) + "/" + quorum.bigDecimalValue(1, BigDecimal.ROUND_HALF_UP))
-                    .withFontSize(getBarHeight().multiply(BigFraction.getReducedFraction(8,10)).doubleValue())
+                    .withFontSize(getBarHeight() * 0.8)
                     .withMiddleAnchor()
                     .build());
         }
         return svg;
     }
 
-    private double getVotesBarWidth(BigFraction numberOfVotes) {
-        return numberOfVotes.multiply(getScale()).doubleValue();
+    private double getBarWidth(BigFraction numberOfVotes) {
+        return numberOfVotes.doubleValue() * getWidthPerVote();
     }
 
     public void registerOutgoingFlow(VoteFlow voteFlow) {
@@ -96,23 +94,23 @@ public final class VotesForCandidate {
         incomingFlows.add(voteFlow);
     }
 
-    public void initializeVoteFlows(double baseX, double baseY) {
+    public void initializeVoteFlowSizing() {
         if (numberOfVotes != null) {
-            double upperBarEnd = baseY + 1;
-            double lowerBarEnd = upperBarEnd + getBarHeight().doubleValue();
-            double rightFlowEnd = baseX + 1 + getVotesBarWidth(numberOfVotes);
+            double upperBarEnd = baseY;
+            double lowerBarEnd = upperBarEnd + getBarHeight();
+            double rightFlowEnd = baseX + getBarWidth(numberOfVotes);
 
             for (VoteFlow incomingFlow : incomingFlows) {
-                double votesBarWidth = getVotesBarWidth(incomingFlow.getVoteWeight());
+                double votesBarWidth = getBarWidth(incomingFlow.getVoteWeight());
                 double leftFlowEnd = rightFlowEnd - votesBarWidth;
                 incomingFlow.setTargetCoordinates(leftFlowEnd, rightFlowEnd, upperBarEnd);
                 rightFlowEnd = leftFlowEnd;
             }
 
-            rightFlowEnd = 1 + getVotesBarWidth(numberOfVotes);
+            rightFlowEnd = baseX + getBarWidth(numberOfVotes);
 
             for (VoteFlow outgoingFlow : outgoingFlows) {
-                double votesBarWidth = getVotesBarWidth(outgoingFlow.getVoteWeight());
+                double votesBarWidth = getBarWidth(outgoingFlow.getVoteWeight());
                 double leftFlowEnd = rightFlowEnd - votesBarWidth;
                 outgoingFlow.setSourceCoordinates(leftFlowEnd, rightFlowEnd, lowerBarEnd);
                 rightFlowEnd = leftFlowEnd;

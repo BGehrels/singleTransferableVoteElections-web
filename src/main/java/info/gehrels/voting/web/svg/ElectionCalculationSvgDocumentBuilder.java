@@ -57,15 +57,18 @@ public final class ElectionCalculationSvgDocumentBuilder {
             }
         }
 
+        double y = 60;
         for (VoteDistributionSvg voteDistribution : voteDistributions) {
             voteDistribution.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
-            voteDistribution.initializeVoteFlows();
+
+            voteDistribution.initializeSizing(5, y);
+            y += voteDistribution.getHeight() * 3;
+
+            voteDistribution.initializeVoteFlowSizing();
         }
 
-        double y = 35;
         for (VoteDistributionSvg voteDistribution : voteDistributions) {
-            root.appendChild(voteDistribution.build(document, 0, y));
-            y += voteDistribution.getHeight() * 3;
+            root.appendChild(voteDistribution.build(document));
         }
 
         for (VoteFlow voteFlow : voteFlows) {
@@ -101,11 +104,14 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     private Collection<VoteFlow> calculateVoteFlows(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates) {
-        Map<GenderedCandidate, Map<Optional<GenderedCandidate>, VoteFlow>> calculatedVoteFlows = new HashMap<>();
+        Map<GenderedCandidate, Map<Optional<GenderedCandidate>, VoteFlow>> calculatedVoteFlows = new LinkedHashMap<>();
         for (VoteState<GenderedCandidate> originalVoteState : originalVoteStates) {
             VoteState<GenderedCandidate> newVoteState = getById(newVoteStates, originalVoteState.getBallotId());
             if (!sameState(originalVoteState, newVoteState)) {
-                VoteFlow voteFlow = getOrCreateVoteFlow(calculatedVoteFlows, originalVoteState.getPreferredCandidate().get(), newVoteState.getPreferredCandidate()).addVoteWeight(newVoteState.getVoteWeight());
+                VoteFlow voteFlow = getOrCreateVoteFlow(
+                        calculatedVoteFlows,
+                        originalVoteState.getPreferredCandidate().get(),
+                        newVoteState.getPreferredCandidate());
                 voteFlow.addVoteWeight(newVoteState.getVoteWeight());
             }
         }
@@ -124,7 +130,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     private VoteFlow getOrCreateVoteFlow(Map<GenderedCandidate, Map<Optional<GenderedCandidate>, VoteFlow>> voteFlows, GenderedCandidate oldPreferredCandidate, Optional<GenderedCandidate> newPreferredCandidate) {
         Map<Optional<GenderedCandidate>, VoteFlow> genderedCandidateVoteFlowMap = voteFlows.get(oldPreferredCandidate);
         if (genderedCandidateVoteFlowMap == null) {
-            genderedCandidateVoteFlowMap = new HashMap<>();
+            genderedCandidateVoteFlowMap = new LinkedHashMap<>();
             voteFlows.put(oldPreferredCandidate, genderedCandidateVoteFlowMap);
         }
 

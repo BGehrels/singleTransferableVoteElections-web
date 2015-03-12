@@ -52,7 +52,12 @@ public final class VoteFlow {
 
     public Element build(SVGDocument svgDocument) {
         Element path = svgDocument.createElement("path");
-        path.setAttribute("d", "M" + sourceX + "," + sourceY + " C" + targetX + "," + targetY + " " + sourceX + "," + targetY + " " + targetX + "," + sourceY);
+        path.setAttribute("d",
+                "M" + sourceX + "," + sourceY +
+                " C" + sourceX + "," + targetY +
+                "  " + targetX + "," + sourceY +
+                "  " + targetX + "," + targetY);
+                path.setAttribute("style", "stroke:#660000; fill:none;");
         return path;
     }
 }

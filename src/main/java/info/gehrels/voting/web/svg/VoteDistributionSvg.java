@@ -9,15 +9,21 @@ import org.w3c.dom.svg.SVGDocument;
 import java.util.*;
 
 public final class VoteDistributionSvg {
-    private final Map<Optional<GenderedCandidate>, VotesForCandidate> voteDistribution = new HashMap<>();
+    private static final double TOTAL_WIDTH = 800.0;
+    private final Map<Optional<GenderedCandidate>, VotesForCandidate> voteDistribution = new LinkedHashMap<>();
+    private final int numberOfElectableCandidates;
 
     public VoteDistributionSvg(VoteDistribution<GenderedCandidate> voteDistribution, List<GenderedCandidate> electableCandidates, BigFraction quorum) {
+        this.numberOfElectableCandidates = electableCandidates.size();
+        int i = 0;
         for (GenderedCandidate electableCandidate : electableCandidates) {
             BigFraction numberOfVotes = voteDistribution.votesByCandidate.get(electableCandidate);
             this.voteDistribution.put(Optional.of(electableCandidate), new VotesForCandidate(numberOfVotes, quorum));
+            i++;
         }
 
         this.voteDistribution.put(Optional.<GenderedCandidate>empty(), new VotesForCandidate(voteDistribution.noVotes, quorum));
+
     }
 
     public BigFraction getMaxNumberOfLocalVotes() {
@@ -31,6 +37,19 @@ public final class VoteDistributionSvg {
         return result;
     }
 
+    public void initializeSizing(double baseX, double baseY){
+        double totalAmountOfSpacing = 0.1 * TOTAL_WIDTH;
+        double spacingWidth = totalAmountOfSpacing / (numberOfElectableCandidates - 1.0);
+        double perCandidateWidth = TOTAL_WIDTH / numberOfElectableCandidates;
+
+        for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
+            votesForCandidate.initializeSizing(baseX, baseY, perCandidateWidth - spacingWidth);
+            baseX += perCandidateWidth;
+        }
+
+
+    }
+
     public VoteDistributionSvg setGlobalMaxNumberOfVotes(BigFraction globalMaxNumberOfVotes) {
         for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
             votesForCandidate.setGlobalMaxNumberOfVotes(globalMaxNumberOfVotes);
@@ -42,30 +61,24 @@ public final class VoteDistributionSvg {
         return voteDistribution.values().iterator().next().getHeight();
     }
 
-    public Element build(SVGDocument document, double baseX, double baseY) {
-        Element svg = document.createElement("svg");
-        svg.setAttribute("x", String.valueOf(baseX));
-        svg.setAttribute("y", String.valueOf(baseY));
-        double x = 0;
+    public Element build(SVGDocument document) {
+        Element svg = document.createElement("g");
         for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
-            svg.appendChild(votesForCandidate.build(document, x, baseY));
-            x += votesForCandidate.getWidth() * 1.25;
+            svg.appendChild(votesForCandidate.build(document));
         }
 
         return svg;
     }
 
     public void registerOutgoingFlow(VoteFlow voteFlow) {
-        this.voteDistribution.get(Optional.of(voteFlow.getOldPreferredCandidate())).registerOutgoingFlow(voteFlow);
+        voteDistribution.get(Optional.of(voteFlow.getOldPreferredCandidate())).registerOutgoingFlow(voteFlow);
     }
 
     public void registerIncomingFlow(VoteFlow voteFlow) {
-        this.voteDistribution.get(voteFlow.getNewPreferredCandidate()).registerIncomingFlow(voteFlow);
+        voteDistribution.get(voteFlow.getNewPreferredCandidate()).registerIncomingFlow(voteFlow);
     }
 
-    public void initializeVoteFlows() {
-        for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
-            votesForCandidate.initializeVoteFlows(0, 0); // TODO: Fill with real values
-        }
+    public void initializeVoteFlowSizing() {
+        voteDistribution.values().forEach(VotesForCandidate::initializeVoteFlowSizing);
     }
 }

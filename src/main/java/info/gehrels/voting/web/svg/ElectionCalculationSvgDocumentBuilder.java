@@ -63,9 +63,12 @@ public final class ElectionCalculationSvgDocumentBuilder {
             voteDistribution.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
 
             voteDistribution.initializeSizing(5, y);
-            y += voteDistribution.getHeight() * 4;
-
             voteDistribution.initializeVoteFlowSizing();
+
+            y += Math.max(
+                    voteDistribution.getHeight(),
+                    voteDistribution.getMaxOutgoingVoteFlowWidth() * 3
+            );
         }
 
         for (VoteFlow voteFlow : voteFlows) {

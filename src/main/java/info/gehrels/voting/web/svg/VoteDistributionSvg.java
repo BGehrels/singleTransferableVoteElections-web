@@ -89,4 +89,12 @@ public final class VoteDistributionSvg {
     public void initializeVoteFlowSizing() {
         voteDistribution.values().forEach(VotesForCandidate::initializeVoteFlowSizing);
     }
+
+    public double getMaxOutgoingVoteFlowWidth() {
+        double maxOutgoingVoteFlowWidth = 0;
+        for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
+            maxOutgoingVoteFlowWidth = Math.max(maxOutgoingVoteFlowWidth, votesForCandidate.getMaxOutgoingVoteFlowWidth());
+        }
+        return maxOutgoingVoteFlowWidth;
+    }
 }

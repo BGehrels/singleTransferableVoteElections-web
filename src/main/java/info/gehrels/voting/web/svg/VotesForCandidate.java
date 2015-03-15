@@ -116,4 +116,16 @@ public final class VotesForCandidate {
         }
         return svg;
     }
+
+    public double getMaxOutgoingVoteFlowWidth() {
+        double maxOutgoingVoteFlowWidth = 0;
+        for (VoteFlow outgoingFlow : outgoingFlows) {
+            maxOutgoingVoteFlowWidth = Math.max(
+                    maxOutgoingVoteFlowWidth,
+                    outgoingFlow.getWidth()
+            );
+        }
+
+        return maxOutgoingVoteFlowWidth;
+    }
 }

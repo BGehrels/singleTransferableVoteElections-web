@@ -60,4 +60,8 @@ public final class VoteFlow {
                 path.setAttribute("style", "stroke:#660000; fill:none; stroke-width: " + width);
         return path;
     }
+
+    public double getWidth() {
+        return width;
+    }
 }

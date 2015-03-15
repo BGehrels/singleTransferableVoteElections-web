@@ -52,7 +52,7 @@ public final class ManageElectionCalculationsController {
 		this.electionCalculationsState = electionCalculationsState;
 	}
 
-	@RequestMapping(value = "/startElectionCalculation", method = {POST})
+	@RequestMapping(value = "/startElectionCalculation", method = POST)
 	public ModelAndView startElectionCalculation() {
 		if (ballotLayoutState.ballotLayout != null) {
 			ImmutableCollection<Ballot<GenderedCandidate>> firstTryCastBallots = castBallotsState

@@ -31,6 +31,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     private long numberOfValidBallots;
     private BigFraction quorum;
     private SecondHeadLine secondHeadLine;
+    private int indexOfVoteDistributions = 0;
 
     public ElectionCalculationSvgDocumentBuilder(GenderedElection election, boolean femaleExclusive) {
         this.electableCandidates = new ArrayList<>(election.getCandidates());
@@ -93,7 +94,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     public void voteWeightRedistributionCompleted(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, VoteDistribution<GenderedCandidate> voteDistribution) {
-        voteDistributions.add(new VoteDistributionSvg(voteDistribution,electableCandidates, quorum));
+        voteDistributions.add(new VoteDistributionSvg(voteDistribution,electableCandidates, quorum, indexOfVoteDistributions++));
 
         Collection<VoteFlow> calculatedVoteFlows = calculateVoteFlows(originalVoteStates, newVoteStates);
         for (VoteFlow voteFlow : calculatedVoteFlows) {
@@ -169,7 +170,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     public void initialVoteDistribution(VoteDistribution<GenderedCandidate> voteDistribution) {
-        voteDistributions.add(new VoteDistributionSvg(voteDistribution, electableCandidates, quorum));
+        voteDistributions.add(new VoteDistributionSvg(voteDistribution, electableCandidates, quorum, indexOfVoteDistributions++));
         secondHeadLine = new SecondHeadLine(numberOfSeats, femaleExclusive, numberOfElectablePostitions, numberOfValidBallots, voteDistribution.invalidVotes, quorum);
     }
 

@@ -6,11 +6,11 @@ import org.w3c.dom.svg.SVGDocument;
 class FirstHeadline {
     private final String officeName;
 
-    public FirstHeadline(String officeName) {
+    FirstHeadline(String officeName) {
         this.officeName = officeName;
     }
 
-    public Element build(SVGDocument document, int baseX, int baseY) {
-        return new TextElement(document).withX((double) baseX).withY((double) (baseY + 20)).withText(officeName).build();
+    public Element build(SVGDocument document, double baseX, double baseY) {
+        return new TextElement().withX(baseX).withY((baseY + 20)).withText(officeName).build(document);
     }
 }

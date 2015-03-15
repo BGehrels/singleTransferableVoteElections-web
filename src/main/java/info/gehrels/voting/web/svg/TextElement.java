@@ -4,39 +4,52 @@ import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
 public final class TextElement {
-    private final Element element;
-
-    public TextElement(SVGDocument svgDocument) {
-        this.element = svgDocument.createElement("text");
-        element.setAttribute("font-family", "sans-serif");
-    }
+    private double x;
+    private double y;
+    private String text;
+    private Double fontSize;
+    private boolean middleAnchor;
 
     public TextElement withX(double x) {
-        element.setAttribute("x", String.valueOf(x));
+        this.x = x;
         return this;
     }
 
-    public TextElement withY(double x) {
-        element.setAttribute("y", String.valueOf(x));
+    public TextElement withY(double y) {
+        this.y = y;
         return this;
     }
 
     public TextElement withText(String text) {
-        element.setTextContent(text);
+        this.text = text;
         return this;
     }
 
     public TextElement withMiddleAnchor() {
-        element.setAttribute("text-anchor", "middle");
+        this.middleAnchor=true;
         return this;
     }
 
     public TextElement withFontSize(double fontSize) {
-        element.setAttribute("font-size", String.valueOf(fontSize));
+        this.fontSize = fontSize;
         return this;
     }
 
-    public Element build() {
+    public Element build(SVGDocument svgDocument) {
+        Element element = svgDocument.createElement("text");
+        element.setAttribute("x", String.valueOf(x));
+        element.setAttribute("y", String.valueOf(y));
+        element.setAttribute("font-family", "sans-serif");
+        element.setTextContent(text);
+
+        if (fontSize != null) {
+            element.setAttribute("font-size", String.valueOf(fontSize));
+        }
+
+        if (middleAnchor) {
+            element.setAttribute("text-anchor", "middle");
+        }
+
         return element;
     }
 }

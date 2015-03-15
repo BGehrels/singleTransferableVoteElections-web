@@ -28,6 +28,6 @@ public final class SecondHeadLine {
                 "Es gibt " + numberOfValidBallots + " abgegebene gültige Stimmzettel und " +
                 invalidVotes + " ungültige Stimmen." +
                 (quorum != null ? " Das Quorum liegt daher bei " + Double.toString(quorum.doubleValue()) : "") + ".";
-        return new TextElement(document).withX((double) baseX).withY((double) (baseY + 20)).withText(textContent).build();
+        return new TextElement().withX(baseX).withY((baseY + 20)).withText(textContent).build(document);
     }
 }

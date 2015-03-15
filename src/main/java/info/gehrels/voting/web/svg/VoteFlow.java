@@ -57,7 +57,7 @@ public final class VoteFlow {
                 " C" + sourceX + "," + targetY +
                 "  " + targetX + "," + sourceY +
                 "  " + targetX + "," + targetY);
-                path.setAttribute("style", "stroke:#660000; fill:none;");
+                path.setAttribute("style", "stroke:#660000; fill:none; stroke-width: " + width);
         return path;
     }
 }

@@ -62,17 +62,17 @@ public final class ElectionCalculationSvgDocumentBuilder {
             voteDistribution.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
 
             voteDistribution.initializeSizing(5, y);
-            y += voteDistribution.getHeight() * 3;
+            y += voteDistribution.getHeight() * 4;
 
             voteDistribution.initializeVoteFlowSizing();
         }
 
-        for (VoteDistributionSvg voteDistribution : voteDistributions) {
-            root.appendChild(voteDistribution.build(document));
-        }
-
         for (VoteFlow voteFlow : voteFlows) {
             root.appendChild(voteFlow.build(document));
+        }
+
+        for (VoteDistributionSvg voteDistribution : voteDistributions) {
+            root.appendChild(voteDistribution.build(document));
         }
 
         StringWriter writer = new StringWriter();

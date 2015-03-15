@@ -15,11 +15,9 @@ public final class VoteDistributionSvg {
 
     public VoteDistributionSvg(VoteDistribution<GenderedCandidate> voteDistribution, List<GenderedCandidate> electableCandidates, BigFraction quorum) {
         this.numberOfElectableCandidates = electableCandidates.size();
-        int i = 0;
         for (GenderedCandidate electableCandidate : electableCandidates) {
             BigFraction numberOfVotes = voteDistribution.votesByCandidate.get(electableCandidate);
             this.voteDistribution.put(Optional.of(electableCandidate), new VotesForCandidate(numberOfVotes, quorum));
-            i++;
         }
 
         this.voteDistribution.put(Optional.<GenderedCandidate>empty(), new VotesForCandidate(voteDistribution.noVotes, quorum));
@@ -38,7 +36,7 @@ public final class VoteDistributionSvg {
     }
 
     public void initializeSizing(double baseX, double baseY){
-        double totalAmountOfSpacing = 0.1 * TOTAL_WIDTH;
+        double totalAmountOfSpacing = 0.05 * TOTAL_WIDTH;
         double spacingWidth = totalAmountOfSpacing / (numberOfElectableCandidates - 1.0);
         double perCandidateWidth = TOTAL_WIDTH / numberOfElectableCandidates;
 

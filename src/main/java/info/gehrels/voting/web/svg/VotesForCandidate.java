@@ -108,13 +108,21 @@ public final class VotesForCandidate {
 
             svg.appendChild(new TextElement()
                     .withX(baseX + (getBarWidth(quorum) / 2))
-                    .withY(baseY + getBarHeight() - (getBarHeight() / 5))
+                    .withY(getTextBaseY())
                     .withText(numberOfVotes.bigDecimalValue(1, BigDecimal.ROUND_HALF_UP) + "/" + quorum.bigDecimalValue(1, BigDecimal.ROUND_HALF_UP))
-                    .withFontSize(getBarHeight() * 0.8)
+                    .withFontSize(getTextFontSize())
                     .withMiddleAnchor()
                     .build(document));
         }
         return svg;
+    }
+
+    double getTextFontSize() {
+        return getBarHeight() * 0.8;
+    }
+
+    double getTextBaseY() {
+        return baseY + getBarHeight() - (getBarHeight() / 5);
     }
 
     public double getMaxOutgoingVoteFlowWidth() {

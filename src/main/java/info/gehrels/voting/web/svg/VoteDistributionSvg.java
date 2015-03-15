@@ -51,6 +51,7 @@ public final class VoteDistributionSvg {
 
         for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
             votesForCandidate.initializeSizing(baseX, baseY, perCandidateWidth - spacingWidth);
+            caption.withY(votesForCandidate.getTextBaseY()).withFontSize(votesForCandidate.getTextFontSize());
             baseX += perCandidateWidth;
         }
 

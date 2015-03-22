@@ -39,22 +39,17 @@ public final class VoteDistributionContentRow extends VoteDistributionGridRow {
     }
 
     @Override
-    public void initializeSizing(double baseX, double baseY){
-        super.initializeSizing(baseX, baseY);
-        double totalAmountOfSpacing = 0.05 * TOTAL_WIDTH;
-        double spacingWidth = totalAmountOfSpacing / numberOfElectableCandidates;
+    public void initializeSizing(){
+        double x = getBaseX();
+        caption.withX(x).withY(getBaseY() + voteDistribution.values().iterator().next().getHeight());
 
-
-        caption.withX(baseX).withY(baseY + voteDistribution.values().iterator().next().getHeight());
-        baseX += perCandidateWidth;
+        x += getPerCandidateColumnWidth();
 
         for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
-            votesForCandidate.initializeSizing(baseX, baseY, perCandidateWidth - spacingWidth);
+            votesForCandidate.initializeSizing(x, getBaseY(), getPerCandidateUsableWidth());
             caption.withY(votesForCandidate.getTextBaseY()).withFontSize(votesForCandidate.getTextFontSize());
-            baseX += perCandidateWidth;
+            x += getPerCandidateColumnWidth();
         }
-
-
     }
 
     public VoteDistributionContentRow setGlobalMaxNumberOfVotes(BigFraction globalMaxNumberOfVotes) {

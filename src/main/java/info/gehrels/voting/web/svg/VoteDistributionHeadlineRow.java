@@ -16,18 +16,17 @@ public final class VoteDistributionHeadlineRow extends VoteDistributionGridRow {
 
         columnHeaders.add(new TextElement().withText("")); // First column is empty
         for (GenderedCandidate electableCandidate : electableCandidates) {
-            columnHeaders.add(new TextElement().withText(electableCandidate.getName()).withMiddleAnchor());
+            columnHeaders.add(new TextElement().withText(electableCandidate.getName()));
         }
         columnHeaders.add(new TextElement().withText("Nein"));
     }
 
     @Override
-    public void initializeSizing(double baseX, double baseY) {
-        super.initializeSizing(baseX, baseY);
-
+    public void initializeSizing() {
+        double x = getBaseX();
         for (TextElement columnHeader : columnHeaders) {
-            columnHeader.withX(baseX).withY(baseY);
-            baseX += perCandidateWidth;
+            columnHeader.withX(x).withY(getBaseY() + getDefaultFontSize()).withFontSize(getDefaultFontSize());
+            x += getPerCandidateColumnWidth();
         }
     }
 
@@ -38,6 +37,6 @@ public final class VoteDistributionHeadlineRow extends VoteDistributionGridRow {
     }
 
     public double getHeight() {
-        return 20.0;
+        return getDefaultFontSize() * 1.6;
     }
 }

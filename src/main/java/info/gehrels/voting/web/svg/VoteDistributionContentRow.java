@@ -11,14 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class VoteDistributionSvg {
-    private static final double TOTAL_WIDTH = 800.0;
+public final class VoteDistributionContentRow extends VoteDistributionGridRow {
     private final Map<Optional<GenderedCandidate>, VotesForCandidate> voteDistribution = new LinkedHashMap<>();
-    private final int numberOfElectableCandidates;
     private final TextElement caption;
 
-    public VoteDistributionSvg(VoteDistribution<GenderedCandidate> voteDistribution, List<GenderedCandidate> electableCandidates, BigFraction quorum, int indexOfVoteDistribution) {
-        this.numberOfElectableCandidates = electableCandidates.size();
+    public VoteDistributionContentRow(VoteDistribution<GenderedCandidate> voteDistribution, List<GenderedCandidate> electableCandidates, BigFraction quorum, int indexOfVoteDistribution) {
+        super(electableCandidates.size());
         for (GenderedCandidate electableCandidate : electableCandidates) {
             BigFraction numberOfVotes = voteDistribution.votesByCandidate.get(electableCandidate);
             this.voteDistribution.put(Optional.of(electableCandidate), new VotesForCandidate(numberOfVotes, quorum));
@@ -40,10 +38,11 @@ public final class VoteDistributionSvg {
         return result;
     }
 
+    @Override
     public void initializeSizing(double baseX, double baseY){
+        super.initializeSizing(baseX, baseY);
         double totalAmountOfSpacing = 0.05 * TOTAL_WIDTH;
         double spacingWidth = totalAmountOfSpacing / numberOfElectableCandidates;
-        double perCandidateWidth = TOTAL_WIDTH / (numberOfElectableCandidates + 1); // +1 for the caption
 
 
         caption.withX(baseX).withY(baseY + voteDistribution.values().iterator().next().getHeight());
@@ -58,7 +57,7 @@ public final class VoteDistributionSvg {
 
     }
 
-    public VoteDistributionSvg setGlobalMaxNumberOfVotes(BigFraction globalMaxNumberOfVotes) {
+    public VoteDistributionContentRow setGlobalMaxNumberOfVotes(BigFraction globalMaxNumberOfVotes) {
         for (VotesForCandidate votesForCandidate : voteDistribution.values()) {
             votesForCandidate.setGlobalMaxNumberOfVotes(globalMaxNumberOfVotes);
         }

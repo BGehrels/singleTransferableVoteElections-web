@@ -21,10 +21,11 @@ import java.util.*;
 
 public final class ElectionCalculationSvgDocumentBuilder {
     private final long numberOfSeats;
-    private final List<VoteDistributionSvg> voteDistributions = new ArrayList<>();
+    private final List<VoteDistributionContentRow> voteDistributions = new ArrayList<>();
     private final boolean femaleExclusive;
     private final List<GenderedCandidate> electableCandidates;
     private final FirstHeadline firstHeadline;
+    private final VoteDistributionHeadlineRow voteDistributionHeadlineRow;
     private final Collection<VoteFlow> voteFlows = new ArrayList<>();
 
     private long numberOfElectablePostitions;
@@ -42,6 +43,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
             numberOfSeats = election.getNumberOfNotFemaleExclusivePositions();
         }
         firstHeadline = new FirstHeadline(election.getOfficeName());
+        voteDistributionHeadlineRow = new VoteDistributionHeadlineRow(electableCandidates);
     }
 
     public String build() {
@@ -52,14 +54,18 @@ public final class ElectionCalculationSvgDocumentBuilder {
         root.appendChild(secondHeadLine.build(document, 0, 25));
 
         BigFraction maxNumberOfVotes = BigFraction.ZERO;
-        for (VoteDistributionSvg voteDistribution : voteDistributions) {
+        for (VoteDistributionContentRow voteDistribution : voteDistributions) {
             if (maxNumberOfVotes.compareTo(voteDistribution.getMaxNumberOfLocalVotes()) < 0) {
                 maxNumberOfVotes = voteDistribution.getMaxNumberOfLocalVotes();
             }
         }
 
         double y = 60;
-        for (VoteDistributionSvg voteDistribution : voteDistributions) {
+        //voteFlowsAndDistributionsHeadline.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
+        voteDistributionHeadlineRow.initializeSizing(5, y);
+        y += voteDistributionHeadlineRow.getHeight();
+
+        for (VoteDistributionContentRow voteDistribution : voteDistributions) {
             voteDistribution.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
 
             voteDistribution.initializeSizing(5, y);
@@ -75,7 +81,8 @@ public final class ElectionCalculationSvgDocumentBuilder {
             root.appendChild(voteFlow.build(document));
         }
 
-        for (VoteDistributionSvg voteDistribution : voteDistributions) {
+        root.appendChild(voteDistributionHeadlineRow.build(document));
+        for (VoteDistributionContentRow voteDistribution : voteDistributions) {
             root.appendChild(voteDistribution.build(document));
         }
 
@@ -97,7 +104,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     public void voteWeightRedistributionCompleted(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, VoteDistribution<GenderedCandidate> voteDistribution) {
-        voteDistributions.add(new VoteDistributionSvg(voteDistribution,electableCandidates, quorum, indexOfVoteDistributions++));
+        voteDistributions.add(new VoteDistributionContentRow(voteDistribution,electableCandidates, quorum, indexOfVoteDistributions++));
 
         Collection<VoteFlow> calculatedVoteFlows = calculateVoteFlows(originalVoteStates, newVoteStates);
         for (VoteFlow voteFlow : calculatedVoteFlows) {
@@ -173,7 +180,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     public void initialVoteDistribution(VoteDistribution<GenderedCandidate> voteDistribution) {
-        voteDistributions.add(new VoteDistributionSvg(voteDistribution, electableCandidates, quorum, indexOfVoteDistributions++));
+        voteDistributions.add(new VoteDistributionContentRow(voteDistribution, electableCandidates, quorum, indexOfVoteDistributions++));
         secondHeadLine = new SecondHeadLine(numberOfSeats, femaleExclusive, numberOfElectablePostitions, numberOfValidBallots, voteDistribution.invalidVotes, quorum);
     }
 

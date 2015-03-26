@@ -25,9 +25,9 @@ public final class ElectionCalculationSvgDocumentBuilder {
     private final boolean femaleExclusive;
     private final List<GenderedCandidate> electableCandidates;
     private final FirstHeadline firstHeadline;
-    private final VoteDistributionHeadlineRow voteDistributionHeadlineRow;
     private final Collection<VoteFlow> voteFlows = new ArrayList<>();
 
+    private VoteDistributionHeadlineRow voteDistributionHeadlineRow;
     private long numberOfElectablePositions;
     private long numberOfValidBallots;
     private BigFraction quorum;
@@ -43,7 +43,6 @@ public final class ElectionCalculationSvgDocumentBuilder {
             numberOfSeats = election.getNumberOfNotFemaleExclusivePositions();
         }
         firstHeadline = new FirstHeadline(election.getOfficeName());
-        voteDistributionHeadlineRow = new VoteDistributionHeadlineRow(electableCandidates);
     }
 
     public String build() {
@@ -182,6 +181,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     public void initialVoteDistribution(VoteDistribution<GenderedCandidate> voteDistribution) {
         voteDistributions.add(new VoteDistributionContentRow(voteDistribution, electableCandidates, quorum, indexOfVoteDistributions++));
         secondHeadLine = new SecondHeadLine(numberOfSeats, femaleExclusive, numberOfElectablePositions, numberOfValidBallots, voteDistribution.invalidVotes, quorum);
+        voteDistributionHeadlineRow = new VoteDistributionHeadlineRow(electableCandidates);
     }
 
     public void candidateNotQualified(GenderedCandidate candidate) {

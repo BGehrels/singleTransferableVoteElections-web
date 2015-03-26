@@ -39,12 +39,12 @@ public final class ServerStartedMessagePrintingListener implements ApplicationLi
 		return hostnames;
 	}
 
-	private Set<URI> getAllHostNameUrlParts(NetworkInterface intf, int port) {
-		Set<URI> hostnames = new HashSet<>();
-		for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-			hostnames.addAll(getUrlsFor(enumIpAddr.nextElement(), port));
+	private Set<URI> getAllHostNameUrlParts(NetworkInterface networkInterface, int port) {
+		Set<URI> hostNames = new HashSet<>();
+		for (Enumeration<InetAddress> enumIpAddress = networkInterface.getInetAddresses(); enumIpAddress.hasMoreElements(); ) {
+			hostNames.addAll(getUrlsFor(enumIpAddress.nextElement(), port));
 		}
-		return hostnames;
+		return hostNames;
 	}
 
 	private Set<URI> getUrlsFor(InetAddress inetAddress, int port) {

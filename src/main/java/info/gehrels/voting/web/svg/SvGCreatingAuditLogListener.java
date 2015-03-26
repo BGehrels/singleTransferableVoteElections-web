@@ -72,7 +72,7 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
     }
 
     @Override
-    public void externalyResolvedAmbiguity(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
+    public void externallyResolvedAmbiguity(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
     }
 
     @Override

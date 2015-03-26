@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 
@@ -117,7 +115,7 @@ public final class ElectionCalculationController {
         if (bindingResult.hasErrors()) {
             return createModelAndView(snapshot, ambiguityResolverResultBuilder);
         } else {
-            asyncElectionCalculation.setAmbiguityResulutionResult(build);
+            asyncElectionCalculation.setAmbiguityResolutionResult(build);
             redirectAttributes.addAttribute("dateTimeTheCalculationStarted", dateTimeTheCalculationStarted);
             return new ModelAndView("redirect:/showElectionCalculation");
         }

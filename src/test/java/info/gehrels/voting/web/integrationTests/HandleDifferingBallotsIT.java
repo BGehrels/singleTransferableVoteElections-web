@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +40,7 @@ public final class HandleDifferingBallotsIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new HtmlUnitDriver();
+        driver = new FirefoxDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 

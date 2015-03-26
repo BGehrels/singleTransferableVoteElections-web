@@ -118,9 +118,9 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	}
 
 	@Override
-	public void externalyResolvedAmbiguity(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
+	public void externallyResolvedAmbiguity(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
 		JSONObject value = new JSONObject();
-		value.put("type", "externalyResolvedAmbiguity");
+		value.put("type", "externallyResolvedAmbiguity");
 		value.put("ambiguityResolverResult", asJSON(ambiguityResolverResult));
 		result.put(value);
 	}

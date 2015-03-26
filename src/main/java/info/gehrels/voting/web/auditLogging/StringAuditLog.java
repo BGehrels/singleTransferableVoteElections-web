@@ -115,7 +115,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 	 * Los; die Ziehung und die Eingabe des Ergebnisses in den Computer müssen mitgliederöffentlich erfolgen.
 	 */
 	@Override
-	public void externalyResolvedAmbiguity(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
+	public void externallyResolvedAmbiguity(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
 		formatLine("externes Auswahlverfahren ergab: %s. (%s)", ambiguityResolverResult.chosenCandidate.name,
 		           ambiguityResolverResult.auditLog);
 	}
@@ -178,7 +178,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 			long ballotId = oldState.getBallotId();
 			if (preferredCandidateChanged && voteWeightChanged) {
 				formatLine(
-					"Das Stimmgewicht von Stimmzettel %d verrignert sich von %f%% auf %f%% und wird von %s auf %s übertragen.",
+					"Das Stimmgewicht von Stimmzettel %d verringert sich von %f%% auf %f%% und wird von %s auf %s übertragen.",
 					ballotId, oldState.getVoteWeight().percentageValue(),
 					newState.getVoteWeight().percentageValue(), oldState.getPreferredCandidate().get().getName(),
 					getNameOrNo(newState.getPreferredCandidate()));

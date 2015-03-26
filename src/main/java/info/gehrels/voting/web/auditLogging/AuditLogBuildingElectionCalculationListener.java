@@ -80,11 +80,11 @@ public final class AuditLogBuildingElectionCalculationListener
 	}
 
 	@Override
-	public void externalyResolvedAmbiguity(final AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
+	public void externallyResolvedAmbiguity(final AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
 		entries.add(new Entry() {
 			@Override
 			public <T extends STVElectionCalculationListener<GenderedCandidate> & ElectionCalculationWithFemaleExclusivePositionsListener> void replay(T stvElectionCalculationListener) {
-				stvElectionCalculationListener.externalyResolvedAmbiguity(ambiguityResolverResult);
+				stvElectionCalculationListener.externallyResolvedAmbiguity(ambiguityResolverResult);
 			}
 		});
 	}

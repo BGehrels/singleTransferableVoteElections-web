@@ -66,8 +66,8 @@ public final class AdministrateBallotLayoutController {
 
 	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"deleteCandidate"})
 	public ModelAndView deleteOffice(@RequestParam String deleteCandidate, @Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
-		String[] splited = deleteCandidate.split("_");
-		form.getElections().get(Integer.parseInt(splited[0])).deleteCandidate(Integer.parseInt(splited[1]));
+		String[] splitted = deleteCandidate.split("_");
+		form.getElections().get(Integer.parseInt(splitted[0])).deleteCandidate(Integer.parseInt(splitted[1]));
 		return createModelAndView(form);
 	}
 

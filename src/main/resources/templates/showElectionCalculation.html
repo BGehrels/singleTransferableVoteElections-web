@@ -32,7 +32,7 @@
 
         <p data-th-text="${electionCalculation.state.description}" id="status-text">Beschreibungstext</p>
     </section>
-    <th-block data-th-if="${electionCalculation.state == T(info.gehrels.voting.web.ElectionCalculationState).MANUAL_AMBIGUITY_RESOLUTION_NECCESSARY}">
+    <th-block data-th-if="${electionCalculation.state == T(info.gehrels.voting.web.ElectionCalculationState).MANUAL_AMBIGUITY_RESOLUTION_NECESSARY}">
         <h1>Manuelle Auswahl von gewinnenden/verlierenden Kandidierenden</h1>
 
         <form method="POST"
@@ -79,7 +79,7 @@
                         Peter Musterkind
                     </li>
             </ul>
-            <h2>Detailiertes Ablaufprotokoll</h2>
+            <h2>Detailliertes Ablaufprotokoll</h2>
             <nav>
                 <ul>
                     <li><a data-th-href="@{/downloadElectionCalculationAsJson(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName})}">Maschinenlesbare Fassung herunterladen (JSON)</a></li>

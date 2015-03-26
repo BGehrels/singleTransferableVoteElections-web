@@ -28,7 +28,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
     private final VoteDistributionHeadlineRow voteDistributionHeadlineRow;
     private final Collection<VoteFlow> voteFlows = new ArrayList<>();
 
-    private long numberOfElectablePostitions;
+    private long numberOfElectablePositions;
     private long numberOfValidBallots;
     private BigFraction quorum;
     private SecondHeadLine secondHeadLine;
@@ -175,13 +175,13 @@ public final class ElectionCalculationSvgDocumentBuilder {
 
     public void setQuorum(long numberOfValidBallots, long numberOfSeats, BigFraction quorum) {
         this.numberOfValidBallots = numberOfValidBallots;
-        this.numberOfElectablePostitions = numberOfSeats;
+        this.numberOfElectablePositions = numberOfSeats;
         this.quorum = quorum;
     }
 
     public void initialVoteDistribution(VoteDistribution<GenderedCandidate> voteDistribution) {
         voteDistributions.add(new VoteDistributionContentRow(voteDistribution, electableCandidates, quorum, indexOfVoteDistributions++));
-        secondHeadLine = new SecondHeadLine(numberOfSeats, femaleExclusive, numberOfElectablePostitions, numberOfValidBallots, voteDistribution.invalidVotes, quorum);
+        secondHeadLine = new SecondHeadLine(numberOfSeats, femaleExclusive, numberOfElectablePositions, numberOfValidBallots, voteDistribution.invalidVotes, quorum);
     }
 
     public void candidateNotQualified(GenderedCandidate candidate) {

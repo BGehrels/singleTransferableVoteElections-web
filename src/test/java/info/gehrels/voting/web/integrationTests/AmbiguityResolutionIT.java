@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.containsString;
 @SpringApplicationConfiguration(classes = SpringConfig.class)
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
-public final class AmbigiuityResolutionIT {
+public final class AmbiguityResolutionIT {
     public static final String CANDIDATE_NAME_1 = "The first candidate";
     public static final String CANDIDATE_NAME_2 = "The second candidate";
     public static final String OFFICE_NAME = "The Office";
@@ -45,7 +45,7 @@ public final class AmbigiuityResolutionIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new HtmlUnitDriver();
+        driver = new FirefoxDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
@@ -55,7 +55,7 @@ public final class AmbigiuityResolutionIT {
     }
 
     @Test
-    public void createAmbigiousSituationAndResolveIt() {
+    public void createAmbiguousSituationAndResolveIt() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
@@ -85,7 +85,7 @@ public final class AmbigiuityResolutionIT {
                         .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
                         .clickElectionCalculation();
 
-        electionCalculationPage = electionCalculationPage.waitUntilAmbiguityResolutionIsNeccessary();
+        electionCalculationPage = electionCalculationPage.waitUntilAmbiguityResolutionIsNecessary();
         electionCalculationPage.chooseCandidate(CANDIDATE_NAME_2);
         electionCalculationPage.setDescription(AMBIGUITY_RESOLUTION_DESCRIPTION);
         electionCalculationPage = electionCalculationPage.submitAmbiguityResolution();

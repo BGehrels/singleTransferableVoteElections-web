@@ -66,7 +66,7 @@ public final class VoteBuilder {
 			case NOT_VOTED:
 				return Optional.absent();
 			default:
-				throw new IllegalStateException("Unkown type " + type);
+				throw new IllegalStateException("Unknown type " + type);
 		}
 	}
 

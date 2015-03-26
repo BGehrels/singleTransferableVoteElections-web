@@ -46,7 +46,7 @@ public final class HappyPathIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new HtmlUnitDriver();
+        driver = new FirefoxDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
@@ -56,7 +56,7 @@ public final class HappyPathIT {
     }
 
     @Test
-    public void twoElectionsDifferentCandidatesWalkthrough() {
+    public void twoElectionsDifferentCandidatesWalkThrough() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();

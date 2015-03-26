@@ -81,15 +81,15 @@ public final class ElectionCalculationPage {
         return electionCalculationPage;
     }
 
-    public ElectionCalculationPage waitUntilAmbiguityResolutionIsNeccessary() {
+    public ElectionCalculationPage waitUntilAmbiguityResolutionIsNecessary() {
         ElectionCalculationPage electionCalculationPage = this;
-        while (!ambiguityResolutionIsNeccessary()) {
+        while (!ambiguityResolutionIsNecessary()) {
             electionCalculationPage = refresh();
         }
         return electionCalculationPage;
     }
 
-    private boolean ambiguityResolutionIsNeccessary() {
+    private boolean ambiguityResolutionIsNecessary() {
         return "Mehrere Kandidierende haben die selbe Stimmzahl. Eine Manuelle Auswahl ist notwendig.".equals(statusText.getText());
     }
 

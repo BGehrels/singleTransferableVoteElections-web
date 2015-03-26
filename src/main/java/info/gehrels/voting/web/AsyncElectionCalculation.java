@@ -48,8 +48,8 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	private ImmutableList<ElectionCalculationResultBean> result;
 	private ElectionCalculationState state = ElectionCalculationState.NOT_YET_STARTED;
-	private Optional<AmbiguityResolverResult<GenderedCandidate>> ambiguityResulutionResult;
-	private Optional<AmbiguityResolutionTask> ambiguityResulutionTask;
+	private Optional<AmbiguityResolverResult<GenderedCandidate>> ambiguityResolutionResult;
+	private Optional<AmbiguityResolutionTask> ambiguityResolutionTask;
 
 	public AsyncElectionCalculation(List<GenderedElection> elections,
 	                                ImmutableCollection<Ballot<GenderedCandidate>> ballots) {
@@ -91,9 +91,9 @@ public final class AsyncElectionCalculation implements Runnable {
 		notifyAll();
 	}
 
-	public synchronized void setAmbiguityResulutionResult(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
-		this.ambiguityResulutionResult = Optional.fromNullable(ambiguityResolverResult);
-		if (ambiguityResulutionResult.isPresent()) {
+	public synchronized void setAmbiguityResolutionResult(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
+		this.ambiguityResolutionResult = Optional.fromNullable(ambiguityResolverResult);
+		if (ambiguityResolutionResult.isPresent()) {
 			setState(ElectionCalculationState.AMBIGUITY_RESOLVED);
 		}
 	}
@@ -108,7 +108,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	public synchronized Snapshot getSnapshot() {
-		return new Snapshot(startDateTime, state, result, ambiguityResulutionTask);
+		return new Snapshot(startDateTime, state, result, ambiguityResolutionTask);
 	}
 
 	private NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum createQuorumCalculation() {
@@ -125,12 +125,12 @@ public final class AsyncElectionCalculation implements Runnable {
 		return startDateTime;
 	}
 
-	public synchronized Optional<AmbiguityResolverResult<GenderedCandidate>> getAmbiguityResulutionResult() {
-		return ambiguityResulutionResult;
+	public synchronized Optional<AmbiguityResolverResult<GenderedCandidate>> getAmbiguityResolutionResult() {
+		return ambiguityResolutionResult;
 	}
 
-	public synchronized Optional<AmbiguityResolutionTask> getAmbiguityResulutionTask() {
-		return ambiguityResulutionTask;
+	public synchronized Optional<AmbiguityResolutionTask> getAmbiguityResolutionTask() {
+		return ambiguityResolutionTask;
 	}
 
 	// TODO: Verfahren nach Satzung implementieren
@@ -165,16 +165,16 @@ public final class AsyncElectionCalculation implements Runnable {
 			ImmutableSet<GenderedCandidate> bestCandidates) {
 
 			synchronized (asyncElectionCalculation) {
-				asyncElectionCalculation.setAmbuguityResulutionTask(new AmbiguityResolutionTask(bestCandidates, asyncElectionCalculation.getCurrentLog()));
+				asyncElectionCalculation.setAmbiguityResulutionTask(new AmbiguityResolutionTask(bestCandidates, asyncElectionCalculation.getCurrentLog()));
 				while (asyncElectionCalculation.getState() != ElectionCalculationState.AMBIGUITY_RESOLVED) {
 					try {
 						asyncElectionCalculation.wait();
 					} catch (InterruptedException e) {
-						// TODO: Gaaaanz schlechte Idee...
+						// TODO: Ganz schlechte Idee...
 					}
 				}
 			}
-			return asyncElectionCalculation.getAmbiguityResulutionResult().get();
+			return asyncElectionCalculation.getAmbiguityResolutionResult().get();
 		}
 
 	}
@@ -183,10 +183,10 @@ public final class AsyncElectionCalculation implements Runnable {
 		return auditLogBuilder.build();
 	}
 
-	private synchronized void setAmbuguityResulutionTask(AmbiguityResolutionTask ambuguityResulutionTask) {
-		setState(ElectionCalculationState.MANUAL_AMBIGUITY_RESOLUTION_NECCESSARY);
-		this.ambiguityResulutionResult = Optional.absent();
-		this.ambiguityResulutionTask = Optional.of(ambuguityResulutionTask);
+	private synchronized void setAmbiguityResulutionTask(AmbiguityResolutionTask ambiguityResolutionTask1) {
+		setState(ElectionCalculationState.MANUAL_AMBIGUITY_RESOLUTION_NECESSARY);
+		this.ambiguityResolutionResult = Optional.absent();
+		this.ambiguityResolutionTask = Optional.of(ambiguityResolutionTask1);
 	}
 
 	public static final class AmbiguityResolutionTask {

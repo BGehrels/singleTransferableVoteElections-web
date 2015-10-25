@@ -38,14 +38,35 @@ Schritte:
     java -jar singleTransferableVoteElections-web-3.0.jar
 
 ##Sicherheitsmodell
--Netzwerksicherheit
-- Fehlertoleranz
-- Acht Augen prinzip
-- Grundsätzlich: alles Flüchtige Daten!
+Ziele:
+- Alle Stimmen müssen gewertet werden
+- Alle Stimmen müssen inhaltlich korrekt erfasst werden
+- Es dürfen keine zusäzlichen Stimmen ins System eingeschmuggelt oder bestehende Stimmen unterschlagen werden können
+- Manipulation bei der Erfassung von Stimmzettelinhalten und versehentliche Fehleingaben sollen vermieden werden
+- Der Sicherheitsstandard darf nicht hinter den klassischer Urnenwahlen zurückfallen
+- Es muss auch nach der Wahlauszählung und ohne Softwareunterstützung jederzeit nachvollziehbar sein, dass dies der Fall ist.
 
-How to start
+Mittel:
+- Das System protokolliert jeden eingegebenen Stimmzettel samt dessen Inhalt
+- Das System protokolliert alle relevanten Berechnungsschritte und deren Ergebnisse
+- Das System forciert eine zweifache Eingabe jedes Stimmzettels und vergleicht die Gleicheit beider Eingaben.
+- Das System fordert zur Löschung des eingegebenen Stimmzettels und zur Neueingabe auf, sollte keine Gleichheit vorliegen
+- Das System gibt einen Überblick über die Anzahl der eingegeneben Stimmzettel, so dass Minder- und Übermengen erkannt werden können
 
-How to use
+Bedingungen
+- Das System muss in einem geschlossenen, für unbeteiligte nicht zugreifbaren Netzwerk betrieben werden.
+- Die Ersteingabe und die Kontrolleingabe eines Stimmzettels müssen stets von unterschiedlichen Personen/Teams vorgenommen werden (4 Augen Prinzip)
+- Die Zahl der eingegebenen Stimmzettel muss mit der tatsächlich in der Urne vorhandenen Anzahl Stimmzettel vergleichen werden
+- Die im Protokoll vermerkten Stimmzettelinhalte müssen Stichprobenartig gegen die tatsächlich vorliegenden Stimmzettel gegengeprüft werden.
+- Das Auszählprotokoll muss ausgedruckt und zusammen mit den Originalstimmzetteln archiviert werden
+
+##Starten des Servers
+Vorbedingung: Es muss eine aktuelle Version der Java Runtime Environment (JRE) >= 1.8 installiert sein.
+
+Je nach Betriebssystem kann der Server mittels eines Doppelklicks auf die Datei singleTransferableVoteElections-web-3.0.jar oder mittels `java -jar singleTransferableVoteElections-web-3.0.jar` gestartet werden. Nach dem Start gibt dieser eine Liste der URLs aus, unter denen er erreichbar ist.
+
+## Benutzung der Eingabe- und Berechnungsmasken
+- Nummerierung aller Stimmzettel
 - Eingabe eines Stimmzetellayouts
 - Ersteingabe der Stimmzettel
 -- keine Angst vor fehleingaben, die werden nach dem zweiten Durchgang automatisch erkannt

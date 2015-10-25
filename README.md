@@ -64,6 +64,16 @@ Bedingungen
 Vorbedingung: Es muss eine aktuelle Version der Java Runtime Environment (JRE) >= 1.8 installiert sein.
 
 Je nach Betriebssystem kann der Server mittels eines Doppelklicks auf die Datei singleTransferableVoteElections-web-3.0.jar oder mittels `java -jar singleTransferableVoteElections-web-3.0.jar` gestartet werden. Nach dem Start gibt dieser eine Liste der URLs aus, unter denen er erreichbar ist.
+```
+$ java -jar singleTransferableVoteElections-web-3.0.jar
+2015-10-25 16:28:24.190  INFO 8180 --- [main] ServerStarted: Die Wahlauszählung kann beginnen. Die Eingabemaske ist nun unter den folgenden URLs erreichbar:
+2015-10-25 16:28:26.939  INFO 8180 --- [main] ServerStarted: http://KONRAD:8080/
+2015-10-25 16:28:26.957  INFO 8180 --- [main] ServerStarted: http://192.168.1.75:8080/
+2015-10-25 16:28:26.963  INFO 8180 --- [main] ServerStarted: http://192.168.59.3:8080/
+2015-10-25 16:28:26.966  INFO 8180 --- [main] ServerStarted: http://127.0.0.1:8080/
+2015-10-25 16:28:26.969  INFO 8180 --- [main] ServerStarted: http://192.168.56.1:8080/
+
+```
 
 ## Benutzung der Eingabe- und Berechnungsmasken
 - Nummerierung aller Stimmzettel

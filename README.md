@@ -37,7 +37,7 @@ Schritte:
 
     java -jar singleTransferableVoteElections-web-3.0.jar
 
-##Sicherheitsmodell
+##Sicherheitskonzept
 Ziele:
 - Alle Stimmen müssen gewertet werden
 - Alle Stimmen müssen inhaltlich korrekt erfasst werden
@@ -55,6 +55,7 @@ Mittel:
 
 Bedingungen
 - Das System muss in einem geschlossenen, für unbeteiligte nicht zugreifbaren Netzwerk betrieben werden.
+- Vor Beginn der Stimmzetteleingabe muss kontrolliert werden, dass die Anzahl der eingegebenen Stimmzettel 0 ist.
 - Die Ersteingabe und die Kontrolleingabe eines Stimmzettels müssen stets von unterschiedlichen Personen/Teams vorgenommen werden (4 Augen Prinzip)
 - Die Zahl der eingegebenen Stimmzettel muss mit der tatsächlich in der Urne vorhandenen Anzahl Stimmzettel vergleichen werden
 - Die im Protokoll vermerkten Stimmzettelinhalte müssen Stichprobenartig gegen die tatsächlich vorliegenden Stimmzettel gegengeprüft werden.
@@ -76,11 +77,35 @@ $ java -jar singleTransferableVoteElections-web-3.0.jar
 ```
 
 ## Benutzung der Eingabe- und Berechnungsmasken
-- Nummerierung aller Stimmzettel
-- Eingabe eines Stimmzetellayouts
-- Ersteingabe der Stimmzettel
--- keine Angst vor fehleingaben, die werden nach dem zweiten Durchgang automatisch erkannt
-- Zweiteingabe der Stimmzettel
+Zuerst eine Vorbemerkung: Der Server speichert keinerlei Daten auf der Festplatte. Sämtliche eingegebenen Daten liegen im Arbeitsspeicher und gehen mit dem Herunterfahren des Servers verloren. Es muss daher sichergestellt werden, dass
+- Der Server jederzeit zuverlässig mit Strom versorgt ist und
+- Alle Protokolle gedruckt sind, bevor das System heruntergefahren wird.
+
+### Hauptmenü
+
+Nach dem Öffnen von http://<serverIp>:8080/ sehen wir das Hauptmenü. Neben den Links zu den unterschiedlichen Funktionen der Software finden wir hier die Übersicht der eingebenen Stimmzettel. Hier ist sicherzustellen, dass diese bis zur Eröffnung der Stimmeingabe stets auf 0 stehen.
+
+### Eingabe eines Stimmzetellayouts
+Bevor wir mit der Stimmeingabe beginnen muss das System mit dem Layout der Stimmzettel vertraut gemacht werden. Die Ämter und Kandidierenden sollten in genau der Reihenfolge eingegeben werden, wie sie auch auf den gedruckten Stimmzetteln erscheinen.
+
+Bitte prüfen Sie zweimal, ob für alle Kandididerenden die "weiblich Ja/Nein"-Angabe korrekt ist. Andernfalls kann und wird es zu falschen Wahlergebnissen kommen.
+
+### Nummerierung aller Stimmzettel
+Jeder Stimmzettel braucht eine eindeutige Nummer. Um die Vertraulichkeit der Wahl nicht zu brechen, darf diese Nummer erst nach Abgabe des Stimmzettels vergeben werden. Es empfiehlt sich, unmittelbar nach der Öffnung der Wahlurnen und dem Zählen der Stimmzettel diese von Hand oder mit einem sogenannten Paginierstempel mit fortlaufenden Nummern zu versehen.
+
+### Ersteingabe der Stimmzettel
+Mit einem Klick auf "Stimmen eingeben (Ersteingabe) gelangen wir zu der Maske, die von unseren Wahlhelfer*innen zur Stimmeingabe genutzt wird. Diese Stimmeingabe kann von mehreren Rechnern aus parallel geschehen, jedes Auszählteam erhält einen Rechner und einen Teil der Stimmzettel zur Eingabe.
+
+Nach der Eingabe der Stimmzettelnummer ist hier für jedes Amt zuerst die Stimmart einzugeben: Präferenz bedeutet, das die Wählerin bei mindestens einer Kandidierenden eine Präferenz (Zahl) eingetragen hat. Keine Stimmabgabe bedeutet, dass für dieses Amt keinerlei Markierung auf dem Stimmzettel vorhanden ist. Nein und Ungültig dürften Selbsterklärend sein.
+
+Unterhalb der Stimmtypauswahl findet sich eine Liste der Kandidierenden mit jeweils einem Eingabefeld dahinter. Hier ist zu jeder Kandidierenden die Präferenz (Zahl) einzutragen. Ist auf dem Simmzettel keine Zahl eingetragen worden, lassen wir auch hier das Feld leer.
+
+Sollte es hier einmal versehentlich zu Fehleingaben kommen so ist dies nicht dramatisch: Am Ende, wenn alle Stimmen ein zweites Mal eingegeben wurden findet eine automatische Fehlerkontrolle statt. Fehlerhafte Stimmzettel können dann gelöscht und erneut eingegeben werden.
+
+Nach der Vollständigen Eingabe des Stimmzettels kann mit einem klick auf "Hinzufügen und nächsten Stimmzettel ausfüllen" die Eingabe gespeichert werden. Sind alle Zettel eingegeben wird der letzte noch gespeichert und dann mittels eines Klicks auf "Zurück zur Startseite" die Ersteingabe beendet.
+
+### Zweiteingabe der Stimmzettel
+
 - Auswertungslauf
 -- Optional: Fehlerkorrektur, dann wieder zur Erst- und zweiteingabe zurück
 --- Stimmzettelnummern unbedingt abschreiben

@@ -14,15 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.resultCalculation;
 
 import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableSortedMap.Builder;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
-import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
 import info.gehrels.voting.web.applicationState.BallotLayoutState;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
@@ -34,7 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
-import static info.gehrels.voting.web.BallotIterableDiffCalculator.calculateDiff;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -59,7 +56,7 @@ public final class ManageElectionCalculationsController {
 				.getFirstTryCastBallots();
 			ImmutableCollection<Ballot<GenderedCandidate>> secondTryCastBallots = castBallotsState
 				.getSecondTryCastBallots();
-			BallotIterableDiff ballotIterableDiff = calculateDiff(firstTryCastBallots, secondTryCastBallots);
+			BallotIterableDiffCalculator.BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator.calculateDiff(firstTryCastBallots, secondTryCastBallots);
 			if (ballotIterableDiff.isDifferent()) {
 				return new ModelAndView("handleDifferingBallotCollections", "ballotIterableDiff", ballotIterableDiff);
 			}

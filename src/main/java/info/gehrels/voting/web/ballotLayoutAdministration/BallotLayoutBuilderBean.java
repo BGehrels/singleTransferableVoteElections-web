@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.ballotLayoutAdministration;
 
 import info.gehrels.voting.genderedElections.GenderedElection;
+import info.gehrels.voting.web.applicationState.BallotLayout;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;

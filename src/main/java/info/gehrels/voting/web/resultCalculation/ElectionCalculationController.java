@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.resultCalculation;
 
 import com.google.common.base.Optional;
 import info.gehrels.voting.AmbiguityResolver.AmbiguityResolverResult;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
-import info.gehrels.voting.web.AsyncElectionCalculation.Snapshot;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import info.gehrels.voting.web.auditLogging.JsonAuditLog;
 import info.gehrels.voting.web.svg.SvgCreatingAuditLogListener;
@@ -48,7 +47,7 @@ public final class ElectionCalculationController {
 
     @RequestMapping(value = "/showElectionCalculation", method = GET)
     public ModelAndView showElectionCalculation(@RequestParam DateTime dateTimeTheCalculationStarted) {
-        Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
+        AsyncElectionCalculation.Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted).getSnapshot();
 
         return createModelAndView(snapshot, new AmbiguityResolverResultBuilderBean());
@@ -57,7 +56,7 @@ public final class ElectionCalculationController {
     @RequestMapping(value = "/downloadElectionCalculationAsJson", method = GET, produces = "application/json")
     @ResponseBody
     public String downloadElectionCalculationAsJson(@RequestParam DateTime dateTimeTheCalculationStarted, String office) {
-        Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
+        AsyncElectionCalculation.Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted).getSnapshot();
 
         Optional<ElectionCalculationResultBean> resultOfFinishedCalculation = snapshot
@@ -73,7 +72,7 @@ public final class ElectionCalculationController {
     @RequestMapping(value = "/downloadElectionCalculationAsSvg", method = GET, produces = "image/svg+xml")
     @ResponseBody
     public String downloadElectionCalculationAsSvg(@RequestParam DateTime dateTimeTheCalculationStarted, String office, boolean femaleExclusiveRun) {
-        Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
+        AsyncElectionCalculation.Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted).getSnapshot();
 
         Optional<ElectionCalculationResultBean> resultOfFinishedCalculation = snapshot
@@ -99,7 +98,7 @@ public final class ElectionCalculationController {
                                          RedirectAttributes redirectAttributes) {
         AsyncElectionCalculation asyncElectionCalculation = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted);
-        Snapshot snapshot = asyncElectionCalculation.getSnapshot();
+        AsyncElectionCalculation.Snapshot snapshot = asyncElectionCalculation.getSnapshot();
 
         AmbiguityResolverResult<GenderedCandidate> build = null;
         if (!bindingResult.hasErrors()) {
@@ -122,7 +121,7 @@ public final class ElectionCalculationController {
     }
 
 
-    private ModelAndView createModelAndView(Snapshot snapshot,
+    private ModelAndView createModelAndView(AsyncElectionCalculation.Snapshot snapshot,
                                             AmbiguityResolverResultBuilderBean ambiguityResolverResultBuilder) {
         ModelAndView modelAndView = new ModelAndView("showElectionCalculation");
         modelAndView.addObject("electionCalculation", snapshot);

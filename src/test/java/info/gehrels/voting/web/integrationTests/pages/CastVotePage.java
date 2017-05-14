@@ -1,7 +1,7 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
 import com.google.common.base.Predicate;
-import info.gehrels.voting.web.VoteType;
+import info.gehrels.voting.web.ballotCasting.VoteType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

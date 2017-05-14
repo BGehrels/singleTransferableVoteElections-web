@@ -14,12 +14,8 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.applicationState;
 
-public class NoSuchCandidateException extends Exception {
-	public final String candidateName;
-
-	public NoSuchCandidateException(String candidateName) {
-		this.candidateName = candidateName;
-	}
+public enum BallotInputTry {
+	FIRST, SECOND
 }

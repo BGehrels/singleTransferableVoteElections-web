@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.resultCalculation;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -22,13 +22,11 @@ import info.gehrels.voting.Ballot;
 import info.gehrels.voting.Candidate;
 import info.gehrels.voting.Election;
 import info.gehrels.voting.Vote;
-import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
+import info.gehrels.voting.web.resultCalculation.BallotIterableDiffCalculator.BallotIterableDiff;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public final class BallotIterableDiffCalculatorTest {
 

@@ -14,25 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.resultCalculation;
 
-import info.gehrels.voting.genderedElections.GenderedElection;
+public enum ElectionCalculationState {
+	NOT_YET_STARTED("Die Ergebnisberechnung wurde noch nicht gestartet."),
+	RUNNING("Die Wahlergebnisse werden momentan berechnet. Bitte laden Sie diese Seite in ein paar Sekunden neu."),
+	MANUAL_AMBIGUITY_RESOLUTION_NECESSARY(
+		"Mehrere Kandidierende haben die selbe Stimmzahl. Eine Manuelle Auswahl ist notwendig."),
+	FINISHED("Die Berechnung der Wahlergebnisse wurde erfolgreich abgeschlossen."),
+	AMBIGUITY_RESOLVED("Das Stimmenpatt wurde durch einen externen Eingriff aufgelöst, die Berechnung wird in Kürze fortgesetzt.");
 
-import java.util.ArrayList;
-import java.util.List;
+	private final String description;
 
-public class BallotLayout {
-	private List<GenderedElection> elections = new ArrayList<>();
-
-	public void addElection(GenderedElection election) {
-		elections.add(election);
+	ElectionCalculationState(String description) {
+		this.description = description;
 	}
 
-	public List<GenderedElection> getElections() {
-		return elections;
-	}
-
-	public void setElections(List<GenderedElection> elections) {
-		this.elections = elections;
+	public String getDescription() {
+		return description;
 	}
 }

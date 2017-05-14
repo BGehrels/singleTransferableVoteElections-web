@@ -14,23 +14,33 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.ballotLayoutAdministration;
 
-public enum ElectionCalculationState {
-	NOT_YET_STARTED("Die Ergebnisberechnung wurde noch nicht gestartet."),
-	RUNNING("Die Wahlergebnisse werden momentan berechnet. Bitte laden Sie diese Seite in ein paar Sekunden neu."),
-	MANUAL_AMBIGUITY_RESOLUTION_NECESSARY(
-		"Mehrere Kandidierende haben die selbe Stimmzahl. Eine Manuelle Auswahl ist notwendig."),
-	FINISHED("Die Berechnung der Wahlergebnisse wurde erfolgreich abgeschlossen."),
-	AMBIGUITY_RESOLVED("Das Stimmenpatt wurde durch einen externen Eingriff aufgelöst, die Berechnung wird in Kürze fortgesetzt.");
+import info.gehrels.voting.genderedElections.GenderedCandidate;
+import org.hibernate.validator.constraints.NotEmpty;
 
-	private final String description;
+public final class GenderedCandidateBuilderBean {
+	@NotEmpty
+	private String name;
+	private boolean female;
 
-	ElectionCalculationState(String description) {
-		this.description = description;
+	public String getName() {
+		return name;
 	}
 
-	public String getDescription() {
-		return description;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isFemale() {
+		return female;
+	}
+
+	public void setFemale(boolean female) {
+		this.female = female;
+	}
+
+	public GenderedCandidate build() {
+		return new GenderedCandidate(name, female);
 	}
 }

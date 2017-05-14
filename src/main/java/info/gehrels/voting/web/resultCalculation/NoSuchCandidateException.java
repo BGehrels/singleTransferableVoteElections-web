@@ -14,33 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.resultCalculation;
 
-import info.gehrels.voting.genderedElections.GenderedCandidate;
-import org.hibernate.validator.constraints.NotEmpty;
+public class NoSuchCandidateException extends Exception {
+	public final String candidateName;
 
-public final class GenderedCandidateBuilderBean {
-	@NotEmpty
-	private String name;
-	private boolean female;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean isFemale() {
-		return female;
-	}
-
-	public void setFemale(boolean female) {
-		this.female = female;
-	}
-
-	public GenderedCandidate build() {
-		return new GenderedCandidate(name, female);
+	public NoSuchCandidateException(String candidateName) {
+		this.candidateName = candidateName;
 	}
 }

@@ -17,7 +17,7 @@
 package info.gehrels.voting.web.applicationState;
 
 import com.google.common.collect.ImmutableMap;
-import info.gehrels.voting.web.AsyncElectionCalculation;
+import info.gehrels.voting.web.resultCalculation.AsyncElectionCalculation;
 import org.joda.time.DateTime;
 
 import java.util.HashMap;

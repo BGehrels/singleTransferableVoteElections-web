@@ -1,4 +1,4 @@
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.ballotCasting;
 
 public final class PreferenceBuilder {
 	private Long value;

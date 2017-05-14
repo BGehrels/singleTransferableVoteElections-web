@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
  * Elections Web Interface. If not, see <http://www.gnu.org/licenses/>.
  */
-package info.gehrels.voting.web;
+package info.gehrels.voting.web.resultCalculation;
 
-import info.gehrels.voting.web.BallotIterableDiffCalculator.BallotIterableDiff;
+import info.gehrels.voting.web.resultCalculation.BallotIterableDiffCalculator;
+import info.gehrels.voting.web.resultCalculation.BallotIterableDiffCalculator.BallotIterableDiff;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

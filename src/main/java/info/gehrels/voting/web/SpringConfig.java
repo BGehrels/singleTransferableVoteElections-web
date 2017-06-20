@@ -25,9 +25,10 @@ import info.gehrels.voting.web.ballotLayoutAdministration.AdministrateBallotLayo
 import info.gehrels.voting.web.resultCalculation.DeleteBallotController;
 import info.gehrels.voting.web.resultCalculation.ElectionCalculationController;
 import info.gehrels.voting.web.resultCalculation.ManageElectionCalculationsController;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.Formatter;
@@ -47,7 +48,7 @@ import static javax.servlet.DispatcherType.REQUEST;
 public class SpringConfig implements ServletContextInitializer {
     public static void main(String... args) {
 	    SpringApplication springApplication = new SpringApplication(SpringConfig.class);
-	    springApplication.setShowBanner(false);
+	    springApplication.setBannerMode(Banner.Mode.OFF);
 	    springApplication.setDefaultProperties(
 		    ImmutableMap.<String, Object>builder()
 			    .put("logging.level.", "WARN")

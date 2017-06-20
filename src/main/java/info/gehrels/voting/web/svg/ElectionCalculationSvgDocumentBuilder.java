@@ -6,7 +6,7 @@ import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
 import info.gehrels.voting.singleTransferableVote.VoteDistribution;
 import info.gehrels.voting.singleTransferableVote.VoteState;
-import org.apache.batik.dom.svg.SVGDOMImplementation;
+import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.svg.SVGDocument;
@@ -18,6 +18,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 import java.util.*;
+
+import static org.apache.batik.util.SVGConstants.SVG_NAMESPACE_URI;
 
 public final class ElectionCalculationSvgDocumentBuilder {
     private final long numberOfSeats;
@@ -46,8 +48,8 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     public String build() {
-        DOMImplementation impl = new SVGDOMImplementation();
-        SVGDocument document = (SVGDocument) impl.createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
+        DOMImplementation impl = GenericDOMImplementation.getDOMImplementation();
+        SVGDocument document = (SVGDocument) impl.createDocument(SVG_NAMESPACE_URI, "svg", null);
         SVGSVGElement root = document.getRootElement();
         root.appendChild(firstHeadline.build(document, 0, 0));
         root.appendChild(secondHeadLine.build(document, 0, 25));

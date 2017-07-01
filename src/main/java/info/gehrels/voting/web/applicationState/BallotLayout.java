@@ -26,9 +26,9 @@ import java.util.function.Function;
 public class BallotLayout {
 	private List<GenderedElection> elections = new ArrayList<>();
 
-	public void addElection(GenderedElection election) {
-		elections.add(election);
-	}
+	public BallotLayout(List<GenderedElection> elections) {
+	    this.elections.addAll(elections);
+    }
 
 	public List<GenderedElection> getElections() {
 		return ImmutableList.copyOf(elections);
@@ -42,9 +42,5 @@ public class BallotLayout {
 				elections.set(i, newElection);
 			}
 		}
-	}
-
-	public void setElections(List<GenderedElection> elections) {
-		this.elections = elections;
 	}
 }

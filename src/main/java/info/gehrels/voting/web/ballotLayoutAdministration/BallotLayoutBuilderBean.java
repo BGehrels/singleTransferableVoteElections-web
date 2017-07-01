@@ -16,13 +16,14 @@
  */
 package info.gehrels.voting.web.ballotLayoutAdministration;
 
-import info.gehrels.voting.genderedElections.GenderedElection;
 import info.gehrels.voting.web.applicationState.BallotLayout;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public final class BallotLayoutBuilderBean {
 	@Valid
@@ -53,12 +54,10 @@ public final class BallotLayoutBuilderBean {
 	}
 
 	public BallotLayout createBallotLayout() {
-		BallotLayout ballotLayout = new BallotLayout();
-		for (GenderedElectionBuilderBean genderedElectionBuilderBean : elections) {
-			GenderedElection genderedElection = genderedElectionBuilderBean.build();
-			ballotLayout.addElection(genderedElection);
-		}
-
-		return ballotLayout;
+		return new BallotLayout(
+				elections.stream()
+						.map(GenderedElectionBuilderBean::build)
+						.collect(toList())
+		);
 	}
 }

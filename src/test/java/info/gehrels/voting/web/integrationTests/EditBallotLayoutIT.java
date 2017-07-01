@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +37,7 @@ public class EditBallotLayoutIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new ChromeDriver();
+        driver = new HtmlUnitDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 

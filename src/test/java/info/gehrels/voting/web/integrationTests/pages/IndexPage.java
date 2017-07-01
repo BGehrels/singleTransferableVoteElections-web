@@ -16,6 +16,9 @@ public class IndexPage {
     @FindBy(linkText = CREATE_BALLOT_LAYOUT_LINK)
     private WebElement createBallotLayoutLink;
 
+    @FindBy(linkText = "Stimmzettellayout bearbeiten (bereits eingegebene Stimmen bleiben erhalten)")
+    private WebElement editBallotLayoutLink;
+
     @FindBy(linkText = "Stimmen eingeben (Ersteingabe)")
     private WebElement castVotesFirstTryLink;
 
@@ -27,17 +30,17 @@ public class IndexPage {
 
     public IndexPage(WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
-            @Override
-            public boolean apply(WebDriver input) {
-                return input.findElement(By.linkText(CREATE_BALLOT_LAYOUT_LINK)).isDisplayed();
-            }
-        });
+        new WebDriverWait(webDriver, 60).until((Predicate<WebDriver>) input -> input.findElement(By.linkText(CREATE_BALLOT_LAYOUT_LINK)).isDisplayed());
     }
 
     public CreateBallotLayoutPage clickCreateBallotLayoutLink() {
         createBallotLayoutLink.click();
         return PageFactory.initElements(webDriver, CreateBallotLayoutPage.class);
+    }
+
+    public EditBallotLayoutPage clickEditBallotLayoutLink() {
+        editBallotLayoutLink.click();
+        return PageFactory.initElements(webDriver, EditBallotLayoutPage.class);
     }
 
     public CastVotePage clickCastVotesFirstTryLink() {

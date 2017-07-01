@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<!--
+ Copyright © 2014 Benjamin Gehrels
+
+ This file is part of The Single Transferable Vote Elections Web Interface.
+
+ The Single Transferable Vote Elections Web Interface is free software: you can redistribute it and/or modify it under
+ the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of
+ the License, or (at your option) any later version.
+
+ The Single Transferable Vote Elections Web Interface is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License along with The Single Transferable Vote
+ Elections Web Interface. If not, see http://www.gnu.org/licenses/.
+-->
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<title>Stimmzettellayout bearbeiten - Wahlauszählungen nach der Weighted Inclusive Gregory Method</title>
+	<style type="text/css">
+		.error {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+<header>
+	<h1>Stimmzettellayout bearbeiten</h1>
+</header>
+<main>
+    <section data-th-if="${error}" data-th-text="${error}" class="error">
+    </section>
+    <section data-th-each="election, electionStatus : ${ballotLayout.elections}" class="election">
+        <h2 data-th-text="${election.officeName}">Entenhausener Parlament</h2>
+        <form method="post">
+            Amt umbenennen in:
+            <input type="hidden" name="oldOfficeName" data-th-value="${election.officeName}" />
+            <input type="text" name="newOfficeName" data-th-value="${election.officeName}" />
+            <input type="submit" name="renameOffice" value="Umbenennen" />
+        </form>
+    </section>
+</main>
+<footer><a href="/">Zurück zur Startseite</a></footer>
+</body>
+</html>

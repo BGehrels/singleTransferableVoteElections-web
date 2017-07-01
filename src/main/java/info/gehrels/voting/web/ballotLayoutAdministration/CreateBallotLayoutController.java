@@ -77,7 +77,7 @@ public final class CreateBallotLayoutController {
 			return createModelAndView(form);
 		}
 
-		ballotLayoutState.ballotLayout = form.createBallotLayout();
+		ballotLayoutState.setBallotLayout(form.createBallotLayout());
 		castBallotsState.reset();
 		return new ModelAndView("redirect:/");
 	}

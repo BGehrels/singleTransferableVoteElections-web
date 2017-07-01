@@ -27,18 +27,19 @@
 <main>
     <ul>
         <li><a href="/createBallotLayout">Stimmzettellayout erstellen/überschreiben (<strong>löscht eventuell bereits eingegebene Stimmen</strong>)</a></li>
-        <li><a href="/castVote?firstOrSecondTry=FIRST">Stimmen eingeben (Ersteingabe)</a></li>
-        <li><a href="/castVote?firstOrSecondTry=SECOND">Stimmen eingeben (Kontrolleingabe)</a></li>
-        <li><a href="/listElectionCalculations">Ergebnisberechnung</a></li>
+        <li data-th-if="${indexPageBean.ballotLayoutExists}"><a href="/editBallotLayout">Stimmzettellayout bearbeiten (bereits eingegebene Stimmen bleiben erhalten)</a></li>
+        <li data-th-if="${indexPageBean.ballotLayoutExists}"><a href="/castVote?firstOrSecondTry=FIRST">Stimmen eingeben (Ersteingabe)</a></li>
+        <li data-th-if="${indexPageBean.ballotLayoutExists}"><a href="/castVote?firstOrSecondTry=SECOND">Stimmen eingeben (Kontrolleingabe)</a></li>
+        <li data-th-if="${indexPageBean.ballotLayoutExists}"><a href="/listElectionCalculations">Ergebnisberechnung</a></li>
     </ul>
 </main>
 <aside>
     <dl>
         <h1>Anzahl eingegebener Stimmzettel</h1>
         <dt>Ersteingabe</dt>
-        <dd data-th-text="${numberOfCastBallots.firstTry}">1234</dd>
+        <dd data-th-text="${indexPageBean.numberOfCastBallotsFirstTry}">1234</dd>
         <dt>Kontrolleingabe</dt>
-        <dd data-th-text="${numberOfCastBallots.secondTry}">4321</dd>
+        <dd data-th-text="${indexPageBean.numberOfCastBallotsSecondTry}">4321</dd>
     </dl>
 </aside>
 <footer>

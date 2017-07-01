@@ -16,6 +16,7 @@
  */
 package info.gehrels.voting.web;
 
+import info.gehrels.voting.web.applicationState.BallotLayoutState;
 import info.gehrels.voting.web.applicationState.CastBallotsState;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,33 +27,47 @@ import org.springframework.web.servlet.ModelAndView;
 public class IndexPageController {
 
 	private final CastBallotsState castBallotsState;
+	private final BallotLayoutState ballotLayoutState;
 
-	public IndexPageController(CastBallotsState castBallotsState) {
+	public IndexPageController(CastBallotsState castBallotsState, BallotLayoutState ballotLayoutState) {
 		this.castBallotsState = castBallotsState;
+		this.ballotLayoutState = ballotLayoutState;
 	}
 
 	@RequestMapping(value= "/", method = {RequestMethod.GET, RequestMethod.HEAD})
 	protected final ModelAndView doGet() {
-		return new ModelAndView("indexPage", "numberOfCastBallots", new NumberOfCastBallotsBean(castBallotsState.getFirstTryCastBallots().size(),castBallotsState.getSecondTryCastBallots().size()));
+		return new ModelAndView("indexPage",
+				"indexPageBean",
+				new IndexPageBean(
+						castBallotsState.getFirstTryCastBallots().size(),
+						castBallotsState.getSecondTryCastBallots().size(),
+						ballotLayoutState.isBallotLayoutPresent()
+				)
+		);
 	}
 
-	public static final class NumberOfCastBallotsBean {
+	public static final class IndexPageBean {
 
-		private final int firstTry;
-		private final int secondTry;
+		private final int numberOfCastBallotsFirstTry;
+		private final int numberOfCastBallotsSecondTry;
+		private final boolean ballotLayoutExists;
 
-		public NumberOfCastBallotsBean(int firstTry, int secondTry) {
-
-			this.firstTry = firstTry;
-			this.secondTry = secondTry;
+		public IndexPageBean(int numberOfCastBallotsFirstTry, int numberOfCastBallotsSecondTry, boolean ballotLayoutExists) {
+			this.numberOfCastBallotsFirstTry = numberOfCastBallotsFirstTry;
+			this.numberOfCastBallotsSecondTry = numberOfCastBallotsSecondTry;
+			this.ballotLayoutExists = ballotLayoutExists;
 		}
 
-		public int getFirstTry() {
-			return firstTry;
+		public int getNumberOfCastBallotsFirstTry() {
+			return numberOfCastBallotsFirstTry;
 		}
 
-		public int getSecondTry() {
-			return secondTry;
+		public int getNumberOfCastBallotsSecondTry() {
+			return numberOfCastBallotsSecondTry;
+		}
+
+		public boolean isBallotLayoutExists() {
+			return ballotLayoutExists;
 		}
 	}
 }

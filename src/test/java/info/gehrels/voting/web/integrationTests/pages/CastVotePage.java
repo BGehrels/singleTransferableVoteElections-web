@@ -3,6 +3,7 @@ package info.gehrels.voting.web.integrationTests.pages;
 import com.google.common.base.Predicate;
 import info.gehrels.voting.web.ballotCasting.VoteType;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -90,6 +91,15 @@ public final class CastVotePage {
          backToIndexPageLink.click();
         return PageFactory.initElements(webDriver, IndexPage.class);
 
+    }
+
+    public boolean hasOfficeWithName(String officeName) {
+        try {
+            findOfficeSection(officeName);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
     private WebElement findOfficeSection(String officeName) {

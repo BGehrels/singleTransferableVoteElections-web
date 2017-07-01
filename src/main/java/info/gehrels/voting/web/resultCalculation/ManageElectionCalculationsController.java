@@ -51,7 +51,7 @@ public final class ManageElectionCalculationsController {
 
 	@RequestMapping(value = "/startElectionCalculation", method = POST)
 	public ModelAndView startElectionCalculation() {
-		if (ballotLayoutState.ballotLayout != null) {
+		if (ballotLayoutState.getBallotLayout() != null) {
 			ImmutableCollection<Ballot<GenderedCandidate>> firstTryCastBallots = castBallotsState
 				.getFirstTryCastBallots();
 			ImmutableCollection<Ballot<GenderedCandidate>> secondTryCastBallots = castBallotsState
@@ -62,7 +62,7 @@ public final class ManageElectionCalculationsController {
 			}
 
 			AsyncElectionCalculation electionCalculation = new AsyncElectionCalculation(
-				ballotLayoutState.ballotLayout.getElections(),
+				ballotLayoutState.getBallotLayout().getElections(),
 				firstTryCastBallots);
 			electionCalculationsState.addElectionCalculation(electionCalculation);
 			new Thread(electionCalculation).start();

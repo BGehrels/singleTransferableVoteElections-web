@@ -22,6 +22,7 @@ import info.gehrels.voting.web.applicationState.CastBallotsState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import info.gehrels.voting.web.ballotCasting.CastVoteController;
 import info.gehrels.voting.web.ballotLayoutAdministration.CreateBallotLayoutController;
+import info.gehrels.voting.web.ballotLayoutAdministration.EditBallotLayoutController;
 import info.gehrels.voting.web.resultCalculation.DeleteBallotController;
 import info.gehrels.voting.web.resultCalculation.ElectionCalculationController;
 import info.gehrels.voting.web.resultCalculation.ManageElectionCalculationsController;
@@ -60,12 +61,17 @@ public class SpringConfig implements ServletContextInitializer {
 
 	@Bean
 	public IndexPageController indexPageController() {
-		return new IndexPageController(castBallotsState());
+		return new IndexPageController(castBallotsState(), ballotLayoutState());
 	}
 
 	@Bean
 	public CreateBallotLayoutController createBallotLayoutController() {
 		return new CreateBallotLayoutController(ballotLayoutState(), castBallotsState());
+	}
+
+	@Bean
+	public EditBallotLayoutController editBallotLayoutController() {
+		return new EditBallotLayoutController(ballotLayoutState(), castBallotsState());
 	}
 
 	@Bean

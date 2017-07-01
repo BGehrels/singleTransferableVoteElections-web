@@ -44,7 +44,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringConfig.class, webEnvironment = RANDOM_PORT)
-@WebAppConfiguration
 public final class MartinWilkesExampleIT {
     private static final String OFFICE_NAME = "Example Office";
 

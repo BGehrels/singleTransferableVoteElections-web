@@ -17,7 +17,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,7 +28,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringConfig.class, webEnvironment = RANDOM_PORT)
-@WebAppConfiguration
 public final class AmbiguityResolutionIT {
     private static final String CANDIDATE_NAME_1 = "The first candidate";
     private static final String CANDIDATE_NAME_2 = "The second candidate";

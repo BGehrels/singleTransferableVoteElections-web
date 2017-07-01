@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringConfig.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@WebAppConfiguration
 public final class HappyPathIT {
     private static final String CANDIDATE_NAME_1 = "The Candidate";
     private static final String CANDIDATE_NAME_2 = "The second Candidate";

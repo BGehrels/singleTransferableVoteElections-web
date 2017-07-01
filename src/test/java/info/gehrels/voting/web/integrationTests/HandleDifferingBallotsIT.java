@@ -26,7 +26,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringConfig.class, webEnvironment = RANDOM_PORT)
-@WebAppConfiguration
 public final class HandleDifferingBallotsIT {
     public static final String CANDIDATE_NAME_1 = "The first candidate";
     public static final String CANDIDATE_NAME_2 = "The second candidate";

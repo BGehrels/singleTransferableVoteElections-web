@@ -16,10 +16,12 @@
  */
 package info.gehrels.voting.web.applicationState;
 
+import com.google.common.collect.ImmutableList;
 import info.gehrels.voting.genderedElections.GenderedElection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class BallotLayout {
 	private List<GenderedElection> elections = new ArrayList<>();
@@ -29,7 +31,17 @@ public class BallotLayout {
 	}
 
 	public List<GenderedElection> getElections() {
-		return elections;
+		return ImmutableList.copyOf(elections);
+	}
+
+	public void replaceElection(String officeName, Function<GenderedElection, GenderedElection> replacementFactory) {
+		for (int i = 0; i < elections.size(); i++) {
+			GenderedElection oldElection = elections.get(i);
+			if (oldElection.getOfficeName().equals(officeName)) {
+				GenderedElection newElection = replacementFactory.apply(oldElection);
+				elections.set(i, newElection);
+			}
+		}
 	}
 
 	public void setElections(List<GenderedElection> elections) {

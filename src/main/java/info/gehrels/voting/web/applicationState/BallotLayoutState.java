@@ -16,19 +16,11 @@
  */
 package info.gehrels.voting.web.applicationState;
 
-import info.gehrels.voting.genderedElections.GenderedElection;
-
 public class BallotLayoutState {
 	private BallotLayout ballotLayout;
 
 	public synchronized void changeOfficeName(String oldOfficeName, String newOfficeName) {
-		for (int i = 0; i < ballotLayout.getElections().size(); i++) {
-			GenderedElection oldElection = ballotLayout.getElections().get(i);
-			if (oldElection.getOfficeName().equals(oldOfficeName)) {
-				GenderedElection newElection = oldElection.withOfficeName(newOfficeName);
-				ballotLayout.getElections().set(i, newElection);
-			}
-		}
+		ballotLayout.replaceElection(oldOfficeName, (e) -> e.withOfficeName(newOfficeName));
 	}
 
 	public synchronized BallotLayout getBallotLayout() {

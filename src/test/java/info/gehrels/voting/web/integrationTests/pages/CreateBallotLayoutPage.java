@@ -12,7 +12,7 @@ import java.util.List;
 
 import static info.gehrels.voting.web.integrationTests.pages.WebElementUtils.setInputText;
 
-public final class AdministrateBallotLayoutPage {
+public final class CreateBallotLayoutPage {
     private final WebDriver webDriver;
 
 
@@ -22,7 +22,7 @@ public final class AdministrateBallotLayoutPage {
     @FindBy(name = "addNewElection")
     private WebElement addElection;
 
-    public AdministrateBallotLayoutPage(final WebDriver webDriver) {
+    public CreateBallotLayoutPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
 
         new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
@@ -63,13 +63,13 @@ public final class AdministrateBallotLayoutPage {
         return PageFactory.initElements(webDriver, IndexPage.class);
     }
 
-    public AdministrateBallotLayoutPage clickAddCandidate(int officeIndex) {
+    public CreateBallotLayoutPage clickAddCandidate(int officeIndex) {
         webDriver.findElement(By.xpath("//*[@name='addNewCandidate' and @value='" + officeIndex + "']")).click();
-        return PageFactory.initElements(webDriver, AdministrateBallotLayoutPage.class);
+        return PageFactory.initElements(webDriver, CreateBallotLayoutPage.class);
     }
 
-    public AdministrateBallotLayoutPage clickAddElection() {
+    public CreateBallotLayoutPage clickAddElection() {
         addElection.click();
-        return PageFactory.initElements(webDriver, AdministrateBallotLayoutPage.class);
+        return PageFactory.initElements(webDriver, CreateBallotLayoutPage.class);
     }
 }

@@ -2,7 +2,7 @@ package info.gehrels.voting.web.integrationTests;
 
 import info.gehrels.voting.web.SpringConfig;
 import info.gehrels.voting.web.ballotCasting.VoteType;
-import info.gehrels.voting.web.integrationTests.pages.AdministrateBallotLayoutPage;
+import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.CastVotePage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
@@ -54,16 +54,16 @@ public final class AmbiguityResolutionIT {
     public void createAmbiguousSituationAndResolveIt() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
-        AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
-        administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
-        administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
-        administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
-        administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
-        administrateBallotLayoutPage.setCandidateFemale(0, 0, false);
-        administrateBallotLayoutPage.clickAddCandidate(0);
-        administrateBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
-        administrateBallotLayoutPage.setCandidateFemale(0, 1, false);
-        indexPage = administrateBallotLayoutPage.clickBallotLayoutCompleted();
+        CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
+        createBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
+        createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
+        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
+        createBallotLayoutPage.setCandidateFemale(0, 0, false);
+        createBallotLayoutPage.clickAddCandidate(0);
+        createBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
+        createBallotLayoutPage.setCandidateFemale(0, 1, false);
+        indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
 
         CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
         castVotePage = castVote(castVotePage, 1, 1, 2);

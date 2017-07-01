@@ -2,7 +2,7 @@ package info.gehrels.voting.web.integrationTests;
 
 import info.gehrels.voting.web.SpringConfig;
 import info.gehrels.voting.web.ballotCasting.VoteType;
-import info.gehrels.voting.web.integrationTests.pages.AdministrateBallotLayoutPage;
+import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.CastVotePage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
@@ -17,7 +17,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,12 +54,12 @@ public final class HappyPathIT {
     public void twoElectionsDifferentCandidatesWalkThrough() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
-        AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
-        administrateBallotLayoutPage = createFirstElection(administrateBallotLayoutPage);
-        administrateBallotLayoutPage.clickAddElection();
-        createSecondElection(administrateBallotLayoutPage);
+        CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
+        createBallotLayoutPage = createFirstElection(createBallotLayoutPage);
+        createBallotLayoutPage.clickAddElection();
+        createSecondElection(createBallotLayoutPage);
 
-        indexPage = administrateBallotLayoutPage.clickBallotLayoutCompleted();
+        indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
 
         indexPage = castSomeVotesOfEachType(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
         indexPage = castSomeVotesOfEachType(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
@@ -76,24 +75,24 @@ public final class HappyPathIT {
         assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME_2), contains(CANDIDATE_NAME_3));
     }
 
-    private AdministrateBallotLayoutPage createFirstElection(AdministrateBallotLayoutPage administrateBallotLayoutPage) {
-        administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME_1);
-        administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
-        administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
-        administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
-        administrateBallotLayoutPage.setCandidateFemale(0, 0, true);
-        administrateBallotLayoutPage = administrateBallotLayoutPage.clickAddCandidate(0);
-        administrateBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
-        administrateBallotLayoutPage.setCandidateFemale(0, 1, false);
-        return administrateBallotLayoutPage;
+    private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage) {
+        createBallotLayoutPage.setOfficeName(0, OFFICE_NAME_1);
+        createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
+        createBallotLayoutPage.setCandidateFemale(0, 0, true);
+        createBallotLayoutPage = createBallotLayoutPage.clickAddCandidate(0);
+        createBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
+        createBallotLayoutPage.setCandidateFemale(0, 1, false);
+        return createBallotLayoutPage;
     }
 
-    private void createSecondElection(AdministrateBallotLayoutPage administrateBallotLayoutPage) {
-        administrateBallotLayoutPage.setOfficeName(1, OFFICE_NAME_2);
-        administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(1, 0);
-        administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(1, 1);
-        administrateBallotLayoutPage.setCandidateName(1, 0, CANDIDATE_NAME_3);
-        administrateBallotLayoutPage.setCandidateFemale(1, 0, true);
+    private void createSecondElection(CreateBallotLayoutPage createBallotLayoutPage) {
+        createBallotLayoutPage.setOfficeName(1, OFFICE_NAME_2);
+        createBallotLayoutPage.setNumberOfFemaleExclusivePositions(1, 0);
+        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(1, 1);
+        createBallotLayoutPage.setCandidateName(1, 0, CANDIDATE_NAME_3);
+        createBallotLayoutPage.setCandidateFemale(1, 0, true);
     }
 
     private CastVotePage castSomeVotesOfEachType(CastVotePage castVotePage) {

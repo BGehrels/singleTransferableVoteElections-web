@@ -32,46 +32,46 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
-public final class AdministrateBallotLayoutController {
+public final class CreateBallotLayoutController {
 	private final BallotLayoutState ballotLayoutState;
 	private final CastBallotsState castBallotsState;
 
-	public AdministrateBallotLayoutController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState) {
+	public CreateBallotLayoutController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState) {
 		this.ballotLayoutState = ballotLayoutState;
 		this.castBallotsState = castBallotsState;
 	}
 
-	@RequestMapping(value = "/administrateBallotLayout", method = {GET})
+	@RequestMapping(value = "/createBallotLayout", method = {GET})
 	public ModelAndView showNewEmptyBallotLayout() {
-		return new ModelAndView("administrateBallotLayout", "ballotLayoutBuilderBean", new BallotLayoutBuilderBean());
+		return new ModelAndView("createBallotLayout", "ballotLayoutBuilderBean", new BallotLayoutBuilderBean());
 	}
 
-	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"addNewElection"})
+	@RequestMapping(value = "/createBallotLayout", method = {PUT, POST}, params = {"addNewElection"})
 	public ModelAndView addNewElection(@Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		form.addNewElection();
 		return createModelAndView(form);
 	}
 
-	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"addNewCandidate"})
+	@RequestMapping(value = "/createBallotLayout", method = {PUT, POST}, params = {"addNewCandidate"})
 	public ModelAndView addNewElection(@RequestParam("addNewCandidate") int electionIndex, @Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		form.getElections().get(electionIndex).addNewCandidate();
 		return createModelAndView(form);
 	}
 
-	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"deleteElection"})
+	@RequestMapping(value = "/createBallotLayout", method = {PUT, POST}, params = {"deleteElection"})
 	public ModelAndView deleteElection(@RequestParam("deleteElection") int electionIndex, @Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		form.getElections().remove(electionIndex);
 		return createModelAndView(form);
 	}
 
-	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST}, params = {"deleteCandidate"})
+	@RequestMapping(value = "/createBallotLayout", method = {PUT, POST}, params = {"deleteCandidate"})
 	public ModelAndView deleteOffice(@RequestParam String deleteCandidate, @Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		String[] splitted = deleteCandidate.split("_");
 		form.getElections().get(Integer.parseInt(splitted[0])).deleteCandidate(Integer.parseInt(splitted[1]));
 		return createModelAndView(form);
 	}
 
-	@RequestMapping(value = "/administrateBallotLayout", method = {PUT, POST})
+	@RequestMapping(value = "/createBallotLayout", method = {PUT, POST})
 	public ModelAndView saveBallotLayout(@Valid BallotLayoutBuilderBean form, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return createModelAndView(form);
@@ -83,7 +83,7 @@ public final class AdministrateBallotLayoutController {
 	}
 
 	private ModelAndView createModelAndView(BallotLayoutBuilderBean form) {
-		return new ModelAndView("administrateBallotLayout", new ModelMap("ballotLayoutBuilderBean", form));
+		return new ModelAndView("createBallotLayout", new ModelMap("ballotLayoutBuilderBean", form));
 	}
 
 }

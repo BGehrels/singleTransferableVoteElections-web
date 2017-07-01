@@ -4,18 +4,17 @@ import com.google.common.base.Predicate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.lift.find.PageTitleFinder;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class IndexPage {
-    public static final String ADMINISTRATE_BALLOT_LAYOUT_LINK = "Stimmzettellayout erstellen/bearbeiten (löscht eventuell bereits eingegebene Stimmen)";
+    public static final String CREATE_BALLOT_LAYOUT_LINK = "Stimmzettellayout erstellen/überschreiben (löscht eventuell bereits eingegebene Stimmen)";
 
     private final WebDriver webDriver;
 
-    @FindBy(linkText = ADMINISTRATE_BALLOT_LAYOUT_LINK)
-    private WebElement administrateBallotLayoutLink;
+    @FindBy(linkText = CREATE_BALLOT_LAYOUT_LINK)
+    private WebElement createBallotLayoutLink;
 
     @FindBy(linkText = "Stimmen eingeben (Ersteingabe)")
     private WebElement castVotesFirstTryLink;
@@ -31,14 +30,14 @@ public class IndexPage {
         new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
             @Override
             public boolean apply(WebDriver input) {
-                return input.findElement(By.linkText(ADMINISTRATE_BALLOT_LAYOUT_LINK)).isDisplayed();
+                return input.findElement(By.linkText(CREATE_BALLOT_LAYOUT_LINK)).isDisplayed();
             }
         });
     }
 
-    public AdministrateBallotLayoutPage clickAdministrateBallotLayoutLink() {
-        administrateBallotLayoutLink.click();
-        return PageFactory.initElements(webDriver, AdministrateBallotLayoutPage.class);
+    public CreateBallotLayoutPage clickCreateBallotLayoutLink() {
+        createBallotLayoutLink.click();
+        return PageFactory.initElements(webDriver, CreateBallotLayoutPage.class);
     }
 
     public CastVotePage clickCastVotesFirstTryLink() {

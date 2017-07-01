@@ -13,7 +13,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -49,20 +48,20 @@ public final class HandleDifferingBallotsIT {
     @Test
     public void handleDifferingBallots() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
-        AdministrateBallotLayoutPage administrateBallotLayoutPage = indexPage.clickAdministrateBallotLayoutLink();
+        CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
 
-        administrateBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
-        administrateBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
-        administrateBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
+        createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
+        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
 
-        administrateBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
-        administrateBallotLayoutPage.setCandidateFemale(0, 0, true);
-        administrateBallotLayoutPage = administrateBallotLayoutPage.clickAddCandidate(0);
+        createBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
+        createBallotLayoutPage.setCandidateFemale(0, 0, true);
+        createBallotLayoutPage = createBallotLayoutPage.clickAddCandidate(0);
 
-        administrateBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
-        administrateBallotLayoutPage.setCandidateFemale(0, 1, false);
+        createBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
+        createBallotLayoutPage.setCandidateFemale(0, 1, false);
 
-        indexPage = administrateBallotLayoutPage.clickBallotLayoutCompleted();
+        indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
         indexPage = enterFirstTryDuplicateAndSecondTryUniqueVote(indexPage, 1);
         indexPage = enterSecondTryDuplicateAndFirstTryUniqueVote(indexPage, 2);
         indexPage = enterVoteThatIsOnlyInFirstTry(indexPage, 3);

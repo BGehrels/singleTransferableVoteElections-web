@@ -34,13 +34,17 @@ public class BallotLayout {
 		return ImmutableList.copyOf(elections);
 	}
 
-	public void replaceElection(String officeName, Function<GenderedElection, GenderedElection> replacementFactory) {
+	public GenderedElection replaceElection(String officeName, Function<GenderedElection, GenderedElection> replacementFactory) {
 		for (int i = 0; i < elections.size(); i++) {
 			GenderedElection oldElection = elections.get(i);
 			if (oldElection.getOfficeName().equals(officeName)) {
 				GenderedElection newElection = replacementFactory.apply(oldElection);
 				elections.set(i, newElection);
+
+				return newElection;
 			}
 		}
+
+		throw new IllegalArgumentException("No office exists with name " + officeName);
 	}
 }

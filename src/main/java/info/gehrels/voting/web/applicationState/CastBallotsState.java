@@ -22,13 +22,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
+import info.gehrels.voting.genderedElections.GenderedElection;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static java.util.stream.Collectors.toList;
+
 public final class CastBallotsState {
-	private final Collection<Ballot<GenderedCandidate>> firstTryCastBallots = new ArrayList<>();
-	private final Collection<Ballot<GenderedCandidate>> secondTryCastBallots = new ArrayList<>();
+	private Collection<Ballot<GenderedCandidate>> firstTryCastBallots = new ArrayList<>();
+	private Collection<Ballot<GenderedCandidate>> secondTryCastBallots = new ArrayList<>();
 
 	public synchronized void deleteById(long ballotId) {
 		Iterables.removeIf(firstTryCastBallots, hasId(ballotId));
@@ -47,11 +50,11 @@ public final class CastBallotsState {
 		return ImmutableList.copyOf(secondTryCastBallots);
 	}
 
-	private BallotIdPredicate hasId(long ballotId) {
+	private synchronized BallotIdPredicate hasId(long ballotId) {
 		return new BallotIdPredicate(ballotId);
 	}
 
-	private Collection<Ballot<GenderedCandidate>> getCastBallotsState(BallotInputTry firstOrSecondTry) {
+	private synchronized Collection<Ballot<GenderedCandidate>> getCastBallotsState(BallotInputTry firstOrSecondTry) {
 		if (firstOrSecondTry == BallotInputTry.FIRST) {
 			return firstTryCastBallots;
 		} else if (firstOrSecondTry == BallotInputTry.SECOND) {
@@ -64,6 +67,15 @@ public final class CastBallotsState {
 	public synchronized void reset() {
 		firstTryCastBallots.clear();
 		secondTryCastBallots.clear();
+	}
+
+	public synchronized void replaceElection(String oldOfficeName, GenderedElection newElectionVersion) {
+		firstTryCastBallots = firstTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, newElectionVersion, b)).collect(toList());
+		secondTryCastBallots = secondTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, newElectionVersion, b)).collect(toList());
+	}
+
+	private Ballot<GenderedCandidate> withReplacedElection(String oldOfficeName, GenderedElection newElectionVersion, Ballot<GenderedCandidate> b) {
+		return b.withReplacedElection(oldOfficeName, newElectionVersion);
 	}
 
 	private static final class BallotIdPredicate implements Predicate<Ballot<GenderedCandidate>> {

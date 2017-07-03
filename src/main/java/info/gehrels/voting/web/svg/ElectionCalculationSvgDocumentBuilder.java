@@ -9,15 +9,19 @@ import info.gehrels.voting.singleTransferableVote.VoteState;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.svg.SVGDocument;
-import org.w3c.dom.svg.SVGSVGElement;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.apache.batik.util.SVGConstants.SVG_NAMESPACE_URI;
 
@@ -49,8 +53,8 @@ public final class ElectionCalculationSvgDocumentBuilder {
 
     public String build() {
         DOMImplementation impl = GenericDOMImplementation.getDOMImplementation();
-        SVGDocument document = (SVGDocument) impl.createDocument(SVG_NAMESPACE_URI, "svg", null);
-        SVGSVGElement root = document.getRootElement();
+        Document document = impl.createDocument(SVG_NAMESPACE_URI, "svg", null);
+        Element root = document.getDocumentElement();
         root.appendChild(firstHeadline.build(document, 0, 0));
         root.appendChild(secondHeadLine.build(document, 0, 25));
 

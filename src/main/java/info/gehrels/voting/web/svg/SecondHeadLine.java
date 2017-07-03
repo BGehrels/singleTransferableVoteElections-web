@@ -1,8 +1,8 @@
 package info.gehrels.voting.web.svg;
 
 import org.apache.commons.math3.fraction.BigFraction;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGDocument;
 
 public final class SecondHeadLine {
     private final long numberOfSeats;
@@ -22,7 +22,7 @@ public final class SecondHeadLine {
     }
 
 
-    public Element build(SVGDocument document, int baseX, int baseY) {
+    public Element build(Document document, int baseX, int baseY) {
         String textContent = numberOfSeats + " " + (femaleExclusive ? "Frauenplätze" : "offene Plätze") +
                 ", davon sind " + numberOfElectablePositions + " zu besetzen. " +
                 "Es gibt " + numberOfValidBallots + " abgegebene gültige Stimmzettel und " +

@@ -1,7 +1,7 @@
 package info.gehrels.voting.web.svg;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGDocument;
 
 public final class TextElement {
     private double x;
@@ -35,7 +35,7 @@ public final class TextElement {
         return this;
     }
 
-    public Element build(SVGDocument svgDocument) {
+    public Element build(Document svgDocument) {
         Element element = svgDocument.createElement("text");
         element.setAttribute("x", String.valueOf(x));
         element.setAttribute("y", String.valueOf(y));

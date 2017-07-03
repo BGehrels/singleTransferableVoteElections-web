@@ -1,9 +1,9 @@
 package info.gehrels.voting.web.svg;
 
 import info.gehrels.voting.genderedElections.GenderedCandidate;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.svg.SVGDocument;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public final class VoteDistributionHeadlineRow extends VoteDistributionGridRow {
         }
     }
 
-    public Node build(SVGDocument document) {
+    public Node build(Document document) {
         Element g = document.createElement("g");
         columnHeaders.stream().map(t -> t.build(document)).forEach(g::appendChild);
         return g;

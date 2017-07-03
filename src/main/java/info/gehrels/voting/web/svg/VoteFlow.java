@@ -3,8 +3,8 @@ package info.gehrels.voting.web.svg;
 import com.google.common.base.Optional;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import org.apache.commons.math3.fraction.BigFraction;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGDocument;
 
 public final class VoteFlow {
     private final GenderedCandidate oldPreferredCandidate;
@@ -50,7 +50,7 @@ public final class VoteFlow {
         targetY = y;
     }
 
-    public Element build(SVGDocument svgDocument) {
+    public Element build(Document svgDocument) {
         Element path = svgDocument.createElement("path");
         path.setAttribute("d",
                 "M" + sourceX + "," + sourceY +

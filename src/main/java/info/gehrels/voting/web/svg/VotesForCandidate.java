@@ -1,8 +1,8 @@
 package info.gehrels.voting.web.svg;
 
 import org.apache.commons.math3.fraction.BigFraction;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGDocument;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public final class VotesForCandidate {
         }
     }
 
-    public Element build(SVGDocument document) {
+    public Element build(Document document) {
         Element svg = document.createElement("g");
         if (numberOfVotes != null) {
             Element numberOfVotesBar = document.createElement("rect");

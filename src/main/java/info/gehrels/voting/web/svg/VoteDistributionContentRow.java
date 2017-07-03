@@ -3,8 +3,8 @@ package info.gehrels.voting.web.svg;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.singleTransferableVote.VoteDistribution;
 import org.apache.commons.math3.fraction.BigFraction;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGDocument;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,7 +63,7 @@ public final class VoteDistributionContentRow extends VoteDistributionGridRow {
         return voteDistribution.values().iterator().next().getHeight();
     }
 
-    public Element build(SVGDocument document) {
+    public Element build(Document document) {
         Element svg = document.createElement("g");
         svg.appendChild(caption.build(document));
         for (VotesForCandidate votesForCandidate : voteDistribution.values()) {

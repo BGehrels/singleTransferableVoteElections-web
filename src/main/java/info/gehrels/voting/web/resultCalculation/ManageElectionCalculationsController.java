@@ -21,8 +21,7 @@ import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableSortedMap.Builder;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
-import info.gehrels.voting.web.applicationState.BallotLayoutState;
-import info.gehrels.voting.web.applicationState.CastBallotsState;
+import info.gehrels.voting.web.applicationState.BallotState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableInstant;
@@ -37,32 +36,28 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 public final class ManageElectionCalculationsController {
-	private final BallotLayoutState ballotLayoutState;
-	private final CastBallotsState castBallotsState;
+	private final BallotState ballotState;
 	private final ElectionCalculationsState electionCalculationsState;
 
 
-	public ManageElectionCalculationsController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState,
-	                                            ElectionCalculationsState electionCalculationsState) {
-		this.ballotLayoutState = ballotLayoutState;
-		this.castBallotsState = castBallotsState;
+	public ManageElectionCalculationsController(BallotState ballotState,
+												ElectionCalculationsState electionCalculationsState) {
+		this.ballotState = ballotState;
 		this.electionCalculationsState = electionCalculationsState;
 	}
 
 	@RequestMapping(value = "/startElectionCalculation", method = POST)
 	public ModelAndView startElectionCalculation() {
-		if (ballotLayoutState.getBallotLayout() != null) {
-			ImmutableCollection<Ballot<GenderedCandidate>> firstTryCastBallots = castBallotsState
-				.getFirstTryCastBallots();
-			ImmutableCollection<Ballot<GenderedCandidate>> secondTryCastBallots = castBallotsState
-				.getSecondTryCastBallots();
+		if (ballotState.getBallotLayout() != null) {
+			ImmutableCollection<Ballot<GenderedCandidate>> firstTryCastBallots = ballotState.getFirstTryCastBallots();
+			ImmutableCollection<Ballot<GenderedCandidate>> secondTryCastBallots = ballotState.getSecondTryCastBallots();
 			BallotIterableDiffCalculator.BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator.calculateDiff(firstTryCastBallots, secondTryCastBallots);
 			if (ballotIterableDiff.isDifferent()) {
 				return new ModelAndView("handleDifferingBallotCollections", "ballotIterableDiff", ballotIterableDiff);
 			}
 
 			AsyncElectionCalculation electionCalculation = new AsyncElectionCalculation(
-				ballotLayoutState.getBallotLayout().getElections(),
+				ballotState.getBallotLayout().getElections(),
 				firstTryCastBallots);
 			electionCalculationsState.addElectionCalculation(electionCalculation);
 			new Thread(electionCalculation).start();

@@ -17,8 +17,7 @@
 package info.gehrels.voting.web;
 
 import com.google.common.collect.ImmutableMap;
-import info.gehrels.voting.web.applicationState.BallotLayoutState;
-import info.gehrels.voting.web.applicationState.CastBallotsState;
+import info.gehrels.voting.web.applicationState.BallotState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import info.gehrels.voting.web.ballotCasting.CastVoteController;
 import info.gehrels.voting.web.ballotLayoutAdministration.CreateBallotLayoutController;
@@ -61,27 +60,27 @@ public class SpringConfig implements ServletContextInitializer {
 
 	@Bean
 	public IndexPageController indexPageController() {
-		return new IndexPageController(castBallotsState(), ballotLayoutState());
+		return new IndexPageController(ballotState(), ballotState());
 	}
 
 	@Bean
 	public CreateBallotLayoutController createBallotLayoutController() {
-		return new CreateBallotLayoutController(ballotLayoutState(), castBallotsState());
+		return new CreateBallotLayoutController(ballotState());
 	}
 
 	@Bean
 	public EditBallotLayoutController editBallotLayoutController() {
-		return new EditBallotLayoutController(ballotLayoutState(), castBallotsState());
+		return new EditBallotLayoutController(ballotState());
 	}
 
 	@Bean
 	public CastVoteController castVoteController() {
-		return new CastVoteController(ballotLayoutState(), castBallotsState());
+		return new CastVoteController(ballotState());
 	}
 
 	@Bean
 	public DeleteBallotController deleteBallotController() {
-		return new DeleteBallotController(castBallotsState());
+		return new DeleteBallotController(ballotState());
 	}
 
 	@Bean
@@ -90,8 +89,8 @@ public class SpringConfig implements ServletContextInitializer {
 	}
 
 	@Bean
-	public CastBallotsState castBallotsState() {
-		return new CastBallotsState();
+	public BallotState ballotState() {
+		return new BallotState();
 	}
 
 	@Bean
@@ -104,14 +103,8 @@ public class SpringConfig implements ServletContextInitializer {
 	}
 
 	@Bean
-	public BallotLayoutState ballotLayoutState() {
-		return new BallotLayoutState();
-	}
-
-	@Bean
 	public ManageElectionCalculationsController calculateElectionResultsController() {
-		return new ManageElectionCalculationsController(ballotLayoutState(), castBallotsState(),
-		                                              electionCalculationsState());
+		return new ManageElectionCalculationsController(ballotState(), electionCalculationsState());
 	}
 
 	@Bean

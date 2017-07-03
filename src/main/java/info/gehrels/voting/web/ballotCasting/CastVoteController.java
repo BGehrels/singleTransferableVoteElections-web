@@ -19,8 +19,7 @@ package info.gehrels.voting.web.ballotCasting;
 import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.applicationState.BallotInputTry;
-import info.gehrels.voting.web.applicationState.BallotLayoutState;
-import info.gehrels.voting.web.applicationState.CastBallotsState;
+import info.gehrels.voting.web.applicationState.BallotState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -38,18 +37,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public final class CastVoteController {
-	private final BallotLayoutState ballotLayoutState;
-	private final CastBallotsState castBallotsState;
+	private final BallotState ballotState;
 
-	public CastVoteController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState) {
-		this.ballotLayoutState = ballotLayoutState;
-		this.castBallotsState = castBallotsState;
+	public CastVoteController(BallotState ballotState) {
+		this.ballotState = ballotState;
 	}
 
 	@RequestMapping(value = "/castVote", method = {POST, PUT})
 	public ModelAndView doCastVote(@Valid BallotBuilder ballotBuilder, BindingResult bindingResult,
 	                               BallotInputTry firstOrSecondTry) {
-		if (ballotLayoutState.getBallotLayout() == null) {
+		if (ballotState.getBallotLayout() == null) {
 			return new ModelAndView("redirect:/");
 		}
 
@@ -62,15 +59,15 @@ public final class CastVoteController {
 			return createModelAndView(ballotBuilder, firstOrSecondTry);
 		}
 
-		Ballot<GenderedCandidate> ballotFromForm = ballotBuilder.createBallotFromForm(ballotLayoutState.getBallotLayout());
-		castBallotsState.add(firstOrSecondTry, ballotFromForm);
+		Ballot<GenderedCandidate> ballotFromForm = ballotBuilder.createBallotFromForm(ballotState.getBallotLayout());
+		ballotState.addCastBallot(firstOrSecondTry, ballotFromForm);
 
 		return new ModelAndView("redirect:/castVote?firstOrSecondTry=" + firstOrSecondTry);
 	}
 
 	@RequestMapping(value = "/castVote", method = {HEAD, GET})
 	public ModelAndView doGet(@RequestParam BallotInputTry firstOrSecondTry) {
-		if (ballotLayoutState.getBallotLayout() == null) {
+		if (ballotState.getBallotLayout() == null) {
 			return new ModelAndView("redirect:/");
 		}
 
@@ -80,7 +77,7 @@ public final class CastVoteController {
 
 	private ModelAndView createModelAndView(BallotBuilder ballotBuilder, BallotInputTry firstOrSecondTry) {
 		ModelMap modelMap = new ModelMap();
-		modelMap.addAttribute("ballotLayout", ballotLayoutState.getBallotLayout());
+		modelMap.addAttribute("ballotLayout", ballotState.getBallotLayout());
 		modelMap.addAttribute("ballotBuilder", ballotBuilder);
 		modelMap.addAttribute("firstOrSecondTry", firstOrSecondTry);
 		return new ModelAndView("castVote", modelMap);

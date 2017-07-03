@@ -16,9 +16,8 @@
  */
 package info.gehrels.voting.web.resultCalculation;
 
-import info.gehrels.voting.web.resultCalculation.BallotIterableDiffCalculator;
+import info.gehrels.voting.web.applicationState.BallotState;
 import info.gehrels.voting.web.resultCalculation.BallotIterableDiffCalculator.BallotIterableDiff;
-import info.gehrels.voting.web.applicationState.CastBallotsState;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,20 +27,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public final class DeleteBallotController {
-	private final CastBallotsState castBallotsState;
+	private final BallotState ballotState;
 
-	public DeleteBallotController(CastBallotsState castBallotsState) {
-		this.castBallotsState = castBallotsState;
+	public DeleteBallotController(BallotState ballotState) {
+		this.ballotState = ballotState;
 	}
 
 	@RequestMapping(value = "/deleteBallots", method = {POST, PUT})
 	public String deleteBallotsById(@RequestParam long[] ballotIds) {
 		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
-			.calculateDiff(castBallotsState.getFirstTryCastBallots(), castBallotsState.getSecondTryCastBallots());
+			.calculateDiff(ballotState.getFirstTryCastBallots(), ballotState.getSecondTryCastBallots());
 		for (long ballotId : ballotIds) {
 			// We check here again to prevent forged requests.
 			if (ballotIterableDiff.isBallotDifferentOrDuplicate(ballotId)) {
-				castBallotsState.deleteById(ballotId);
+				ballotState.deleteById(ballotId);
 			}
 		}
 

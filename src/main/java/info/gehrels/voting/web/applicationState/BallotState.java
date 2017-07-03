@@ -29,17 +29,41 @@ import java.util.Collection;
 
 import static java.util.stream.Collectors.toList;
 
-public final class CastBallotsState {
+public class BallotState {
+	private BallotLayout ballotLayout;
 	private Collection<Ballot<GenderedCandidate>> firstTryCastBallots = new ArrayList<>();
 	private Collection<Ballot<GenderedCandidate>> secondTryCastBallots = new ArrayList<>();
+
+	public synchronized GenderedElection changeOfficeName(String oldOfficeName, String newOfficeName) {
+		GenderedElection genderedElection = ballotLayout.replaceElection(oldOfficeName, (e) -> e.withOfficeName(newOfficeName));
+		firstTryCastBallots = firstTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, genderedElection, b)).collect(toList());
+		secondTryCastBallots = secondTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, genderedElection, b)).collect(toList());
+		return genderedElection;
+	}
+
+	public synchronized BallotLayout getBallotLayout() {
+		return ballotLayout;
+	}
+
+	public synchronized void setBallotLayout(BallotLayout ballotLayout) {
+		this.ballotLayout = ballotLayout;
+		firstTryCastBallots.clear();
+		secondTryCastBallots.clear();
+	}
+
+	public synchronized boolean isBallotLayoutPresent() {
+		return ballotLayout != null;
+	}
+
+
 
 	public synchronized void deleteById(long ballotId) {
 		Iterables.removeIf(firstTryCastBallots, hasId(ballotId));
 		Iterables.removeIf(secondTryCastBallots, hasId(ballotId));
 	}
 
-	public synchronized void add(BallotInputTry firstOrSecondTry, Ballot<GenderedCandidate> ballotFromForm) {
-		getCastBallotsState(firstOrSecondTry).add(ballotFromForm);
+	public synchronized void addCastBallot(BallotInputTry firstOrSecondTry, Ballot<GenderedCandidate> ballotFromForm) {
+		getBallotState(firstOrSecondTry).add(ballotFromForm);
 	}
 
 	public synchronized ImmutableCollection<Ballot<GenderedCandidate>> getFirstTryCastBallots() {
@@ -54,7 +78,7 @@ public final class CastBallotsState {
 		return new BallotIdPredicate(ballotId);
 	}
 
-	private synchronized Collection<Ballot<GenderedCandidate>> getCastBallotsState(BallotInputTry firstOrSecondTry) {
+	private synchronized Collection<Ballot<GenderedCandidate>> getBallotState(BallotInputTry firstOrSecondTry) {
 		if (firstOrSecondTry == BallotInputTry.FIRST) {
 			return firstTryCastBallots;
 		} else if (firstOrSecondTry == BallotInputTry.SECOND) {
@@ -62,16 +86,6 @@ public final class CastBallotsState {
 		} else {
 			throw new IllegalStateException("Unknown enum value " + firstOrSecondTry);
 		}
-	}
-
-	public synchronized void reset() {
-		firstTryCastBallots.clear();
-		secondTryCastBallots.clear();
-	}
-
-	public synchronized void replaceElection(String oldOfficeName, GenderedElection newElectionVersion) {
-		firstTryCastBallots = firstTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, newElectionVersion, b)).collect(toList());
-		secondTryCastBallots = secondTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, newElectionVersion, b)).collect(toList());
 	}
 
 	private Ballot<GenderedCandidate> withReplacedElection(String oldOfficeName, GenderedElection newElectionVersion, Ballot<GenderedCandidate> b) {

@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -82,8 +83,8 @@ public class EditBallotLayoutIT {
         ElectionCalculationPage electionCalculationPage = indexPage.clickElectionCalculationLink()
                 .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
                 .clickElectionCalculation();
-        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), is(FEMALE_CANDIDATES_NAME));
-        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), is(NON_FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), contains(FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
     }
 
     private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage) {

@@ -16,8 +16,7 @@
  */
 package info.gehrels.voting.web;
 
-import info.gehrels.voting.web.applicationState.BallotLayoutState;
-import info.gehrels.voting.web.applicationState.CastBallotsState;
+import info.gehrels.voting.web.applicationState.BallotState;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,11 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class IndexPageController {
 
-	private final CastBallotsState castBallotsState;
-	private final BallotLayoutState ballotLayoutState;
+	private final BallotState ballotState;
+	private final BallotState ballotLayoutState;
 
-	public IndexPageController(CastBallotsState castBallotsState, BallotLayoutState ballotLayoutState) {
-		this.castBallotsState = castBallotsState;
+	public IndexPageController(BallotState ballotState, BallotState ballotLayoutState) {
+		this.ballotState = ballotState;
 		this.ballotLayoutState = ballotLayoutState;
 	}
 
@@ -39,8 +38,8 @@ public class IndexPageController {
 		return new ModelAndView("indexPage",
 				"indexPageBean",
 				new IndexPageBean(
-						castBallotsState.getFirstTryCastBallots().size(),
-						castBallotsState.getSecondTryCastBallots().size(),
+						ballotState.getFirstTryCastBallots().size(),
+						ballotState.getSecondTryCastBallots().size(),
 						ballotLayoutState.isBallotLayoutPresent()
 				)
 		);

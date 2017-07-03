@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class BallotLayoutStateTest {
+public class BallotStateTest {
 
     private static final String OLD_OFFICE_NAME = "office";
     private static final BallotLayout BALLOT_LAYOUT = new BallotLayout(ImmutableList.of(new GenderedElection("office", 1, 0, ImmutableSet.of(new GenderedCandidate("Peter", true)))));
@@ -18,12 +18,12 @@ public class BallotLayoutStateTest {
 
     @Test
     public void initializedWithoutLayout() {
-        assertThat(new BallotLayoutState().isBallotLayoutPresent(), is(false));
+        assertThat(new BallotState().isBallotLayoutPresent(), is(false));
     }
 
     @Test
     public void hasLayoutAfterSettingOne() {
-        BallotLayoutState ballotLayoutState = new BallotLayoutState();
+        BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(BALLOT_LAYOUT);
 
@@ -33,7 +33,7 @@ public class BallotLayoutStateTest {
 
     @Test
     public void storesNewElectionAfterCallingChangeOfficeName() {
-        BallotLayoutState ballotLayoutState = new BallotLayoutState();
+        BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(BALLOT_LAYOUT);
 
@@ -44,7 +44,7 @@ public class BallotLayoutStateTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void throwsIfOldOfficeNameDoesNotExist() {
-        BallotLayoutState ballotLayoutState = new BallotLayoutState();
+        BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(BALLOT_LAYOUT);
 

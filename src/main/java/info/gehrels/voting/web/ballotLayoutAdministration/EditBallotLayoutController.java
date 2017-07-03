@@ -17,9 +17,7 @@
 package info.gehrels.voting.web.ballotLayoutAdministration;
 
 import com.google.common.collect.ImmutableMap;
-import info.gehrels.voting.genderedElections.GenderedElection;
-import info.gehrels.voting.web.applicationState.BallotLayoutState;
-import info.gehrels.voting.web.applicationState.CastBallotsState;
+import info.gehrels.voting.web.applicationState.BallotState;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +28,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 public final class EditBallotLayoutController {
-	private final BallotLayoutState ballotLayoutState;
-	private final CastBallotsState castBallotsState;
+	private final BallotState ballotLayoutState;
 
-	public EditBallotLayoutController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState) {
-		this.ballotLayoutState = ballotLayoutState;
-		this.castBallotsState = castBallotsState;
+	public EditBallotLayoutController(BallotState ballotState) {
+		this.ballotLayoutState = ballotState;
 	}
 
 	@RequestMapping(value = "/editBallotLayout", method = {GET})
@@ -57,8 +53,7 @@ public final class EditBallotLayoutController {
 			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Der Name des Amtes darf nicht leer sein"));
 		}
 
-		GenderedElection newElectionVersion = ballotLayoutState.changeOfficeName(oldOfficeName, newOfficeName);
-		castBallotsState.replaceElection(oldOfficeName, newElectionVersion);
+		ballotLayoutState.changeOfficeName(oldOfficeName, newOfficeName);
 
 		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
 	}

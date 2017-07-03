@@ -16,8 +16,7 @@
  */
 package info.gehrels.voting.web.ballotLayoutAdministration;
 
-import info.gehrels.voting.web.applicationState.BallotLayoutState;
-import info.gehrels.voting.web.applicationState.CastBallotsState;
+import info.gehrels.voting.web.applicationState.BallotState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -33,12 +32,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @Controller
 public final class CreateBallotLayoutController {
-	private final BallotLayoutState ballotLayoutState;
-	private final CastBallotsState castBallotsState;
+	private final BallotState ballotState;
 
-	public CreateBallotLayoutController(BallotLayoutState ballotLayoutState, CastBallotsState castBallotsState) {
-		this.ballotLayoutState = ballotLayoutState;
-		this.castBallotsState = castBallotsState;
+	public CreateBallotLayoutController(BallotState ballotState) {
+		this.ballotState = ballotState;
 	}
 
 	@RequestMapping(value = "/createBallotLayout", method = {GET})
@@ -77,8 +74,7 @@ public final class CreateBallotLayoutController {
 			return createModelAndView(form);
 		}
 
-		ballotLayoutState.setBallotLayout(form.createBallotLayout());
-		castBallotsState.reset();
+		ballotState.setBallotLayout(form.createBallotLayout());
 		return new ModelAndView("redirect:/");
 	}
 

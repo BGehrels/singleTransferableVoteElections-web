@@ -27,13 +27,15 @@ public final class EditBallotLayoutPage {
         });
     }
 
-    public void setNewOfficeName(int officeIndex, String officeName) {
-        // TODO: make it work for multiple offices
-        setInputText(webDriver.findElement(By.name("newOfficeName")), officeName);
+    public void setNewOfficeName(String oldOfficeName, String newOfficeName) {
+        By xpath = By.xpath("//section/h2[text()='" + oldOfficeName + "']/following-sibling::form/input[@name='newOfficeName']");
+        setInputText(webDriver.findElement(xpath), newOfficeName);
     }
 
-    public EditBallotLayoutPage clickRenameOffice(int officeIndex) {
-        webDriver.findElement(By.name("renameOffice")).click();
+    public EditBallotLayoutPage clickRenameOffice(String oldOfficeName) {
+        By xpath = By.xpath("//section/h2[text()='" + oldOfficeName + "']/following-sibling::form/input[@name='renameOffice']");
+
+        webDriver.findElement(xpath).click();
         return PageFactory.initElements(webDriver, EditBallotLayoutPage.class);
     }
 

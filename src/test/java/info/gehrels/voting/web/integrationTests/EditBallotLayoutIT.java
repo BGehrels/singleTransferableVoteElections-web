@@ -65,8 +65,8 @@ public class EditBallotLayoutIT {
 
         // When we edit an office name on the ballot
         EditBallotLayoutPage editBallotLayoutPage = indexPage.clickEditBallotLayoutLink();
-        editBallotLayoutPage.setNewOfficeName(0, NEW_OFFICE_NAME);
-        editBallotLayoutPage.clickRenameOffice(0);
+        editBallotLayoutPage.setNewOfficeName(ORIGINAL_OFFICE_NAME, NEW_OFFICE_NAME);
+        editBallotLayoutPage.clickRenameOffice(ORIGINAL_OFFICE_NAME);
         indexPage = editBallotLayoutPage.clickBackToIndexPage();
 
         // Then the office Name is changed on the cast Votes page

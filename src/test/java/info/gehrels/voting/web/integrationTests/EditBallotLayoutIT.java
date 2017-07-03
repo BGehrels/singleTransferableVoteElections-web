@@ -4,7 +4,9 @@ import info.gehrels.voting.web.SpringConfig;
 import info.gehrels.voting.web.integrationTests.pages.CastVotePage;
 import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.EditBallotLayoutPage;
+import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
+import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,17 +21,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static info.gehrels.voting.web.integrationTests.HandleDifferingBallotsIT.OFFICE_NAME;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SpringConfig.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EditBallotLayoutIT {
-    private static final String CANDIDATE_NAME_1 = "The Candidate";
-    private static final String CANDIDATE_NAME_2 = "The second Candidate";
-    private static final String OFFICE_NAME_1 = "The Office";
-    private static final String OFFICE_NAME_2 = "The second office";
+    private static final String FEMALE_CANDIDATES_NAME = "The Candidate";
+    private static final String NON_FEMALE_CANDIDATES_NAME = "The second Candidate";
+    private static final String ORIGINAL_OFFICE_NAME = "The Office";
+    private static final String NEW_OFFICE_NAME = "The second office";
 
     @Value("${local.server.port}")
     int port;
@@ -47,32 +48,57 @@ public class EditBallotLayoutIT {
     }
 
     @Test
-    public void twoElectionsDifferentCandidatesWalkThrough() {
+    public void changeOfficeName() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
+        // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
         createBallotLayoutPage = createFirstElection(createBallotLayoutPage);
+        indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
 
-        indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();;
+        // And Given there have already been votes cast
+        indexPage = castAPreferenceVote(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
+        indexPage = castAPreferenceVote(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
+        assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
+        assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("1"));
 
+        // When we edit an office name on the ballot
         EditBallotLayoutPage editBallotLayoutPage = indexPage.clickEditBallotLayoutLink();
-        editBallotLayoutPage.setNewOfficeName(0, OFFICE_NAME_2);
+        editBallotLayoutPage.setNewOfficeName(0, NEW_OFFICE_NAME);
         editBallotLayoutPage.clickRenameOffice(0);
-        IndexPage indexPage1 = editBallotLayoutPage.clickBackToIndexPage();
-        CastVotePage castVotePage = indexPage1.clickCastVotesFirstTryLink();
-        assertThat(castVotePage.hasOfficeWithName(OFFICE_NAME), is(false));
-        assertThat(castVotePage.hasOfficeWithName(OFFICE_NAME_2), is(true));
+        indexPage = editBallotLayoutPage.clickBackToIndexPage();
+
+        // Then the office Name is changed on the cast Votes page
+        CastVotePage castVotePage = indexPage.clickCastVotesFirstTryLink();
+        assertThat(castVotePage.hasOfficeWithName(ORIGINAL_OFFICE_NAME), is(false));
+        assertThat(castVotePage.hasOfficeWithName(NEW_OFFICE_NAME), is(true));
+
+        // and the cast votes still exist
+        IndexPage indexPage2 = castVotePage.clickBackToIndexPage();
+        assertThat(indexPage2.getNumberOfCastVotesFirstTry(), is("1"));
+        assertThat(indexPage2.getNumberOfCastVotesSecondTry(), is("1"));
+
+        // And they are correctly included in the election calculation under the new office name
+        ElectionCalculationPage electionCalculationPage = indexPage.clickElectionCalculationLink()
+                .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
+                .clickElectionCalculation();
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), is(FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), is(NON_FEMALE_CANDIDATES_NAME));
     }
 
     private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage) {
-        createBallotLayoutPage.setOfficeName(0, OFFICE_NAME_1);
+        createBallotLayoutPage.setOfficeName(0, ORIGINAL_OFFICE_NAME);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
         createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
-        createBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
+        createBallotLayoutPage.setCandidateName(0, 0, FEMALE_CANDIDATES_NAME);
         createBallotLayoutPage.setCandidateFemale(0, 0, true);
         createBallotLayoutPage = createBallotLayoutPage.clickAddCandidate(0);
-        createBallotLayoutPage.setCandidateName(0, 1, CANDIDATE_NAME_2);
+        createBallotLayoutPage.setCandidateName(0, 1, NON_FEMALE_CANDIDATES_NAME);
         createBallotLayoutPage.setCandidateFemale(0, 1, false);
         return createBallotLayoutPage;
+    }
+
+    private CastVotePage castAPreferenceVote(CastVotePage castVotePage) {
+        return castVotePage.setBallotId(1).setPreferences(ORIGINAL_OFFICE_NAME, FEMALE_CANDIDATES_NAME, NON_FEMALE_CANDIDATES_NAME).clickCastVote();
     }
 }

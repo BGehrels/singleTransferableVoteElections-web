@@ -28,6 +28,12 @@ public class IndexPage {
     @FindBy(linkText = "Ergebnisberechnung")
     private WebElement electionCalculationLink;
 
+    @FindBy(xpath = "//dt[text()='Ersteingabe']/following-sibling::dd")
+    private WebElement numberOfCastVotesFirstTry;
+
+    @FindBy(xpath = "//dt[text()='Kontrolleingabe']/following-sibling::dd")
+    private WebElement numberOfCastVotesSecondTry;
+
     public IndexPage(WebDriver webDriver) {
         this.webDriver = webDriver;
         new WebDriverWait(webDriver, 60).until((Predicate<WebDriver>) input -> input.findElement(By.linkText(CREATE_BALLOT_LAYOUT_LINK)).isDisplayed());
@@ -51,6 +57,14 @@ public class IndexPage {
     public CastVotePage clickCastVotesSecondTryLink() {
         castVotesSecondTryLink.click();
         return PageFactory.initElements(webDriver, CastVotePage.class);
+    }
+
+    public String getNumberOfCastVotesFirstTry() {
+        return numberOfCastVotesFirstTry.getText();
+    }
+
+    public String getNumberOfCastVotesSecondTry() {
+        return numberOfCastVotesSecondTry.getText();
     }
 
 

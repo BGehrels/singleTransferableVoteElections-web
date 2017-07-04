@@ -16,7 +16,6 @@
  */
 package info.gehrels.voting.web.resultCalculation;
 
-import com.google.common.base.Optional;
 import info.gehrels.voting.AmbiguityResolver.AmbiguityResolverResult;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
@@ -33,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;

@@ -16,7 +16,6 @@
  */
 package info.gehrels.voting.web.resultCalculation;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -35,6 +34,7 @@ import info.gehrels.voting.web.auditLogging.StringAuditLog;
 import org.joda.time.DateTime;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.apache.commons.math3.fraction.BigFraction.ONE;
 
@@ -92,7 +92,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	public synchronized void setAmbiguityResolutionResult(AmbiguityResolverResult<GenderedCandidate> ambiguityResolverResult) {
-		this.ambiguityResolutionResult = Optional.fromNullable(ambiguityResolverResult);
+		this.ambiguityResolutionResult = Optional.ofNullable(ambiguityResolverResult);
 		if (ambiguityResolutionResult.isPresent()) {
 			setState(ElectionCalculationState.AMBIGUITY_RESOLVED);
 		}
@@ -179,7 +179,7 @@ public final class AsyncElectionCalculation implements Runnable {
 
 	private synchronized void setAmbiguityResulutionTask(AmbiguityResolutionTask ambiguityResolutionTask1) {
 		setState(ElectionCalculationState.MANUAL_AMBIGUITY_RESOLUTION_NECESSARY);
-		this.ambiguityResolutionResult = Optional.absent();
+		this.ambiguityResolutionResult = Optional.empty();
 		this.ambiguityResolutionTask = Optional.of(ambiguityResolutionTask1);
 	}
 
@@ -238,7 +238,7 @@ public final class AsyncElectionCalculation implements Runnable {
 					return Optional.of(resultOfFinishedCalculation);
 				}
 			}
-			return Optional.absent();
+			return Optional.empty();
 		}
 
 		public ElectionCalculationState getState() {
@@ -246,7 +246,7 @@ public final class AsyncElectionCalculation implements Runnable {
 		}
 
 		public AmbiguityResolutionTask getAmbiguityResulutionTask() {
-			return ambiguityResulutionTask.orNull();
+			return ambiguityResulutionTask.orElse(null);
 		}
 	}
 

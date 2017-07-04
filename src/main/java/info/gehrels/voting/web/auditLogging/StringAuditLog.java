@@ -26,7 +26,6 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 	STVElectionCalculationListener<GenderedCandidate> {
 	private final StringBuilder builder = new StringBuilder();
 
-	// TODO: Am Anfang einmal Die Anzahl der Abgegebenen, Gültigen, ungültigen, Nein-Stimmen und Präferenz-Stimmen ausgeben
 	@Override
 	public void reducedNonFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats,
 	                                           long numberOfElectedFemaleExclusiveSeats,

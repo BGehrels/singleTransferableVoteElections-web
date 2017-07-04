@@ -16,7 +16,6 @@
  */
 package info.gehrels.voting.web.ballotCasting;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import info.gehrels.voting.Ballot;
@@ -30,6 +29,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 public final class BallotBuilder {
 	@Min(0) @NotNull

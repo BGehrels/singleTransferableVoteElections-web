@@ -16,7 +16,6 @@
  */
 package info.gehrels.voting.web.ballotCasting;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import info.gehrels.voting.Vote;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
@@ -28,6 +27,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -64,7 +64,7 @@ public final class VoteBuilder {
 			case INVALID:
 				return Optional.of(Vote.createInvalidVote(genderedElection));
 			case NOT_VOTED:
-				return Optional.absent();
+				return Optional.empty();
 			default:
 				throw new IllegalStateException("Unknown type " + type);
 		}

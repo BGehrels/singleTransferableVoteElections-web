@@ -52,6 +52,27 @@ public final class ElectionCalculationPage {
     }
 
 
+    public long getNumberOfFemaleExclusivePositions(String officeName) {
+        return extractNumberOfPositions(findNumberOfPositionsHeadline(officeName, "Frauen"));
+    }
+
+
+    public long getNumberOfNonFemaleExclusivePositions(String officeName) {
+        return extractNumberOfPositions(findNumberOfPositionsHeadline(officeName, "offen"));
+    }
+
+    private WebElement findNumberOfPositionsHeadline(String officeName, final String genderDistinguisher) {
+        return webDriver.findElement(By.xpath(
+                    "//h1[contains(text(), '" + officeName + "')]/following-sibling::h2[contains(text(), '" + genderDistinguisher + "')]"));
+    }
+
+    private long extractNumberOfPositions(WebElement h2) {
+        Matcher matcher = NUMBER_OF_POSITIONS_PATTERN.matcher(h2.getText());
+        assertTrue(matcher.find());
+        return Long.valueOf(matcher.group(1));
+    }
+
+
     public List<String> getFemaleExclusiveElectedCandidateNames(String officeName) {
         List<WebElement> li = webDriver.findElements(By.xpath(
                 "//h1[contains(text(), '" + officeName + "')]/parent::section" +
@@ -63,16 +84,6 @@ public final class ElectionCalculationPage {
 
         return builder.build();
     }
-
-
-    public long getNumberOfFemaleExclusivePositions(String officeName) {
-        WebElement h2 = webDriver.findElement(By.xpath(
-                "//h1[contains(text(), '" + officeName + "')]/following-sibling::h2[contains(text(), 'Frauen')]"));
-        Matcher matcher = NUMBER_OF_POSITIONS_PATTERN.matcher(h2.getText());
-        assertTrue(matcher.find());
-        return Long.valueOf(matcher.group(1));
-    }
-
 
     public List<String> getNonFemaleExclusiveElectedCandidateNames(String officeName) {
         List<WebElement> li = webDriver.findElements(By.xpath(

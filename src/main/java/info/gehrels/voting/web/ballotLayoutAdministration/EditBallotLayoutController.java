@@ -58,17 +58,32 @@ public final class EditBallotLayoutController {
 		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
 	}
 
-	@RequestMapping(value = "/editBallotLayout", method = POST, params = "changeNumberOfFemaleOnlyPositions")
-	public ModelAndView renameOffice(String officeName, long newNumberOfFemaleOnlyPositions) {
+	@RequestMapping(value = "/editBallotLayout", method = POST, params = "changeNumberOfFemaleExclusivePositions")
+	public ModelAndView changeNumberOfFemaleExclusivePositions(String officeName, long newNumberOfFemaleExclusivePositions) {
 		if (!ballotLayoutState.isBallotLayoutPresent()) {
 			return new ModelAndView("redirect:/");
 		}
 
-		if (newNumberOfFemaleOnlyPositions < 0) {
+		if (newNumberOfFemaleExclusivePositions < 0) {
 			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an Frauenplätzen darf nicht negativ sein."));
 		}
 
-		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfFemaleExclusivePositions(newNumberOfFemaleOnlyPositions));
+		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfFemaleExclusivePositions(newNumberOfFemaleExclusivePositions));
+
+		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
+	}
+
+	@RequestMapping(value = "/editBallotLayout", method = POST, params = "changeNumberOfNonFemaleExclusivePositions")
+	public ModelAndView changeNumberOfNonFemaleExclusivePositions(String officeName, long newNumberOfNonFemaleExclusivePositions) {
+		if (!ballotLayoutState.isBallotLayoutPresent()) {
+			return new ModelAndView("redirect:/");
+		}
+
+		if (newNumberOfNonFemaleExclusivePositions < 0) {
+			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an Frauenplätzen darf nicht negativ sein."));
+		}
+
+		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfNotFemaleExclusivePositions(newNumberOfNonFemaleExclusivePositions));
 
 		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
 	}

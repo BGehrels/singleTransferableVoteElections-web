@@ -1,6 +1,5 @@
 package info.gehrels.voting.web.auditLogging;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableSet;
 import info.gehrels.voting.AmbiguityResolver.AmbiguityResolverResult;
@@ -19,6 +18,7 @@ import org.apache.commons.math3.fraction.BigFraction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -52,7 +52,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 		List<Long> ballotIdsWithoutAVote = new ArrayList<>();
 		long numberOfCastVotes = 0;
 		for (Ballot<GenderedCandidate> ballot : ballots) {
-			Optional<Vote<GenderedCandidate>> vote = ballot.getVote(election);
+			java.util.Optional<Vote<GenderedCandidate>> vote = ballot.getVote(election);
 			if (vote.isPresent()) {
 				formatLine("Stimmzettel %d: %s", ballot.id, vote.get());
 				numberOfCastVotes++;

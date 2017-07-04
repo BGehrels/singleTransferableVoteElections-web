@@ -1,10 +1,11 @@
 package info.gehrels.voting.web.svg;
 
-import com.google.common.base.Optional;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import java.util.Optional;
 
 public final class VoteFlow {
     private final GenderedCandidate oldPreferredCandidate;
@@ -30,8 +31,8 @@ public final class VoteFlow {
         return oldPreferredCandidate;
     }
 
-    public java.util.Optional<GenderedCandidate> getNewPreferredCandidate() {
-        return java.util.Optional.ofNullable(newPreferredCandidate.orNull());
+    public Optional<GenderedCandidate> getNewPreferredCandidate() {
+        return newPreferredCandidate;
     }
 
     public BigFraction getVoteWeight() {

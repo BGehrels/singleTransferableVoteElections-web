@@ -1,6 +1,5 @@
 package info.gehrels.voting.web.svg;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableCollection;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
@@ -22,6 +21,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.apache.batik.util.SVGConstants.SVG_NAMESPACE_URI;
 

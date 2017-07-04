@@ -1,6 +1,5 @@
 package info.gehrels.voting.web.auditLogging;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -287,12 +286,7 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	private JSONObject asJSON(VoteState<GenderedCandidate> voteState) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("ballotId", voteState.getBallotId());
-		jsonObject.put("preferredCandidate", voteState.getPreferredCandidate().transform(new Function<GenderedCandidate, JSONObject>() {
-			@Override
-			public JSONObject apply(GenderedCandidate input) {
-				return asJSON(input);
-			}
-		}).orNull());
+		jsonObject.put("preferredCandidate", voteState.getPreferredCandidate().map(this::asJSON).orElse(null));
 		jsonObject.put("voteWeight", asJSON(voteState.getVoteWeight()));
 		jsonObject.put("invalid", voteState.isInvalid());
 		jsonObject.put("noVote", voteState.isNoVote());

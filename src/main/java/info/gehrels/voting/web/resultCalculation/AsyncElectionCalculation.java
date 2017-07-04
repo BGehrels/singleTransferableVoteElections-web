@@ -112,12 +112,6 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	private NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum createQuorumCalculation() {
-		// § 18 Satz 2 Nr. 2 WahlO-GJ:
-		// Berechne das Quorum: q = [(gültige Stimmen) / (zu vergebende Sitze + 1)] +1. Hat der so berechnete Wert des
-		// Quorums mehr als sieben Nachkommastellen, so wird das Quorum auf sieben Nachkommastellen aufgerundet, d.h.
-		// die überzähligen	Nachkommastellen werden abgeschnitten und der Wert des Quorums wird	um die	kleinste
-		// positive Zahl, die mit sieben Nachkommastellen darstellbar ist, erhöht.
-		// TODO: SÄ zur Streichung der Rundung bei der Quorenberechnung
 		return new NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum(ONE);
 	}
 

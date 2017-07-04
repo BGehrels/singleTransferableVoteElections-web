@@ -43,4 +43,16 @@ public final class EditBallotLayoutPage {
         backToIndexPageLink.click();
         return PageFactory.initElements(webDriver, IndexPage.class);
     }
+
+    public void setNewNumberOfFemaleExclusivePositions(String officeName, int numberOfPositions) {
+        By xpath = By.xpath("//section/h2[text()='" + officeName + "']/following-sibling::form/input[@name='newNumberOfFemaleOnlyPositions']");
+        webDriver.findElement(xpath).clear();
+        webDriver.findElement(xpath).sendKeys(Integer.toString(numberOfPositions));
+    }
+
+    public EditBallotLayoutPage clickChangeNumberOfFemaleExclusivePositions(String officeName) {
+        By xpath = By.xpath("//section/h2[text()='" + officeName + "']/following-sibling::form/input[@name='changeNumberOfFemaleOnlyPositions']");
+        webDriver.findElement(xpath).click();
+        return PageFactory.initElements(webDriver, EditBallotLayoutPage.class);
+    }
 }

@@ -13,10 +13,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static info.gehrels.voting.web.integrationTests.pages.WebElementUtils.setInputText;
+import static org.junit.Assert.assertTrue;
 
 public final class ElectionCalculationPage {
+    private static final Pattern NUMBER_OF_POSITIONS_PATTERN = Pattern.compile(".* ([0-9]+) .*");
     private final WebDriver webDriver;
 
     @FindBy(id="elected-female-candidates")
@@ -58,6 +62,15 @@ public final class ElectionCalculationPage {
         }
 
         return builder.build();
+    }
+
+
+    public long getNumberOfFemaleExclusivePositions(String officeName) {
+        WebElement h2 = webDriver.findElement(By.xpath(
+                "//h1[contains(text(), '" + officeName + "')]/following-sibling::h2[contains(text(), 'Frauen')]"));
+        Matcher matcher = NUMBER_OF_POSITIONS_PATTERN.matcher(h2.getText());
+        assertTrue(matcher.find());
+        return Long.valueOf(matcher.group(1));
     }
 
 

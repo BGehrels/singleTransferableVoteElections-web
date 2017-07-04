@@ -45,7 +45,7 @@ public final class EditBallotLayoutController {
 
 	@RequestMapping(value = "/editBallotLayout", method = POST, params = "renameOffice")
 	public ModelAndView renameOffice(String oldOfficeName, String newOfficeName) {
-		if (ballotLayoutState.getBallotLayout() == null) {
+		if (!ballotLayoutState.isBallotLayoutPresent()) {
 			return new ModelAndView("redirect:/");
 		}
 
@@ -53,7 +53,22 @@ public final class EditBallotLayoutController {
 			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Der Name des Amtes darf nicht leer sein"));
 		}
 
-		ballotLayoutState.changeOfficeName(oldOfficeName, newOfficeName);
+		ballotLayoutState.replaceElectionVersion(oldOfficeName, (e) -> e.withOfficeName(newOfficeName));
+
+		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
+	}
+
+	@RequestMapping(value = "/editBallotLayout", method = POST, params = "changeNumberOfFemaleOnlyPositions")
+	public ModelAndView renameOffice(String officeName, long newNumberOfFemaleOnlyPositions) {
+		if (!ballotLayoutState.isBallotLayoutPresent()) {
+			return new ModelAndView("redirect:/");
+		}
+
+		if (newNumberOfFemaleOnlyPositions < 0) {
+			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an Frauenplätzen darf nicht negativ sein."));
+		}
+
+		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfFemaleExclusivePositions(newNumberOfFemaleOnlyPositions));
 
 		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
 	}

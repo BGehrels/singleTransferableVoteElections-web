@@ -42,7 +42,7 @@ public class BallotStateTest {
 
         ballotLayoutState.setBallotLayout(ballotLayout);
 
-        ballotLayoutState.changeOfficeName(OLD_OFFICE_NAME, NEW_OFFICE_NAME);
+        ballotLayoutState.replaceElectionVersion(OLD_OFFICE_NAME, (e) -> e.withOfficeName(NEW_OFFICE_NAME));
 
         assertThat(ballotLayoutState.getBallotLayout().getElections().get(0).getOfficeName(), is(NEW_OFFICE_NAME));
     }
@@ -53,7 +53,7 @@ public class BallotStateTest {
         ballotLayoutState.setBallotLayout(ballotLayout);
         ballotLayoutState.addCastBallot(BallotInputTry.FIRST, new Ballot<>(1L, ImmutableSet.of(Vote.createNoVote(ORIGINAL_ELECTION))));
 
-        GenderedElection newChangedElection = ballotLayoutState.changeOfficeName(OLD_OFFICE_NAME, NEW_OFFICE_NAME);
+        GenderedElection newChangedElection = ballotLayoutState.replaceElectionVersion(OLD_OFFICE_NAME, (e) -> e.withOfficeName(NEW_OFFICE_NAME));
 
         assertThat(ballotLayoutState.getFirstTryCastBallots().iterator().next().getVote(ORIGINAL_ELECTION).isPresent(), is(false));
         assertThat(ballotLayoutState.getFirstTryCastBallots().iterator().next().getVote(newChangedElection).get().getElection().getOfficeName(), is(NEW_OFFICE_NAME));
@@ -65,7 +65,7 @@ public class BallotStateTest {
 
         ballotLayoutState.setBallotLayout(ballotLayout);
 
-        ballotLayoutState.changeOfficeName("non existing Office Name", NEW_OFFICE_NAME);
+        ballotLayoutState.replaceElectionVersion("non existing Office Name", (e) -> e.withOfficeName(NEW_OFFICE_NAME));
 
         assertThat(ballotLayoutState.getBallotLayout().getElections().get(0).getOfficeName(), is(OLD_OFFICE_NAME));
     }

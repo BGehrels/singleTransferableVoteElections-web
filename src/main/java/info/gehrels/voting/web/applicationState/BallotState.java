@@ -26,6 +26,7 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,10 +35,10 @@ public class BallotState {
 	private Collection<Ballot<GenderedCandidate>> firstTryCastBallots = new ArrayList<>();
 	private Collection<Ballot<GenderedCandidate>> secondTryCastBallots = new ArrayList<>();
 
-	public synchronized GenderedElection changeOfficeName(String oldOfficeName, String newOfficeName) {
-		GenderedElection genderedElection = ballotLayout.replaceElection(oldOfficeName, (e) -> e.withOfficeName(newOfficeName));
-		firstTryCastBallots = firstTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, genderedElection, b)).collect(toList());
-		secondTryCastBallots = secondTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(oldOfficeName, genderedElection, b)).collect(toList());
+	public synchronized GenderedElection replaceElectionVersion(String officeName, Function<GenderedElection, GenderedElection> replacementFactory) {
+		GenderedElection genderedElection = ballotLayout.replaceElection(officeName, replacementFactory);
+		firstTryCastBallots = firstTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(officeName, genderedElection, b)).collect(toList());
+		secondTryCastBallots = secondTryCastBallots.stream().map((Ballot<GenderedCandidate> b) -> withReplacedElection(officeName, genderedElection, b)).collect(toList());
 		return genderedElection;
 	}
 

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,7 +39,7 @@ public class EditBallotLayoutIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new HtmlUnitDriver();
+        driver = new ChromeDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
@@ -63,7 +63,7 @@ public class EditBallotLayoutIT {
         assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
         assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("1"));
 
-        // When we edit an office name on the ballot
+        // When we edit an office name
         EditBallotLayoutPage editBallotLayoutPage = indexPage.clickEditBallotLayoutLink();
         editBallotLayoutPage.setNewOfficeName(ORIGINAL_OFFICE_NAME, NEW_OFFICE_NAME);
         editBallotLayoutPage.clickRenameOffice(ORIGINAL_OFFICE_NAME);
@@ -87,10 +87,43 @@ public class EditBallotLayoutIT {
         assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
     }
 
+    @Test
+    public void changeOfFemaleExclusivePositions() {
+        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+
+        // Given we created a ballot
+        CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
+        createBallotLayoutPage = createFirstElection(createBallotLayoutPage);
+        indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
+
+        // And Given there have already been votes cast
+        indexPage = castAPreferenceVote(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
+        indexPage = castAPreferenceVote(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
+        assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
+        assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("1"));
+
+        // When we edit the number of female exclusive positions of the office
+        EditBallotLayoutPage editBallotLayoutPage = indexPage.clickEditBallotLayoutLink();
+        editBallotLayoutPage.setNewNumberOfFemaleExclusivePositions(ORIGINAL_OFFICE_NAME, 1);
+        indexPage = editBallotLayoutPage.clickChangeNumberOfFemaleExclusivePositions(ORIGINAL_OFFICE_NAME).clickBackToIndexPage();
+
+        // then the cast votes still exist
+        assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
+        assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("1"));
+
+        // And they are correctly included in the election calculation under the new office name
+        ElectionCalculationPage electionCalculationPage = indexPage.clickElectionCalculationLink()
+                .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
+                .clickElectionCalculation();
+        assertThat(electionCalculationPage.getNumberOfFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(1L));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
+    }
+
     private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage) {
         createBallotLayoutPage.setOfficeName(0, ORIGINAL_OFFICE_NAME);
-        createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
-        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 4);
+        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 4);
         createBallotLayoutPage.setCandidateName(0, 0, FEMALE_CANDIDATES_NAME);
         createBallotLayoutPage.setCandidateFemale(0, 0, true);
         createBallotLayoutPage = createBallotLayoutPage.clickAddCandidate(0);

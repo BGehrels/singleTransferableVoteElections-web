@@ -40,6 +40,12 @@
             <input type="text" name="newOfficeName" data-th-value="${election.officeName}" />
             <input type="submit" name="renameOffice" value="Umbenennen" />
         </form>
+        <form method="post">
+            Anzahl der Frauenplätze andern zu:
+            <input type="hidden" name="officeName" data-th-value="${election.officeName}" />
+            <input type="number" name="newNumberOfFemaleOnlyPositions" data-th-value="${election.numberOfFemaleExclusivePositions}" />
+            <input type="submit" name="changeNumberOfFemaleOnlyPositions" value="speichern" />
+        </form>
     </section>
 </main>
 <footer><a href="/">Zurück zur Startseite</a></footer>

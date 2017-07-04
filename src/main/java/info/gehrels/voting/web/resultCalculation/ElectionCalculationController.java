@@ -86,7 +86,7 @@ public final class ElectionCalculationController {
         if (femaleExclusiveRun) {
             result = svgCreatingAuditLogListener.getFemaleExclusiveRunSvg();
         } else {
-            result = svgCreatingAuditLogListener.getNonFemaleExclusiveRunSvg();
+            result = svgCreatingAuditLogListener.getNotFemaleExclusiveRunSvg();
         }
         return result;
     }

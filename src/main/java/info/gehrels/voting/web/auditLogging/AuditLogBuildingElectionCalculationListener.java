@@ -163,17 +163,17 @@ public final class AuditLogBuildingElectionCalculationListener
 	}
 
 	@Override
-	public void reducedNonFemaleExclusiveSeats(final long numberOfOpenFemaleExclusiveSeats,
-	                                           final long numberOfElectedFemaleExclusiveSeats,
-	                                           final long numberOfOpenNonFemaleExclusiveSeats,
-	                                           final long numberOfElectableNonFemaleExclusiveSeats) {
+	public void reducedNotFemaleExclusiveSeats(final long numberOfOpenFemaleExclusiveSeats,
+											   final long numberOfElectedFemaleExclusiveSeats,
+											   final long numberOfOpenNotFemaleExclusiveSeats,
+											   final long numberOfElectableNotFemaleExclusiveSeats) {
 		entries.add(new Entry() {
 			@Override
 			public <T extends STVElectionCalculationListener<GenderedCandidate> & ElectionCalculationWithFemaleExclusivePositionsListener> void replay(T stvElectionCalculationListener) {
-				stvElectionCalculationListener.reducedNonFemaleExclusiveSeats(numberOfOpenFemaleExclusiveSeats,
+				stvElectionCalculationListener.reducedNotFemaleExclusiveSeats(numberOfOpenFemaleExclusiveSeats,
 				                                                              numberOfElectedFemaleExclusiveSeats,
-				                                                              numberOfOpenNonFemaleExclusiveSeats,
-				                                                              numberOfElectableNonFemaleExclusiveSeats);
+						numberOfOpenNotFemaleExclusiveSeats,
+						numberOfElectableNotFemaleExclusiveSeats);
 			}
 		});
 	}
@@ -213,12 +213,12 @@ public final class AuditLogBuildingElectionCalculationListener
 	}
 
 	@Override
-	public void startNonFemaleExclusiveElectionRun() {
+	public void startNotFemaleExclusiveElectionRun() {
 		entries.add(new Entry() {
 			@Override
 			public <T extends STVElectionCalculationListener<GenderedCandidate> & ElectionCalculationWithFemaleExclusivePositionsListener> void replay(
 				T listener) {
-				listener.startNonFemaleExclusiveElectionRun();
+				listener.startNotFemaleExclusiveElectionRun();
 			}
 		});
 	}

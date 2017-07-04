@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,7 +39,7 @@ public class EditBallotLayoutIT {
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new ChromeDriver();
+        driver = new HtmlUnitDriver();
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
@@ -84,7 +84,7 @@ public class EditBallotLayoutIT {
                 .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
                 .clickElectionCalculation();
         assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), contains(FEMALE_CANDIDATES_NAME));
-        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(NEW_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
     }
 
     @Test
@@ -117,11 +117,11 @@ public class EditBallotLayoutIT {
                 .clickElectionCalculation();
         assertThat(electionCalculationPage.getNumberOfFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(1L));
         assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(FEMALE_CANDIDATES_NAME));
-        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
     }
 
     @Test
-    public void changeNumberOfNonFemaleExclusivePositions() {
+    public void changeNumberOfNotFemaleExclusivePositions() {
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
@@ -137,8 +137,8 @@ public class EditBallotLayoutIT {
 
         // When we edit the number of female exclusive positions of the office
         EditBallotLayoutPage editBallotLayoutPage = indexPage.clickEditBallotLayoutLink();
-        editBallotLayoutPage.setNewNumberOfNonFemaleExclusivePositions(ORIGINAL_OFFICE_NAME, 1);
-        indexPage = editBallotLayoutPage.clickChangeNumberOfNonFemaleExclusivePositions(ORIGINAL_OFFICE_NAME).clickBackToIndexPage();
+        editBallotLayoutPage.setNewNumberOfNotFemaleExclusivePositions(ORIGINAL_OFFICE_NAME, 1);
+        indexPage = editBallotLayoutPage.clickChangeNumberOfNotFemaleExclusivePositions(ORIGINAL_OFFICE_NAME).clickBackToIndexPage();
 
         // then the cast votes still exist
         assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
@@ -149,15 +149,15 @@ public class EditBallotLayoutIT {
                 .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
                 .clickElectionCalculation();
         assertThat(electionCalculationPage.getNumberOfFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(1L));
-        assertThat(electionCalculationPage.getNumberOfNonFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(1L));
+        assertThat(electionCalculationPage.getNumberOfNotFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(1L));
         assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(FEMALE_CANDIDATES_NAME));
-        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
     }
 
-    private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage, int numberOfFemaleExclusivePositions, int numberOfNonFemaleExclusivePositions) {
+    private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage, int numberOfFemaleExclusivePositions, int numberOfNotFemaleExclusivePositions) {
         createBallotLayoutPage.setOfficeName(0, ORIGINAL_OFFICE_NAME);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, numberOfFemaleExclusivePositions);
-        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, numberOfNonFemaleExclusivePositions);
+        createBallotLayoutPage.setNumberOfNotFemaleExclusivePositions(0, numberOfNotFemaleExclusivePositions);
         createBallotLayoutPage.setCandidateName(0, 0, FEMALE_CANDIDATES_NAME);
         createBallotLayoutPage.setCandidateFemale(0, 0, true);
         createBallotLayoutPage = createBallotLayoutPage.clickAddCandidate(0);

@@ -56,14 +56,14 @@ public final class EditBallotLayoutPage {
         return PageFactory.initElements(webDriver, EditBallotLayoutPage.class);
     }
 
-    public void setNewNumberOfNonFemaleExclusivePositions(String officeName, int numberOfPositions) {
-        By xpath = By.xpath("//section/h2[text()='" + officeName + "']/following-sibling::form/input[@name='newNumberOfNonFemaleExclusivePositions']");
+    public void setNewNumberOfNotFemaleExclusivePositions(String officeName, int numberOfPositions) {
+        By xpath = By.xpath("//section/h2[text()='" + officeName + "']/following-sibling::form/input[@name='newNumberOfNotFemaleExclusivePositions']");
         webDriver.findElement(xpath).clear();
         webDriver.findElement(xpath).sendKeys(Integer.toString(numberOfPositions));
     }
 
-    public EditBallotLayoutPage clickChangeNumberOfNonFemaleExclusivePositions(String officeName) {
-        By xpath = By.xpath("//section/h2[text()='" + officeName + "']/following-sibling::form/input[@name='changeNumberOfNonFemaleExclusivePositions']");
+    public EditBallotLayoutPage clickChangeNumberOfNotFemaleExclusivePositions(String officeName) {
+        By xpath = By.xpath("//section/h2[text()='" + officeName + "']/following-sibling::form/input[@name='changeNumberOfNotFemaleExclusivePositions']");
         webDriver.findElement(xpath).click();
         return PageFactory.initElements(webDriver, EditBallotLayoutPage.class);
     }

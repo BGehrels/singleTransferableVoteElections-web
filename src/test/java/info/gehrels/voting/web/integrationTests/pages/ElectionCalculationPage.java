@@ -57,7 +57,7 @@ public final class ElectionCalculationPage {
     }
 
 
-    public long getNumberOfNonFemaleExclusivePositions(String officeName) {
+    public long getNumberOfNotFemaleExclusivePositions(String officeName) {
         return extractNumberOfPositions(findNumberOfPositionsHeadline(officeName, "offen"));
     }
 
@@ -85,7 +85,7 @@ public final class ElectionCalculationPage {
         return builder.build();
     }
 
-    public List<String> getNonFemaleExclusiveElectedCandidateNames(String officeName) {
+    public List<String> getNotFemaleExclusiveElectedCandidateNames(String officeName) {
         List<WebElement> li = webDriver.findElements(By.xpath(
                 "//h1[contains(text(), '" + officeName + "')]/parent::section" +
                         "/h2[contains(text(), 'offen')]/following-sibling::ul[1]/li"));
@@ -135,7 +135,7 @@ public final class ElectionCalculationPage {
         setInputText(ambiguityResolutionForm.findElement(By.id("comment")), ambiguityResolutionDescription);
     }
 
-    public Set<String> getWinningNonFemaleExclusiveCandidate(String officeName) {
+    public Set<String> getWinningNotFemaleExclusiveCandidate(String officeName) {
         List<WebElement> li = getSectionOfElection(officeName)
                 .findElement(By.xpath(".//h2[contains(text(), 'offen')]/following::ul[1]"))
                 .findElements(By.tagName("li"));

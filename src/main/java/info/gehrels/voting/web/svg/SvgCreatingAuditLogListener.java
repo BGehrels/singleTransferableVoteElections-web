@@ -40,11 +40,11 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
     }
 
     @Override
-    public void reducedNonFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats, long numberOfElectedFemaleExclusiveSeats, long numberOfOpenNonFemaleExclusiveSeats, long numberOfElectableNonFemaleExclusiveSeats) {
+    public void reducedNotFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats, long numberOfElectedFemaleExclusiveSeats, long numberOfOpenNotFemaleExclusiveSeats, long numberOfElectableNotFemaleExclusiveSeats) {
     }
 
     @Override
-    public void startNonFemaleExclusiveElectionRun() {
+    public void startNotFemaleExclusiveElectionRun() {
         weAreStillInFemaleExclusiveRun = false;
         nonFemaleExclusiveRun.started();
     }
@@ -107,7 +107,7 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
         return femaleExclusiveRun.build();
     }
 
-    public String getNonFemaleExclusiveRunSvg() {
+    public String getNotFemaleExclusiveRunSvg() {
         return nonFemaleExclusiveRun.build();
     }
 

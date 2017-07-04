@@ -33,7 +33,7 @@ public final class GenderedElectionBuilderBean {
 	@Min(0)
 	private int numberOfFemaleExclusivePositions;
 	@Min(0)
-	private int numberOfNonFemaleExclusivePositions;
+	private int numberOfNotFemaleExclusivePositions;
 	@NotEmpty @Valid
 	private List<GenderedCandidateBuilderBean> candidates = new ArrayList<>();
 
@@ -57,12 +57,12 @@ public final class GenderedElectionBuilderBean {
 		this.numberOfFemaleExclusivePositions = numberOfFemaleExclusivePositions;
 	}
 
-	public int getNumberOfNonFemaleExclusivePositions() {
-		return numberOfNonFemaleExclusivePositions;
+	public int getNumberOfNotFemaleExclusivePositions() {
+		return numberOfNotFemaleExclusivePositions;
 	}
 
-	public void setNumberOfNonFemaleExclusivePositions(int numberOfNonFemaleExclusivePositions) {
-		this.numberOfNonFemaleExclusivePositions = numberOfNonFemaleExclusivePositions;
+	public void setNumberOfNotFemaleExclusivePositions(int numberOfNotFemaleExclusivePositions) {
+		this.numberOfNotFemaleExclusivePositions = numberOfNotFemaleExclusivePositions;
 	}
 
 	public List<GenderedCandidateBuilderBean> getCandidates() {
@@ -78,7 +78,7 @@ public final class GenderedElectionBuilderBean {
 		for (GenderedCandidateBuilderBean candidate : candidates) {
 			builder.add(candidate.build());
 		}
-		return new GenderedElection(officeName, numberOfFemaleExclusivePositions, numberOfNonFemaleExclusivePositions,
+		return new GenderedElection(officeName, numberOfFemaleExclusivePositions, numberOfNotFemaleExclusivePositions,
 		                            builder.build());
 	}
 

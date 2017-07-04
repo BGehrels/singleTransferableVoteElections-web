@@ -41,8 +41,8 @@ public final class CreateBallotLayoutPage {
         setInputText(webDriver.findElement(By.name("elections[" + officeIndex + "].numberOfFemaleExclusivePositions")), Integer.toString(value));
     }
 
-    public void setNumberOfNonFemaleExclusivePositions(int officeIndex, int value) {
-        setInputText(webDriver.findElement(By.name("elections[" + officeIndex + "].numberOfNonFemaleExclusivePositions")), Integer.toString(value));
+    public void setNumberOfNotFemaleExclusivePositions(int officeIndex, int value) {
+        setInputText(webDriver.findElement(By.name("elections[" + officeIndex + "].numberOfNotFemaleExclusivePositions")), Integer.toString(value));
     }
 
     public void setCandidateName(int officeIndex, int candidateIdx, String candidateName) {

@@ -2,7 +2,12 @@ package info.gehrels.voting.web.integrationTests;
 
 import info.gehrels.voting.web.SpringConfig;
 import info.gehrels.voting.web.ballotCasting.VoteType;
-import info.gehrels.voting.web.integrationTests.pages.*;
+import info.gehrels.voting.web.integrationTests.pages.CastVotePage;
+import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
+import info.gehrels.voting.web.integrationTests.pages.DifferingBallotsPage;
+import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
+import info.gehrels.voting.web.integrationTests.pages.IndexPage;
+import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +57,7 @@ public final class HandleDifferingBallotsIT {
 
         createBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
-        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setNumberOfNotFemaleExclusivePositions(0, 1);
 
         createBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
         createBallotLayoutPage.setCandidateFemale(0, 0, true);
@@ -85,7 +90,7 @@ public final class HandleDifferingBallotsIT {
                 .clickElectionCalculation();
 
         assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME), is(empty()));
-        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME_1));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(OFFICE_NAME), contains(CANDIDATE_NAME_1));
     }
 
     private IndexPage enterVoteThatIsWithoutAnyProblemsAndVotesFor(IndexPage indexPage, int ballotId, String candidateName) {

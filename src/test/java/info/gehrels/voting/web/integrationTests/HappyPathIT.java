@@ -2,8 +2,8 @@ package info.gehrels.voting.web.integrationTests;
 
 import info.gehrels.voting.web.SpringConfig;
 import info.gehrels.voting.web.ballotCasting.VoteType;
-import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.CastVotePage;
+import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
 import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
@@ -70,15 +70,15 @@ public final class HappyPathIT {
         electionCalculationPage = electionCalculationPage.waitForElectionCalculationToBeFinished();
 
         assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME_1), contains(CANDIDATE_NAME_1));
-        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME_1), contains(CANDIDATE_NAME_2));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(OFFICE_NAME_1), contains(CANDIDATE_NAME_2));
         assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME_2), is(empty()));
-        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME_2), contains(CANDIDATE_NAME_3));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(OFFICE_NAME_2), contains(CANDIDATE_NAME_3));
     }
 
     private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage) {
         createBallotLayoutPage.setOfficeName(0, OFFICE_NAME_1);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 1);
-        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setNumberOfNotFemaleExclusivePositions(0, 1);
         createBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
         createBallotLayoutPage.setCandidateFemale(0, 0, true);
         createBallotLayoutPage = createBallotLayoutPage.clickAddCandidate(0);
@@ -90,7 +90,7 @@ public final class HappyPathIT {
     private void createSecondElection(CreateBallotLayoutPage createBallotLayoutPage) {
         createBallotLayoutPage.setOfficeName(1, OFFICE_NAME_2);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(1, 0);
-        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(1, 1);
+        createBallotLayoutPage.setNumberOfNotFemaleExclusivePositions(1, 1);
         createBallotLayoutPage.setCandidateName(1, 0, CANDIDATE_NAME_3);
         createBallotLayoutPage.setCandidateFemale(1, 0, true);
     }

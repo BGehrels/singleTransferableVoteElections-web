@@ -18,8 +18,8 @@ package info.gehrels.voting.web.integrationTests;
 
 import info.gehrels.voting.web.SpringConfig;
 import info.gehrels.voting.web.ballotCasting.VoteType;
-import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.CastVotePage;
+import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
 import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
@@ -38,7 +38,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -82,13 +84,13 @@ public final class MartinWilkesExampleIT {
         electionCalculationPage.submitAmbiguityResolution().waitForElectionCalculationToBeFinished();
 
         assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(OFFICE_NAME), is(empty()));
-        assertThat(electionCalculationPage.getNonFemaleExclusiveElectedCandidateNames(OFFICE_NAME), containsInAnyOrder("C", "E", "F"));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(OFFICE_NAME), containsInAnyOrder("C", "E", "F"));
 	}
 
     private CreateBallotLayoutPage createElection(CreateBallotLayoutPage createBallotLayoutPage) {
         createBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
-        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 4);
+        createBallotLayoutPage.setNumberOfNotFemaleExclusivePositions(0, 4);
         createBallotLayoutPage = createCandidate(createBallotLayoutPage, "A", 0, true);
         createBallotLayoutPage = createBallotLayoutPage.clickAddCandidate(0);
         createBallotLayoutPage = createCandidate(createBallotLayoutPage, "B", 1, false);

@@ -23,16 +23,16 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	STVElectionCalculationListener<GenderedCandidate> {
 	private final JSONArray result  = new JSONArray();
 	@Override
-	public void reducedNonFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats,
-	                                           long numberOfElectedFemaleExclusiveSeats,
-	                                           long numberOfOpenNonFemaleExclusiveSeats,
-	                                           long numberOfElectableNonFemaleExclusiveSeats) {
+	public void reducedNotFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats,
+											   long numberOfElectedFemaleExclusiveSeats,
+											   long numberOfOpenNotFemaleExclusiveSeats,
+											   long numberOfElectableNotFemaleExclusiveSeats) {
 		JSONObject value = new JSONObject();
-		value.put("type", "reducedNonFemaleExclusiveSeats")
+		value.put("type", "reducedNotFemaleExclusiveSeats")
 			.put("numberOfOpenFemaleExclusiveSeats", numberOfOpenFemaleExclusiveSeats)
 			.put("numberOfElectedFemaleExclusiveSeats", numberOfElectedFemaleExclusiveSeats)
-			.put("numberOfOpenNonFemaleExclusiveSeats", numberOfOpenNonFemaleExclusiveSeats)
-			.put("numberOfElectableNonFemaleExclusiveSeats", numberOfElectableNonFemaleExclusiveSeats);
+			.put("numberOfOpenNotFemaleExclusiveSeats", numberOfOpenNotFemaleExclusiveSeats)
+			.put("numberOfElectableNotFemaleExclusiveSeats", numberOfElectableNotFemaleExclusiveSeats);
 		result.put(value);
 	}
 
@@ -63,9 +63,9 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	}
 
 	@Override
-	public void startNonFemaleExclusiveElectionRun() {
+	public void startNotFemaleExclusiveElectionRun() {
 		JSONObject value = new JSONObject();
-		value.put("type", "startNonFemaleExclusiveElectionRun");
+		value.put("type", "startNotFemaleExclusiveElectionRun");
 		result.put(value);
 	}
 

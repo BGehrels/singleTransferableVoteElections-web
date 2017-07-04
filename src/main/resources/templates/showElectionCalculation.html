@@ -65,7 +65,7 @@
                 wurden gewählt:
             </h2>
             <ul>
-                <li data-th-each="electedCandidate : ${calculationResult.electionResult.candidatesElectedInFemaleOnlyRun}" data-th-text="${electedCandidate.name}">
+                <li data-th-each="electedCandidate : ${calculationResult.electionResult.candidatesElectedInFemaleExclusiveRun}" data-th-text="${electedCandidate.name}">
                     Petra Musterfrau
                 </li>
             </ul>
@@ -75,7 +75,7 @@
                 Plätze wurden gewählt:
             </h2>
             <ul>
-                    <li data-th-each="electedCandidate : ${calculationResult.electionResult.candidatesElectedInNonFemaleOnlyRun}" data-th-text="${electedCandidate.name}">
+                    <li data-th-each="electedCandidate : ${calculationResult.electionResult.candidatesElectedInNotFemaleExclusiveRun}" data-th-text="${electedCandidate.name}">
                         Peter Musterkind
                     </li>
             </ul>

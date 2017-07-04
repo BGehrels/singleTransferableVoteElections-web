@@ -2,8 +2,8 @@ package info.gehrels.voting.web.integrationTests;
 
 import info.gehrels.voting.web.SpringConfig;
 import info.gehrels.voting.web.ballotCasting.VoteType;
-import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.CastVotePage;
+import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
 import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
@@ -57,7 +57,7 @@ public final class AmbiguityResolutionIT {
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
         createBallotLayoutPage.setOfficeName(0, OFFICE_NAME);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, 0);
-        createBallotLayoutPage.setNumberOfNonFemaleExclusivePositions(0, 1);
+        createBallotLayoutPage.setNumberOfNotFemaleExclusivePositions(0, 1);
         createBallotLayoutPage.setCandidateName(0, 0, CANDIDATE_NAME_1);
         createBallotLayoutPage.setCandidateFemale(0, 0, false);
         createBallotLayoutPage.clickAddCandidate(0);
@@ -87,7 +87,7 @@ public final class AmbiguityResolutionIT {
         electionCalculationPage = electionCalculationPage.submitAmbiguityResolution();
 
         electionCalculationPage.waitForElectionCalculationToBeFinished();
-        assertThat(electionCalculationPage.getWinningNonFemaleExclusiveCandidate(OFFICE_NAME), contains(CANDIDATE_NAME_1));
+        assertThat(electionCalculationPage.getWinningNotFemaleExclusiveCandidate(OFFICE_NAME), contains(CANDIDATE_NAME_1));
         assertThat(electionCalculationPage.getProtocol(OFFICE_NAME), containsString(AMBIGUITY_RESOLUTION_DESCRIPTION));
     }
 

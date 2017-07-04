@@ -73,17 +73,17 @@ public final class EditBallotLayoutController {
 		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
 	}
 
-	@RequestMapping(value = "/editBallotLayout", method = POST, params = "changeNumberOfNonFemaleExclusivePositions")
-	public ModelAndView changeNumberOfNonFemaleExclusivePositions(String officeName, long newNumberOfNonFemaleExclusivePositions) {
+	@RequestMapping(value = "/editBallotLayout", method = POST, params = "changeNumberOfNotFemaleExclusivePositions")
+	public ModelAndView changeNumberOfNotFemaleExclusivePositions(String officeName, long newNumberOfNotFemaleExclusivePositions) {
 		if (!ballotLayoutState.isBallotLayoutPresent()) {
 			return new ModelAndView("redirect:/");
 		}
 
-		if (newNumberOfNonFemaleExclusivePositions < 0) {
+		if (newNumberOfNotFemaleExclusivePositions < 0) {
 			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an Frauenplätzen darf nicht negativ sein."));
 		}
 
-		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfNotFemaleExclusivePositions(newNumberOfNonFemaleExclusivePositions));
+		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfNotFemaleExclusivePositions(newNumberOfNotFemaleExclusivePositions));
 
 		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
 	}

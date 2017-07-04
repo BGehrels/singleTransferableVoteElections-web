@@ -27,14 +27,14 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 	private final StringBuilder builder = new StringBuilder();
 
 	@Override
-	public void reducedNonFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats,
-	                                           long numberOfElectedFemaleExclusiveSeats,
-	                                           long numberOfOpenNonFemaleExclusiveSeats,
-	                                           long numberOfElectableNonFemaleExclusiveSeats) {
+	public void reducedNotFemaleExclusiveSeats(long numberOfOpenFemaleExclusiveSeats,
+											   long numberOfElectedFemaleExclusiveSeats,
+											   long numberOfOpenNotFemaleExclusiveSeats,
+											   long numberOfElectableNotFemaleExclusiveSeats) {
 		formatLine(
 			"Es wurden nur %d von %d Frauenplätzen besetzt. Daher können auch nur %d von %d offenen Plätzen gewählt werden.",
 			numberOfElectedFemaleExclusiveSeats, numberOfOpenFemaleExclusiveSeats,
-			numberOfElectableNonFemaleExclusiveSeats, numberOfOpenNonFemaleExclusiveSeats);
+				numberOfElectableNotFemaleExclusiveSeats, numberOfOpenNotFemaleExclusiveSeats);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 	}
 
 	@Override
-	public void startNonFemaleExclusiveElectionRun() {
+	public void startNotFemaleExclusiveElectionRun() {
 		formatLine("Starte die Berechnung der offenen Plätze.");
 	}
 

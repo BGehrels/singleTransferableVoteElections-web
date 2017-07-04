@@ -42,9 +42,9 @@
             <input data-th-field="*{elections[__${electionsStatus.index}__].numberOfFemaleExclusivePositions}" type="number" required="required" min="0" size="3"/>
             <span data-th-errors="*{elections[__${electionsStatus.index}__].numberOfFemaleExclusivePositions}" class="error">Bitte eine Zahl eingeben.</span><br />
 
-            <label data-th-for="'elections' + ${electionsStatus.index} + '.numberOfNonFemaleExclusivePositions'">Anzahl offene Plätze:</label>
-            <input data-th-field="*{elections[__${electionsStatus.index}__].numberOfNonFemaleExclusivePositions}" type="number" required="required" min="0" size="3"/>
-            <span data-th-errors="*{elections[__${electionsStatus.index}__].numberOfNonFemaleExclusivePositions}" class="error">Bitte eine Zahl eingeben.</span><br />
+            <label data-th-for="'elections' + ${electionsStatus.index} + '.numberOfNotFemaleExclusivePositions'">Anzahl offene Plätze:</label>
+            <input data-th-field="*{elections[__${electionsStatus.index}__].numberOfNotFemaleExclusivePositions}" type="number" required="required" min="0" size="3"/>
+            <span data-th-errors="*{elections[__${electionsStatus.index}__].numberOfNotFemaleExclusivePositions}" class="error">Bitte eine Zahl eingeben.</span><br />
 
             <h2>Kandidat*innen</h2>
             <div data-th-each="candidate,candidatesStatus : *{elections[__${electionsStatus.index}__].candidates}">

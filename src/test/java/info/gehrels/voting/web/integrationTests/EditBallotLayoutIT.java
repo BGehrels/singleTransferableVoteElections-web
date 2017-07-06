@@ -23,6 +23,7 @@ import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,12 +55,11 @@ public class EditBallotLayoutIT {
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
-        createBallotLayoutPage = createFirstElection(createBallotLayoutPage, 4, 4);
+        createBallotLayoutPage = createElection(createBallotLayoutPage, 2, 4);
         indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
 
         // And Given there have already been votes cast
-        indexPage = castAPreferenceVote(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
-        indexPage = castAPreferenceVote(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
+        indexPage = castABallot(indexPage, 1);
         assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
         assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("1"));
 
@@ -93,12 +93,11 @@ public class EditBallotLayoutIT {
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
-        createBallotLayoutPage = createFirstElection(createBallotLayoutPage, 4, 4);
+        createBallotLayoutPage = createElection(createBallotLayoutPage, 4, 4);
         indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
 
         // And Given there have already been votes cast
-        indexPage = castAPreferenceVote(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
-        indexPage = castAPreferenceVote(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
+        indexPage = castABallot(indexPage, 1);
         assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
         assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("1"));
 
@@ -126,16 +125,15 @@ public class EditBallotLayoutIT {
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
-        createBallotLayoutPage = createFirstElection(createBallotLayoutPage, 1, 4);
+        createBallotLayoutPage = createElection(createBallotLayoutPage, 1, 4);
         indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
 
         // And Given there have already been votes cast
-        indexPage = castAPreferenceVote(indexPage.clickCastVotesFirstTryLink()).clickBackToIndexPage();
-        indexPage = castAPreferenceVote(indexPage.clickCastVotesSecondTryLink()).clickBackToIndexPage();
+        indexPage = castABallot(indexPage, 1);
         assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("1"));
         assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("1"));
 
-        // When we edit the number of female exclusive positions of the office
+        // When we edit the number of not female exclusive positions of the office
         EditBallotLayoutPage editBallotLayoutPage = indexPage.clickEditBallotLayoutLink();
         editBallotLayoutPage.setNewNumberOfNotFemaleExclusivePositions(ORIGINAL_OFFICE_NAME, 1);
         indexPage = editBallotLayoutPage.clickChangeNumberOfNotFemaleExclusivePositions(ORIGINAL_OFFICE_NAME).clickBackToIndexPage();
@@ -154,7 +152,48 @@ public class EditBallotLayoutIT {
         assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(NON_FEMALE_CANDIDATES_NAME));
     }
 
-    private CreateBallotLayoutPage createFirstElection(CreateBallotLayoutPage createBallotLayoutPage, int numberOfFemaleExclusivePositions, int numberOfNotFemaleExclusivePositions) {
+    @Test
+    public void changeCandidatesGender() {
+        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+
+        // Given we created a ballot
+        CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
+        createBallotLayoutPage = createElection(createBallotLayoutPage, 5, 0);
+        indexPage = createBallotLayoutPage.clickBallotLayoutCompleted();
+
+        // And Given there have already been votes cast
+        indexPage = castABallot(indexPage, 1);
+        indexPage = castABallot(indexPage, 2);
+        indexPage = castABallot(indexPage, 3);
+        indexPage = castABallot(indexPage, 4);
+        assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("4"));
+        assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("4"));
+
+        // When we change the female candidate to candidate on an open position
+        EditBallotLayoutPage editBallotLayoutPage = indexPage.clickEditBallotLayoutLink();
+        indexPage = editBallotLayoutPage.clickSwitchIsFemale(ORIGINAL_OFFICE_NAME, NON_FEMALE_CANDIDATES_NAME).clickBackToIndexPage();
+
+        // then the cast votes still exist
+        assertThat(indexPage.getNumberOfCastVotesFirstTry(), is("4"));
+        assertThat(indexPage.getNumberOfCastVotesSecondTry(), is("4"));
+
+        // And they are correctly included in the election calculation under the new office name
+        ElectionCalculationPage electionCalculationPage = indexPage.clickElectionCalculationLink()
+                .clickStartNewElectionCalculation(ManageElectionCalculationsPage.class)
+                .clickElectionCalculation();
+        assertThat(electionCalculationPage.getNumberOfFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(5L));
+        assertThat(electionCalculationPage.getNumberOfNotFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(0L));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(FEMALE_CANDIDATES_NAME, NON_FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), is(empty()));
+    }
+
+    private IndexPage castABallot(IndexPage indexPage, int id) {
+        indexPage = castAPreferenceVote(indexPage.clickCastVotesFirstTryLink(), id).clickBackToIndexPage();
+        indexPage = castAPreferenceVote(indexPage.clickCastVotesSecondTryLink(), id).clickBackToIndexPage();
+        return indexPage;
+    }
+
+    private CreateBallotLayoutPage createElection(CreateBallotLayoutPage createBallotLayoutPage, int numberOfFemaleExclusivePositions, int numberOfNotFemaleExclusivePositions) {
         createBallotLayoutPage.setOfficeName(0, ORIGINAL_OFFICE_NAME);
         createBallotLayoutPage.setNumberOfFemaleExclusivePositions(0, numberOfFemaleExclusivePositions);
         createBallotLayoutPage.setNumberOfNotFemaleExclusivePositions(0, numberOfNotFemaleExclusivePositions);
@@ -166,7 +205,7 @@ public class EditBallotLayoutIT {
         return createBallotLayoutPage;
     }
 
-    private CastVotePage castAPreferenceVote(CastVotePage castVotePage) {
-        return castVotePage.setBallotId(1).setPreferences(ORIGINAL_OFFICE_NAME, FEMALE_CANDIDATES_NAME, NON_FEMALE_CANDIDATES_NAME).clickCastVote();
+    private CastVotePage castAPreferenceVote(CastVotePage castVotePage, int id) {
+        return castVotePage.setBallotId(id).setPreferences(ORIGINAL_OFFICE_NAME, FEMALE_CANDIDATES_NAME, NON_FEMALE_CANDIDATES_NAME).clickCastVote();
     }
 }

@@ -32,7 +32,7 @@
 <main>
     <section data-th-if="${error}" data-th-text="${error}" class="error">
     </section>
-    <section data-th-each="election, electionStatus : ${ballotLayout.elections}" class="election">
+    <section data-th-each="election : ${ballotLayout.elections}" class="election">
         <h2 data-th-text="${election.officeName}">Entenhausener Parlament</h2>
         <form method="post">
             Amt umbenennen in:
@@ -51,6 +51,12 @@
             <input type="hidden" name="officeName" data-th-value="${election.officeName}" />
             <input type="number" name="newNumberOfNotFemaleExclusivePositions" data-th-value="${election.numberOfNotFemaleExclusivePositions}" />
             <input type="submit" name="changeNumberOfNotFemaleExclusivePositions" value="speichern" />
+        </form>
+        <form method="post" data-th-each="candidate : ${election.candidates}">
+            <span data-th-text="${candidate.name}">Petra Mustermann</span> kandidiert auf einen <span data-th-if="${candidate.female}">FIT-Platz</span><span data-th-if="${!candidate.female}">offenen Platz</span>
+            <input type="hidden" name="officeName" data-th-value="${election.officeName}" />
+            <input type="hidden" name="candidateName" data-th-value="${candidate.name}" />
+            <input type="submit" name="switchIsFemale" value="ändern" />
         </form>
     </section>
 </main>

@@ -21,6 +21,7 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class BallotLayout {
@@ -32,6 +33,10 @@ public class BallotLayout {
 
 	public List<GenderedElection> getElections() {
 		return ImmutableList.copyOf(elections);
+	}
+
+	public Optional<GenderedElection> getElection(String officeName) {
+		return elections.stream().filter(e -> e.getOfficeName().equals(officeName)).findAny();
 	}
 
 	public GenderedElection replaceElection(String officeName, Function<GenderedElection, GenderedElection> replacementFactory) {

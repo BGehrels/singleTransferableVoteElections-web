@@ -17,6 +17,7 @@
 package info.gehrels.voting.web.ballotLayoutAdministration;
 
 import com.google.common.collect.ImmutableMap;
+import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.applicationState.BallotState;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -84,6 +85,17 @@ public final class EditBallotLayoutController {
 		}
 
 		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfNotFemaleExclusivePositions(newNumberOfNotFemaleExclusivePositions));
+
+		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
+	}
+
+	@RequestMapping(value = "/editBallotLayout", method = POST, params = "switchIsFemale")
+	public ModelAndView switchIsFemale(String officeName, String candidateName) {
+		if (!ballotLayoutState.isBallotLayoutPresent()) {
+			return new ModelAndView("redirect:/");
+		}
+
+		ballotLayoutState.replaceCandidateVersion(officeName, candidateName, (GenderedCandidate c) -> c.withIsFemale(!c.isFemale()));
 
 		return new ModelAndView("editBallotLayout", "ballotLayout", ballotLayoutState.getBallotLayout());
 	}

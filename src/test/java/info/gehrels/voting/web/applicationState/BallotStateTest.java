@@ -16,7 +16,8 @@ import static org.hamcrest.Matchers.is;
 public class BallotStateTest {
 
     private static final String OLD_OFFICE_NAME = "office";
-    private static final GenderedElection ORIGINAL_ELECTION = new GenderedElection(OLD_OFFICE_NAME, 1, 0, ImmutableSet.of(new GenderedCandidate("Peter", true)));
+    private static final GenderedCandidate CANDIDATE = new GenderedCandidate("Peter", true);
+    private static final GenderedElection ORIGINAL_ELECTION = new GenderedElection(OLD_OFFICE_NAME, 1, 0, ImmutableSet.of(CANDIDATE));
     private static final String NEW_OFFICE_NAME = "new Office";
 
     private final BallotLayout ballotLayout = new BallotLayout(ImmutableList.of(ORIGINAL_ELECTION));
@@ -37,7 +38,7 @@ public class BallotStateTest {
     }
 
     @Test
-    public void changeOfficeNameStoresNewElection() {
+    public void replaceElectionStoresNewElection() {
         BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(ballotLayout);
@@ -48,7 +49,7 @@ public class BallotStateTest {
     }
 
     @Test
-    public void changeOfficeNameMigratesCastBallots() {
+    public void replaceElectionMigratesCastBallots() {
         BallotState ballotLayoutState = new BallotState();
         ballotLayoutState.setBallotLayout(ballotLayout);
         ballotLayoutState.addCastBallot(BallotInputTry.FIRST, new Ballot<>(1L, ImmutableSet.of(Vote.createNoVote(ORIGINAL_ELECTION))));
@@ -60,14 +61,55 @@ public class BallotStateTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void throwsIfOldOfficeNameDoesNotExist() {
+    public void replaceElectionThrowsIfOldOfficeNameDoesNotExist() {
         BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(ballotLayout);
 
         ballotLayoutState.replaceElectionVersion("non existing Office Name", (e) -> e.withOfficeName(NEW_OFFICE_NAME));
+    }
 
-        assertThat(ballotLayoutState.getBallotLayout().getElections().get(0).getOfficeName(), is(OLD_OFFICE_NAME));
+    @Test
+    public void replaceCandidateVersionStoresNewElection() {
+        BallotState ballotLayoutState = new BallotState();
+
+        ballotLayoutState.setBallotLayout(ballotLayout);
+
+        boolean newIsFemale = !CANDIDATE.isFemale();
+        ballotLayoutState.replaceCandidateVersion(OLD_OFFICE_NAME, CANDIDATE.getName(), (c) -> c.withIsFemale(newIsFemale));
+
+        assertThat(ballotLayoutState.getBallotLayout().getElections().get(0).getCandidate(CANDIDATE.getName()).get().isFemale(), is(newIsFemale));
+    }
+
+    @Test
+    public void replaceCandidateVersionMigratesCastBallots() {
+        BallotState ballotLayoutState = new BallotState();
+        ballotLayoutState.setBallotLayout(ballotLayout);
+        ballotLayoutState.addCastBallot(BallotInputTry.FIRST, new Ballot<>(1L, ImmutableSet.of(Vote.createPreferenceVote(ORIGINAL_ELECTION, ImmutableSet.of(CANDIDATE)))));
+
+        boolean newIsFemale = !CANDIDATE.isFemale();
+        ballotLayoutState.replaceCandidateVersion(OLD_OFFICE_NAME, CANDIDATE.getName(), (c) -> c.withIsFemale(newIsFemale));
+
+        assertThat(ballotLayoutState.getFirstTryCastBallots().iterator().next().getVote(ORIGINAL_ELECTION).isPresent(), is(false));
+        assertThat(ballotLayoutState.getFirstTryCastBallots().iterator().next().getVote(ORIGINAL_ELECTION.getOfficeName()).get().getElection().getCandidate(CANDIDATE.getName()).get().isFemale(), is(newIsFemale));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void replaceCandidateVersionThrowsIfOldOfficeNameDoesNotExist() {
+        BallotState ballotLayoutState = new BallotState();
+
+        ballotLayoutState.setBallotLayout(ballotLayout);
+
+        ballotLayoutState.replaceCandidateVersion("non existing Office Name", CANDIDATE.getName(), (c) -> c.withIsFemale(false));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void replaceCandidateVersionThrowsIfCandidateNameDoesNotExist() {
+        BallotState ballotLayoutState = new BallotState();
+
+        ballotLayoutState.setBallotLayout(ballotLayout);
+
+        ballotLayoutState.replaceCandidateVersion(OLD_OFFICE_NAME, "Mustermann", (c) -> c.withIsFemale(false));
     }
 
     @Test

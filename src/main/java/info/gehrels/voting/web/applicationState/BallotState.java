@@ -93,7 +93,23 @@ public class BallotState {
 		return b.withReplacedElection(oldOfficeName, newElectionVersion);
 	}
 
-	private static final class BallotIdPredicate implements Predicate<Ballot<GenderedCandidate>> {
+	public void replaceCandidateVersion(String officeName, String candidateName, Function<GenderedCandidate, GenderedCandidate> newCandidateVersionFactory) {
+		GenderedCandidate originalCandidate =
+                ballotLayout.getElection(officeName)
+                            .flatMap(e -> e.getCandidate(candidateName))
+                            .orElseThrow(() -> new IllegalArgumentException(
+                                    "No office " + officeName + " with candidate " + candidateName  + " exists")
+                            );
+
+        GenderedCandidate newVersion = newCandidateVersionFactory.apply(originalCandidate);
+
+		GenderedElection genderedElection = ballotLayout.replaceElection(officeName, e -> e.withReplacedCandidate(newVersion));
+		firstTryCastBallots = firstTryCastBallots.stream().map(b -> b.withReplacedCandidateVersion(genderedElection, newVersion)).collect(toList());
+		secondTryCastBallots = secondTryCastBallots.stream().map(b -> b.withReplacedCandidateVersion(genderedElection, newVersion)).collect(toList());
+
+	}
+
+    private static final class BallotIdPredicate implements Predicate<Ballot<GenderedCandidate>> {
 		private final long ballotId;
 
 		private BallotIdPredicate(long ballotId) {

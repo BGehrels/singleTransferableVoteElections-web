@@ -67,4 +67,10 @@ public final class EditBallotLayoutPage {
         webDriver.findElement(xpath).click();
         return PageFactory.initElements(webDriver, EditBallotLayoutPage.class);
     }
+
+    public EditBallotLayoutPage clickSwitchIsFemale(String officeName, String candidatesName) {
+        By xpath = By.xpath("//section/h2[text()='" + officeName + "']/following-sibling::form/span[contains(text(), '" + candidatesName + "')]/following-sibling::input[@name='switchIsFemale']");
+        webDriver.findElement(xpath).click();
+        return PageFactory.initElements(webDriver, EditBallotLayoutPage.class);
+    }
 }

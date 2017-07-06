@@ -7,12 +7,10 @@ import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
 import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,22 +35,17 @@ public final class AmbiguityResolutionIT {
     @Value("${local.server.port}")
     private int port;
 
-    private WebDriver driver;
+    @Rule
+    public WebDriverRule webDriverRule = new WebDriverRule();
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new HtmlUnitDriver();
-        driver.navigate().to(new URL("http", "localhost", port, "/"));
-    }
-
-    @After
-    public void tearDown() {
-        driver.close();
+        webDriverRule.getDriver().navigate().to(new URL("http", "localhost", port, "/"));
     }
 
     @Test
     public void createAmbiguousSituationAndResolveIt() {
-        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
 
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
         createBallotLayoutPage.setOfficeName(0, OFFICE_NAME);

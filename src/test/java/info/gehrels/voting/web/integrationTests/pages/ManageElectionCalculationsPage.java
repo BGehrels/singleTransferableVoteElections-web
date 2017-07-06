@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static org.junit.Assert.fail;
+
 public final class ManageElectionCalculationsPage {
     public static final String INPUT_TYPE_SUBMIT = "//input[@type='submit']";
 
@@ -21,13 +23,8 @@ public final class ManageElectionCalculationsPage {
 
     public ManageElectionCalculationsPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
-            @Override
-            public boolean apply(WebDriver input) {
-                return webDriver.findElement(By.xpath(INPUT_TYPE_SUBMIT)).isDisplayed();
-            }
-                                               }
-        );
+        new WebDriverWait(webDriver, 60)
+                .until((Predicate<WebDriver>) input -> webDriver.findElement(By.xpath(INPUT_TYPE_SUBMIT)).isDisplayed());
     }
 
     public <T> T clickStartNewElectionCalculation(Class<T> expectedResult) {
@@ -37,6 +34,15 @@ public final class ManageElectionCalculationsPage {
 
     public ElectionCalculationPage clickElectionCalculation() {
         firstElectionCalculation.click();
+        while(webDriver.getPageSource().contains("Die Wahlergebnisse werden momentan berechnet")) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                fail("Test interrupted");
+            }
+            webDriver.navigate().refresh();
+        }
         return PageFactory.initElements(webDriver, ElectionCalculationPage.class);
     }
 }

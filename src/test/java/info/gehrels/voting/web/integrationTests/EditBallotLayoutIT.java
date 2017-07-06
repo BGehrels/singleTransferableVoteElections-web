@@ -7,12 +7,10 @@ import info.gehrels.voting.web.integrationTests.pages.EditBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
 import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +21,7 @@ import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 
@@ -36,22 +35,18 @@ public class EditBallotLayoutIT {
 
     @Value("${local.server.port}")
     int port;
-    private WebDriver driver;
+
+    @Rule
+    public WebDriverRule webDriverRule = new WebDriverRule();
 
     @Before
     public void setUp() throws MalformedURLException {
-        driver = new HtmlUnitDriver();
-        driver.navigate().to(new URL("http", "localhost", port, "/"));
-    }
-
-    @After
-    public void tearDown() {
-        driver.close();
+        webDriverRule.getDriver().navigate().to(new URL("http", "localhost", port, "/"));
     }
 
     @Test
     public void changeOfficeName() {
-        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
@@ -89,7 +84,7 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeNumberOfFemaleExclusivePositions() {
-        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
@@ -121,7 +116,7 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeNumberOfNotFemaleExclusivePositions() {
-        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
@@ -154,7 +149,7 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeCandidatesGender() {
-        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
@@ -183,7 +178,7 @@ public class EditBallotLayoutIT {
                 .clickElectionCalculation();
         assertThat(electionCalculationPage.getNumberOfFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(5L));
         assertThat(electionCalculationPage.getNumberOfNotFemaleExclusivePositions(ORIGINAL_OFFICE_NAME), is(0L));
-        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), contains(FEMALE_CANDIDATES_NAME, NON_FEMALE_CANDIDATES_NAME));
+        assertThat(electionCalculationPage.getFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), containsInAnyOrder(FEMALE_CANDIDATES_NAME, NON_FEMALE_CANDIDATES_NAME));
         assertThat(electionCalculationPage.getNotFemaleExclusiveElectedCandidateNames(ORIGINAL_OFFICE_NAME), is(empty()));
     }
 
@@ -208,4 +203,5 @@ public class EditBallotLayoutIT {
     private CastVotePage castAPreferenceVote(CastVotePage castVotePage, int id) {
         return castVotePage.setBallotId(id).setPreferences(ORIGINAL_OFFICE_NAME, FEMALE_CANDIDATES_NAME, NON_FEMALE_CANDIDATES_NAME).clickCastVote();
     }
+
 }

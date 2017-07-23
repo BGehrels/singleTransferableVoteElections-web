@@ -1,6 +1,5 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableSet;
@@ -9,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.Set;
@@ -34,12 +32,6 @@ public final class ElectionCalculationPage {
 
     public ElectionCalculationPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
-            @Override
-            public boolean apply(WebDriver input) {
-                return webDriver.findElement(By.id("status-text")).isDisplayed();
-            }
-        });
     }
 
     public boolean electionCalculationHasFinished() {

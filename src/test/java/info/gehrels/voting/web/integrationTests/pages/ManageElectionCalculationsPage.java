@@ -1,12 +1,9 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
-import com.google.common.base.Predicate;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.junit.Assert.fail;
 
@@ -23,8 +20,6 @@ public final class ManageElectionCalculationsPage {
 
     public ManageElectionCalculationsPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60)
-                .until((Predicate<WebDriver>) input -> webDriver.findElement(By.xpath(INPUT_TYPE_SUBMIT)).isDisplayed());
     }
 
     public <T> T clickStartNewElectionCalculation(Class<T> expectedResult) {
@@ -34,7 +29,7 @@ public final class ManageElectionCalculationsPage {
 
     public ElectionCalculationPage clickElectionCalculation() {
         firstElectionCalculation.click();
-        while(webDriver.getPageSource().contains("Die Wahlergebnisse werden momentan berechnet")) {
+        while(electionCalculationStillInProgress()) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -44,5 +39,11 @@ public final class ManageElectionCalculationsPage {
             webDriver.navigate().refresh();
         }
         return PageFactory.initElements(webDriver, ElectionCalculationPage.class);
+    }
+
+    private boolean electionCalculationStillInProgress() {
+        return
+                webDriver.getPageSource().contains("Die Wahlergebnisse werden momentan berechnet") ||
+                webDriver.getPageSource().contains("Die Ergebnisberechnung wurde noch nicht gestartet.");
     }
 }

@@ -85,7 +85,7 @@ public class BallotStateTest {
     public void replaceCandidateVersionMigratesCastBallots() {
         BallotState ballotLayoutState = new BallotState();
         ballotLayoutState.setBallotLayout(ballotLayout);
-        ballotLayoutState.addCastBallot(BallotInputTry.FIRST, new Ballot<>(1L, ImmutableSet.of(Vote.createPreferenceVote(ORIGINAL_ELECTION, ImmutableSet.of(CANDIDATE)))));
+        ballotLayoutState.addCastBallot(BallotInputTry.FIRST, new Ballot<>(1L, ImmutableSet.of(Vote.createPreferenceVote(ORIGINAL_ELECTION, ImmutableList.of(CANDIDATE)))));
 
         boolean newIsFemale = !CANDIDATE.isFemale();
         ballotLayoutState.replaceCandidateVersion(OLD_OFFICE_NAME, CANDIDATE.getName(), (c) -> c.withIsFemale(newIsFemale));

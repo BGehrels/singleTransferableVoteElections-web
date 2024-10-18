@@ -16,7 +16,7 @@
  */
 package info.gehrels.voting.web.ballotCasting;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import info.gehrels.voting.Vote;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
@@ -81,7 +81,7 @@ public final class VoteBuilder {
 			}
 		}
 
-		return Vote.createPreferenceVote(genderedElection, ImmutableSet.copyOf(candidatesByPreferences.values()));
+		return Vote.createPreferenceVote(genderedElection, ImmutableList.copyOf(candidatesByPreferences.values()));
 	}
 
 	public void validate(String objectName, String fieldPrefix, BindingResult bindingResult) {
@@ -106,7 +106,7 @@ public final class VoteBuilder {
 
 	private boolean allNullOrEmpty(List<PreferenceBuilder> preferenceBuilders) {
 		for (PreferenceBuilder preferenceBuilder : preferenceBuilders) {
-			if (!isEmptyPreference(preferenceBuilder)) {
+			if (isNonEmptyPreference(preferenceBuilder)) {
 				return false;
 			}
 		}
@@ -114,15 +114,15 @@ public final class VoteBuilder {
 		return true;
 	}
 
-	private boolean isEmptyPreference(PreferenceBuilder preferenceBuilder) {
-		return (preferenceBuilder == null) || (preferenceBuilder.getValue() == null);
+	private boolean isNonEmptyPreference(PreferenceBuilder preferenceBuilder) {
+		return preferenceBuilder != null && preferenceBuilder.getValue() != null;
 	}
 
 
 	private boolean containsDuplicates(List<PreferenceBuilder> list) {
 		for (int i = 0; i < list.size(); i++) {
 			for (int j = i + 1; j < list.size(); j++) {
-				if (!isEmptyPreference(list.get(i)) && list.get(i).equals(list.get(j))) {
+				if (isNonEmptyPreference(list.get(i)) && list.get(i).equals(list.get(j))) {
 					return true;
 				}
 			}

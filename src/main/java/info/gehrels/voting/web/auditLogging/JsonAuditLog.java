@@ -82,7 +82,7 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	public void electedCandidates(ImmutableSet<GenderedCandidate> electedCandidates) {
 		JSONObject value = new JSONObject();
 		value.put("type", "electedCandidates");
-		value.put("electedCandidates", asJSON(electedCandidates));
+		value.put("electedCandidates", candidatesAsJSON(electedCandidates));
 		result.put(value);
 	}
 
@@ -112,7 +112,7 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	public void delegatingToExternalAmbiguityResolution(ImmutableSet<GenderedCandidate> bestCandidates) {
 		JSONObject value = new JSONObject();
 		value.put("type", "delegatingToExternalAmbiguityResolution");
-		value.put("bestCandidates", asJSON(bestCandidates));
+		value.put("bestCandidates", candidatesAsJSON(bestCandidates));
 		result.put(value);
 	}
 
@@ -221,7 +221,7 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	private JSONObject asJSON(Vote<GenderedCandidate> vote) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("election", electionAsJSON(vote.getElection()));
-		jsonObject.put("rankedCandidates", asJSON(vote.getRankedCandidates()));
+		jsonObject.put("rankedCandidates", candidatesAsJSON(vote.getRankedCandidates()));
         jsonObject.put("no", vote.isNo());
         jsonObject.put("valid", vote.isValid());
 		return jsonObject;
@@ -230,7 +230,7 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 	private JSONObject electionAsJSON(Election<GenderedCandidate> election) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("officeName", election.getOfficeName());
-		jsonObject.put("candidates", asJSON(election.getCandidates()));
+		jsonObject.put("candidates", candidatesAsJSON(election.getCandidates()));
 		return jsonObject;
 	}
 
@@ -241,7 +241,7 @@ public final class JsonAuditLog  implements ElectionCalculationWithFemaleExclusi
 		return jsonObject;
 	}
 
-	private JSONArray asJSON(ImmutableSet<GenderedCandidate> candidates) {
+	private JSONArray candidatesAsJSON(ImmutableCollection<GenderedCandidate> candidates) {
 		JSONArray jsonArray = new JSONArray();
 		for (GenderedCandidate candidate : candidates) {
 			jsonArray.put(asJSON(candidate));

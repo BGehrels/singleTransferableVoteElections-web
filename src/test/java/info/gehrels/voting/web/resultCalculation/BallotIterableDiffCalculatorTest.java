@@ -62,7 +62,7 @@ public final class BallotIterableDiffCalculatorTest {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
 		Ballot<Candidate> ballot2 = createBallot(5L, GUNDULA);
 		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
-			.calculateDiff(ImmutableList.of(ballot1, ballot2), ImmutableList.<Ballot<Candidate>>of());
+			.calculateDiff(ImmutableList.of(ballot1, ballot2), ImmutableList.of());
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
@@ -95,7 +95,7 @@ public final class BallotIterableDiffCalculatorTest {
 	public void calculatesDifferenceIfFirstCollectionHasAMemberThatDoesNotExistInTheSecondOne() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
 		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
-			.calculateDiff(ImmutableList.of(ballot1), ImmutableList.<Ballot<Candidate>>of());
+			.calculateDiff(ImmutableList.of(ballot1), ImmutableList.of());
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
@@ -111,7 +111,7 @@ public final class BallotIterableDiffCalculatorTest {
 	public void calculatesDifferenceIfSecondCollectionHasAMemberThatDoesNotExistInTheFirstOne() {
 		Ballot<Candidate> ballot1 = createBallot(5L, PETER);
 		BallotIterableDiff ballotIterableDiff = BallotIterableDiffCalculator
-			.calculateDiff(ImmutableList.<Ballot<Candidate>>of(), ImmutableList.of(ballot1));
+			.calculateDiff(ImmutableList.of(), ImmutableList.of(ballot1));
 
 		assertThat(ballotIterableDiff.isEqual(), is(false));
 		assertThat(ballotIterableDiff.isDifferent(), is(true));
@@ -142,7 +142,7 @@ public final class BallotIterableDiffCalculatorTest {
 
 	private Ballot<Candidate> createBallot(long id, Candidate... candidate) {
 		return new Ballot<>(id, ImmutableSet.of(
-			Vote.createPreferenceVote(TEST_ELECTION, ImmutableSet.<Candidate>copyOf(candidate))));
+			Vote.createPreferenceVote(TEST_ELECTION, ImmutableList.copyOf(candidate))));
 	}
 
 

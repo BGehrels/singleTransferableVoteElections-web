@@ -66,7 +66,6 @@ public final class ElectionCalculationSvgDocumentBuilder {
         }
 
         double y = 60;
-        //voteFlowsAndDistributionsHeadline.setGlobalMaxNumberOfVotes(maxNumberOfVotes);
         voteDistributionHeadlineRow.initializeSizing(5, y);
         y += voteDistributionHeadlineRow.getHeight();
 

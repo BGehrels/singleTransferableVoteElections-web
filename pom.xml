@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>info.gehrels.voting</groupId>
 			<artifactId>singleTransferableVoteElections</artifactId>
-			<version>5.1</version>
+			<version>5.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

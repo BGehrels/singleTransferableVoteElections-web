@@ -1,6 +1,5 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
-import com.google.common.base.Predicate;
 import info.gehrels.voting.web.ballotCasting.VoteType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -28,12 +27,9 @@ public final class CastVotePage {
 
     public CastVotePage(final WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
-            @Override
-            public boolean apply(WebDriver input) {
-                WebElement element = webDriver.findElement(By.name("ballotId"));
-                return element.isDisplayed() && element.getText().isEmpty();
-            }
+        new WebDriverWait(webDriver, 60).until(input -> {
+            WebElement element = webDriver.findElement(By.name("ballotId"));
+            return element.isDisplayed() && element.getText().isEmpty();
         });
     }
 

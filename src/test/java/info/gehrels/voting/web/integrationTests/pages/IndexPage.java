@@ -1,6 +1,5 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
-import com.google.common.base.Predicate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -36,7 +35,8 @@ public class IndexPage {
 
     public IndexPage(WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60).until((Predicate<WebDriver>) input -> input.findElement(By.linkText(CREATE_BALLOT_LAYOUT_LINK)).isDisplayed());
+        new WebDriverWait(webDriver, 60)
+                .until(input -> input.findElement(By.linkText(CREATE_BALLOT_LAYOUT_LINK)).isDisplayed());
     }
 
     public CreateBallotLayoutPage clickCreateBallotLayoutLink() {

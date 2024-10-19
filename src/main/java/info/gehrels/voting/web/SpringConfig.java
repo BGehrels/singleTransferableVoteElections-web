@@ -25,6 +25,7 @@ import info.gehrels.voting.web.ballotLayoutAdministration.EditBallotLayoutContro
 import info.gehrels.voting.web.resultCalculation.DeleteBallotController;
 import info.gehrels.voting.web.resultCalculation.ElectionCalculationController;
 import info.gehrels.voting.web.resultCalculation.ManageElectionCalculationsController;
+import org.joda.time.DateTime;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -51,7 +52,7 @@ public class SpringConfig implements ServletContextInitializer {
 	    springApplication.setBannerMode(Banner.Mode.OFF);
 	    springApplication.setDefaultProperties(
 		    ImmutableMap.<String, Object>builder()
-			    .put("logging.level.", "WARN")
+			    .put("logging.level.root", "WARN")
 			    .put("logging.level.ServerStarted", "INFO")
 			    .build());
 	    springApplication.addListeners(new ServerStartedMessagePrintingListener());
@@ -113,12 +114,12 @@ public class SpringConfig implements ServletContextInitializer {
 	}
 
 	@Bean
-	public Formatter dateTimeFormatter() {
+	public Formatter<DateTime> dateTimeFormatter() {
 		return new DateTimeFormatter();
 	}
 
 	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
+	public void onStartup(ServletContext servletContext) {
 		CharacterEncodingFilter filter = new CharacterEncodingFilter();
 		filter.setEncoding("UTF-8");
 		servletContext.addFilter("characterEncodingFilter", filter).addMappingForUrlPatterns(EnumSet.of(REQUEST), false, "/*");

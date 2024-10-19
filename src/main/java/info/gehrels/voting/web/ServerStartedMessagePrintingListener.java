@@ -2,7 +2,7 @@ package info.gehrels.voting.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent;
+import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;
 import org.springframework.context.ApplicationListener;
 
 import java.net.InetAddress;
@@ -15,14 +15,14 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class ServerStartedMessagePrintingListener implements ApplicationListener<EmbeddedServletContainerInitializedEvent> {
+public final class ServerStartedMessagePrintingListener implements ApplicationListener<ServletWebServerInitializedEvent> {
 	private static final Logger LOG = LoggerFactory.getLogger("ServerStarted");
 
 	@Override
-	public void onApplicationEvent(EmbeddedServletContainerInitializedEvent o) {
+	public void onApplicationEvent(ServletWebServerInitializedEvent e) {
 		LOG.info("Die Wahlauszählung kann beginnen. Die Eingabemaske ist nun unter den folgenden URLs erreichbar:");
 
-		for (URI uri : getAllHostNameUrls(o.getEmbeddedServletContainer().getPort())) {
+		for (URI uri : getAllHostNameUrls(e.getWebServer().getPort())) {
 			LOG.info("{}", uri);
 		}
 	}

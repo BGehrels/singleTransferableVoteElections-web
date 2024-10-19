@@ -1,6 +1,5 @@
 package info.gehrels.voting.web.integrationTests.pages;
 
-import com.google.common.base.Predicate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,12 +24,7 @@ public final class CreateBallotLayoutPage {
     public CreateBallotLayoutPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
 
-        new WebDriverWait(webDriver, 60).until(new Predicate<WebDriver>() {
-            @Override
-            public boolean apply(WebDriver input) {
-                return webDriver.findElement(By.linkText("Zurück zur Startseite")).isDisplayed();
-            }
-        });
+        new WebDriverWait(webDriver, 60).until(input -> webDriver.findElement(By.linkText("Zurück zur Startseite")).isDisplayed());
     }
 
     public void setOfficeName(int officeIndex, String officeName) {

@@ -63,7 +63,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.22.RELEASE</version>
+		<version>2.0.9.RELEASE</version>
 	</parent>
 
 	<dependencies>
@@ -78,7 +78,7 @@
 			<version>5.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 
@@ -97,18 +97,18 @@
 			dependency on hamcrest-core, which has scope 'compile' -->
 			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring4</artifactId>
+			<artifactId>thymeleaf-spring5</artifactId>
 		</dependency>
 		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
+			<version>20240303</version>
 		</dependency>
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
@@ -128,8 +128,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-htmlunit-driver</artifactId>
-            <version>2.52.0</version>
+            <artifactId>htmlunit-driver</artifactId>
             <scope>test</scope>
         </dependency>
 	</dependencies>

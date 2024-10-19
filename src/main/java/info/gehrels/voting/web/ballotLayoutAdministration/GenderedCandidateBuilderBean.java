@@ -17,7 +17,7 @@
 package info.gehrels.voting.web.ballotLayoutAdministration;
 
 import info.gehrels.voting.genderedElections.GenderedCandidate;
-import org.hibernate.validator.constraints.NotEmpty;
+import  javax.validation.constraints.NotEmpty;
 
 public final class GenderedCandidateBuilderBean {
 	@NotEmpty

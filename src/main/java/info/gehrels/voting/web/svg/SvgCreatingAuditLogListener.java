@@ -59,7 +59,6 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
 
     @Override
     public void candidateDropped(VoteDistribution<GenderedCandidate> voteDistributionBeforeStriking, GenderedCandidate candidate) {
-        getBuilder().dropCandidate(candidate);
     }
 
     @Override
@@ -77,7 +76,6 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
 
     @Override
     public void candidateIsElected(GenderedCandidate winner, BigFraction numberOfVotes, BigFraction quorum) {
-        getBuilder().markCandidateElected(winner, numberOfVotes, quorum);
     }
 
     @Override

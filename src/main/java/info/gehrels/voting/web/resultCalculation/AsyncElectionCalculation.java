@@ -31,8 +31,8 @@ import info.gehrels.voting.singleTransferableVote.STVElectionCalculationFactory;
 import info.gehrels.voting.web.auditLogging.AuditLog;
 import info.gehrels.voting.web.auditLogging.AuditLogBuildingElectionCalculationListener;
 import info.gehrels.voting.web.auditLogging.StringAuditLog;
-import org.joda.time.DateTime;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +44,7 @@ public final class AsyncElectionCalculation implements Runnable {
 	private final ElectionCalculationWithFemaleExclusivePositions electionCalculation;
 	private final AuditLogBuildingElectionCalculationListener auditLogBuilder = new AuditLogBuildingElectionCalculationListener();
 	private final ImmutableList.Builder<ElectionCalculationResultBean> resultModelBuilder = ImmutableList.builder();
-	private final DateTime startDateTime = DateTime.now();
+	private final Instant startDateTime = Instant.now();
 
 	private ImmutableList<ElectionCalculationResultBean> result;
 	private ElectionCalculationState state = ElectionCalculationState.NOT_YET_STARTED;
@@ -115,7 +115,7 @@ public final class AsyncElectionCalculation implements Runnable {
 		return new NotMoreThanTheAllowedNumberOfCandidatesCanReachItQuorum(ONE);
 	}
 
-	public DateTime getStartDateTime() {
+	public Instant getStartDateTime() {
 		return startDateTime;
 	}
 
@@ -210,12 +210,12 @@ public final class AsyncElectionCalculation implements Runnable {
 	}
 
 	public static final class Snapshot {
-		private final DateTime startDateTime;
+		private final Instant startDateTime;
 		private final ImmutableList<ElectionCalculationResultBean> resultsOfFinishedCalculations;
 		private final Optional<AmbiguityResolutionTask> ambiguityResulutionTask;
 		private final ElectionCalculationState state;
 
-		public Snapshot(DateTime startDateTime, ElectionCalculationState state,
+		public Snapshot(Instant startDateTime, ElectionCalculationState state,
 		                ImmutableList<ElectionCalculationResultBean> result,
 		                Optional<AmbiguityResolutionTask> ambiguityResulutionTask) {
 			this.startDateTime = startDateTime;
@@ -224,7 +224,7 @@ public final class AsyncElectionCalculation implements Runnable {
 			this.ambiguityResulutionTask = ambiguityResulutionTask;
 		}
 
-		public DateTime getStartDateTime() {
+		public Instant getStartDateTime() {
 			return startDateTime;
 		}
 

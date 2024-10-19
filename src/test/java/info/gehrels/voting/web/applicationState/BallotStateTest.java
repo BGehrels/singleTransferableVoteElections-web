@@ -7,11 +7,12 @@ import info.gehrels.voting.Ballot;
 import info.gehrels.voting.Vote;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.genderedElections.GenderedElection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BallotStateTest {
 
@@ -60,13 +61,16 @@ public class BallotStateTest {
         assertThat(ballotLayoutState.getFirstTryCastBallots().iterator().next().getVote(newChangedElection).get().getElection().getOfficeName(), is(NEW_OFFICE_NAME));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test()
     public void replaceElectionThrowsIfOldOfficeNameDoesNotExist() {
         BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(ballotLayout);
 
-        ballotLayoutState.replaceElectionVersion("non existing Office Name", (e) -> e.withOfficeName(NEW_OFFICE_NAME));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> ballotLayoutState.replaceElectionVersion("non existing Office Name", (e) -> e.withOfficeName(NEW_OFFICE_NAME))
+        );
     }
 
     @Test
@@ -94,22 +98,28 @@ public class BallotStateTest {
         assertThat(ballotLayoutState.getFirstTryCastBallots().iterator().next().getVote(ORIGINAL_ELECTION.getOfficeName()).get().getElection().getCandidate(CANDIDATE.getName()).get().isFemale(), is(newIsFemale));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test()
     public void replaceCandidateVersionThrowsIfOldOfficeNameDoesNotExist() {
         BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(ballotLayout);
 
-        ballotLayoutState.replaceCandidateVersion("non existing Office Name", CANDIDATE.getName(), (c) -> c.withIsFemale(false));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> ballotLayoutState.replaceCandidateVersion("non existing Office Name", CANDIDATE.getName(), (c) -> c.withIsFemale(false))
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test()
     public void replaceCandidateVersionThrowsIfCandidateNameDoesNotExist() {
         BallotState ballotLayoutState = new BallotState();
 
         ballotLayoutState.setBallotLayout(ballotLayout);
 
-        ballotLayoutState.replaceCandidateVersion(OLD_OFFICE_NAME, "Mustermann", (c) -> c.withIsFemale(false));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> ballotLayoutState.replaceCandidateVersion(OLD_OFFICE_NAME, "Mustermann", (c) -> c.withIsFemale(false))
+        );
     }
 
     @Test

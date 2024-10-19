@@ -23,12 +23,11 @@ import info.gehrels.voting.Ballot;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.applicationState.BallotState;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
-import org.joda.time.DateTime;
-import org.joda.time.ReadableInstant;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.Instant;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -67,8 +66,8 @@ public final class ManageElectionCalculationsController {
 
 	@RequestMapping(value = "/listElectionCalculations", method = GET)
 	public ModelAndView listElectionCalculations() {
-        Builder<ReadableInstant, AsyncElectionCalculation> sortedMapBuilder = ImmutableSortedMap.reverseOrder();
-        for (Map.Entry<DateTime, AsyncElectionCalculation> dateTimeAsyncElectionCalculationEntry : electionCalculationsState.getHistoryOfElectionCalculations().entrySet()) {
+        Builder<Instant, AsyncElectionCalculation> sortedMapBuilder = ImmutableSortedMap.reverseOrder();
+        for (Map.Entry<Instant, AsyncElectionCalculation> dateTimeAsyncElectionCalculationEntry : electionCalculationsState.getHistoryOfElectionCalculations().entrySet()) {
             sortedMapBuilder.put(dateTimeAsyncElectionCalculationEntry.getKey(), dateTimeAsyncElectionCalculationEntry.getValue());
         }
         return new ModelAndView("listElectionCalculations", "electionCalculations", sortedMapBuilder.build());

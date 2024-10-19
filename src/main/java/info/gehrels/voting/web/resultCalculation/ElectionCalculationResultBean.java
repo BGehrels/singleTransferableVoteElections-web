@@ -20,16 +20,17 @@ import info.gehrels.voting.genderedElections.ElectionCalculationWithFemaleExclus
 import info.gehrels.voting.genderedElections.GenderedElection;
 import info.gehrels.voting.web.auditLogging.AuditLog;
 import info.gehrels.voting.web.auditLogging.StringAuditLog;
-import org.joda.time.DateTime;
+
+import java.time.Instant;
 
 public class ElectionCalculationResultBean {
-	private final DateTime startDateTime;
+	private final Instant startDateTime;
 	private final GenderedElection election;
 	private final Result electionResult;
 	private final AuditLog auditLog;
 
-	public ElectionCalculationResultBean(DateTime startDateTime, GenderedElection election, Result electionResult,
-	                                     AuditLog auditLog) {
+	public ElectionCalculationResultBean(Instant startDateTime, GenderedElection election, Result electionResult,
+										 AuditLog auditLog) {
 		this.startDateTime = startDateTime;
 		this.election = election;
 		this.electionResult = electionResult;
@@ -55,7 +56,7 @@ public class ElectionCalculationResultBean {
 		return stringAuditLog.toString();
 	}
 
-	public DateTime getStartDateTime() {
+	public Instant getStartDateTime() {
 		return startDateTime;
 	}
 }

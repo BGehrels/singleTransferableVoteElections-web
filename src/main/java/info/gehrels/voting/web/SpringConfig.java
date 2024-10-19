@@ -25,20 +25,17 @@ import info.gehrels.voting.web.ballotLayoutAdministration.EditBallotLayoutContro
 import info.gehrels.voting.web.resultCalculation.DeleteBallotController;
 import info.gehrels.voting.web.resultCalculation.ElectionCalculationController;
 import info.gehrels.voting.web.resultCalculation.ManageElectionCalculationsController;
-import org.joda.time.DateTime;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.Formatter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.util.EnumSet;
 
 import static javax.servlet.DispatcherType.REQUEST;
@@ -111,11 +108,6 @@ public class SpringConfig implements ServletContextInitializer {
 	@Bean
 	public ElectionCalculationsState electionCalculationsState() {
 		return new ElectionCalculationsState();
-	}
-
-	@Bean
-	public Formatter<DateTime> dateTimeFormatter() {
-		return new DateTimeFormatter();
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package info.gehrels.voting.web.applicationState;
 
 import com.google.common.collect.ImmutableSet;
 import info.gehrels.voting.genderedElections.GenderedElection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;

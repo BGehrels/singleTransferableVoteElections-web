@@ -7,14 +7,15 @@ import info.gehrels.voting.web.integrationTests.pages.EditBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
 import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,7 +26,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = SpringConfig.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EditBallotLayoutIT {
     private static final String FEMALE_CANDIDATES_NAME = "The Candidate";
@@ -36,17 +37,17 @@ public class EditBallotLayoutIT {
     @Value("${local.server.port}")
     int port;
 
-    @Rule
-    public WebDriverRule webDriverRule = new WebDriverRule();
+    public WebDriver driver;
 
-    @Before
+    @BeforeEach
     public void setUp() throws MalformedURLException {
-        webDriverRule.getDriver().navigate().to(new URL("http", "localhost", port, "/"));
+        driver = new HtmlUnitDriver();
+        driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
     @Test
     public void changeOfficeName() {
-        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
@@ -84,7 +85,7 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeNumberOfFemaleExclusivePositions() {
-        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
@@ -116,7 +117,7 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeNumberOfNotFemaleExclusivePositions() {
-        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
@@ -149,7 +150,7 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeCandidatesGender() {
-        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();

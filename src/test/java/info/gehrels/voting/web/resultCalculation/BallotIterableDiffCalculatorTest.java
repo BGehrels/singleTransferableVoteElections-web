@@ -23,7 +23,7 @@ import info.gehrels.voting.Candidate;
 import info.gehrels.voting.Election;
 import info.gehrels.voting.Vote;
 import info.gehrels.voting.web.resultCalculation.BallotIterableDiffCalculator.BallotIterableDiff;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

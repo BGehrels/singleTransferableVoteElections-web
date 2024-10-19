@@ -7,14 +7,15 @@ import info.gehrels.voting.web.integrationTests.pages.CreateBallotLayoutPage;
 import info.gehrels.voting.web.integrationTests.pages.ElectionCalculationPage;
 import info.gehrels.voting.web.integrationTests.pages.IndexPage;
 import info.gehrels.voting.web.integrationTests.pages.ManageElectionCalculationsPage;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +25,8 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = SpringConfig.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public final class HappyPathIT {
     private static final String CANDIDATE_NAME_1 = "The Candidate";
@@ -35,18 +37,18 @@ public final class HappyPathIT {
 
     @Value("${local.server.port}")
     int port;
+    
+    public WebDriver driver;
 
-    @Rule
-    public WebDriverRule webDriverRule = new WebDriverRule();
-
-    @Before
+    @BeforeEach
     public void setUp() throws MalformedURLException {
-        webDriverRule.getDriver().navigate().to(new URL("http", "localhost", port, "/"));
+        driver = new HtmlUnitDriver();
+        driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
     @Test
     public void twoElectionsDifferentCandidatesWalkThrough() {
-        IndexPage indexPage = PageFactory.initElements(webDriverRule.getDriver(), IndexPage.class);
+        IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();
         createBallotLayoutPage = createFirstElection(createBallotLayoutPage);
@@ -95,10 +97,10 @@ public final class HappyPathIT {
         castVotePage = castVotePage.setBallotId(3).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1, CANDIDATE_NAME_2).setVoteType(OFFICE_NAME_2, VoteType.NO).clickCastVote();
         castVotePage = castVotePage.setBallotId(4).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1, CANDIDATE_NAME_2).setVoteType(OFFICE_NAME_2, VoteType.INVALID).clickCastVote();
         castVotePage = castVotePage.setBallotId(5).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_2, CANDIDATE_NAME_1).setVoteType(OFFICE_NAME_2, VoteType.NOT_VOTED).clickCastVote();
-        castVotePage = castVotePage.setBallotId(6).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1, CANDIDATE_NAME_2).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
-        castVotePage = castVotePage.setBallotId(7).setVoteType(OFFICE_NAME_1, VoteType.NOT_VOTED).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
-        castVotePage = castVotePage.setBallotId(8).setVoteType(OFFICE_NAME_1, VoteType.NO).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
-        castVotePage = castVotePage.setBallotId(9).setVoteType(OFFICE_NAME_1, VoteType.INVALID).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();;
+        castVotePage = castVotePage.setBallotId(6).setPreferences(OFFICE_NAME_1, CANDIDATE_NAME_1, CANDIDATE_NAME_2).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();
+        castVotePage = castVotePage.setBallotId(7).setVoteType(OFFICE_NAME_1, VoteType.NOT_VOTED).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();
+        castVotePage = castVotePage.setBallotId(8).setVoteType(OFFICE_NAME_1, VoteType.NO).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();
+        castVotePage = castVotePage.setBallotId(9).setVoteType(OFFICE_NAME_1, VoteType.INVALID).setPreferences(OFFICE_NAME_2, CANDIDATE_NAME_3).clickCastVote();
 
         return castVotePage;
     }

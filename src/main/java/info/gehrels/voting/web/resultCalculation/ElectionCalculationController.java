@@ -21,7 +21,6 @@ import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import info.gehrels.voting.web.auditLogging.JsonAuditLog;
 import info.gehrels.voting.web.svg.SvgCreatingAuditLogListener;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -32,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -46,7 +46,7 @@ public final class ElectionCalculationController {
     }
 
     @RequestMapping(value = "/showElectionCalculation", method = GET)
-    public ModelAndView showElectionCalculation(@RequestParam DateTime dateTimeTheCalculationStarted) {
+    public ModelAndView showElectionCalculation(@RequestParam Instant dateTimeTheCalculationStarted) {
         AsyncElectionCalculation.Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted).getSnapshot();
 
@@ -55,7 +55,7 @@ public final class ElectionCalculationController {
 
     @RequestMapping(value = "/downloadElectionCalculationAsJson", method = GET, produces = "application/json")
     @ResponseBody
-    public String downloadElectionCalculationAsJson(@RequestParam DateTime dateTimeTheCalculationStarted, String office) {
+    public String downloadElectionCalculationAsJson(@RequestParam Instant dateTimeTheCalculationStarted, String office) {
         AsyncElectionCalculation.Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted).getSnapshot();
 
@@ -71,7 +71,7 @@ public final class ElectionCalculationController {
 
     @RequestMapping(value = "/downloadElectionCalculationAsSvg", method = GET, produces = "image/svg+xml")
     @ResponseBody
-    public String downloadElectionCalculationAsSvg(@RequestParam DateTime dateTimeTheCalculationStarted, String office, boolean femaleExclusiveRun) {
+    public String downloadElectionCalculationAsSvg(@RequestParam Instant dateTimeTheCalculationStarted, String office, boolean femaleExclusiveRun) {
         AsyncElectionCalculation.Snapshot snapshot = electionCalculationsState.getHistoryOfElectionCalculations()
                 .get(dateTimeTheCalculationStarted).getSnapshot();
 
@@ -92,7 +92,7 @@ public final class ElectionCalculationController {
     }
 
     @RequestMapping(value = "/resolveAmbiguity", method = POST)
-    public ModelAndView resolveAmbiguity(@RequestParam DateTime dateTimeTheCalculationStarted,
+    public ModelAndView resolveAmbiguity(@RequestParam Instant dateTimeTheCalculationStarted,
                                          @Valid AmbiguityResolverResultBuilderBean ambiguityResolverResultBuilder,
                                          BindingResult bindingResult,
                                          RedirectAttributes redirectAttributes) {

@@ -18,19 +18,19 @@ package info.gehrels.voting.web.applicationState;
 
 import com.google.common.collect.ImmutableMap;
 import info.gehrels.voting.web.resultCalculation.AsyncElectionCalculation;
-import org.joda.time.DateTime;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class ElectionCalculationsState {
-	private final Map<DateTime, AsyncElectionCalculation> historyOfElectionCalculations = new HashMap<>();
+	private final Map<Instant, AsyncElectionCalculation> historyOfElectionCalculations = new HashMap<>();
 
 	public void addElectionCalculation(AsyncElectionCalculation asyncElectionCalculation) {
 		historyOfElectionCalculations.put(asyncElectionCalculation.getStartDateTime(), asyncElectionCalculation);
 	}
 
-	public ImmutableMap<DateTime, AsyncElectionCalculation> getHistoryOfElectionCalculations() {
+	public ImmutableMap<Instant, AsyncElectionCalculation> getHistoryOfElectionCalculations() {
 		return ImmutableMap.copyOf(historyOfElectionCalculations);
 	}
 }

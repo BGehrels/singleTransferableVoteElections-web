@@ -77,7 +77,7 @@ public final class ElectionCalculationSvgDocumentBuilder {
             voteDistribution.initializeVoteFlowSizing();
 
             y += Math.max(
-                    voteDistribution.getHeight(),
+                    voteDistribution.getPerCandidateUsableWidth(),
                     voteDistribution.getMaxOutgoingVoteFlowWidth() * 3
             );
         }
@@ -102,10 +102,6 @@ public final class ElectionCalculationSvgDocumentBuilder {
 
 
     public void started() {
-    }
-
-    public void dropCandidate(GenderedCandidate candidate) {
-
     }
 
     public void voteWeightRedistributionCompleted(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, VoteDistribution<GenderedCandidate> voteDistribution) {
@@ -144,18 +140,16 @@ public final class ElectionCalculationSvgDocumentBuilder {
     }
 
     private VoteFlow getOrCreateVoteFlow(Map<GenderedCandidate, Map<Optional<GenderedCandidate>, VoteFlow>> voteFlows, GenderedCandidate oldPreferredCandidate, Optional<GenderedCandidate> newPreferredCandidate) {
-        Map<Optional<GenderedCandidate>, VoteFlow> genderedCandidateVoteFlowMap = voteFlows.get(oldPreferredCandidate);
-        if (genderedCandidateVoteFlowMap == null) {
-            genderedCandidateVoteFlowMap = new LinkedHashMap<>();
-            voteFlows.put(oldPreferredCandidate, genderedCandidateVoteFlowMap);
-        }
+        Map<Optional<GenderedCandidate>, VoteFlow> genderedCandidateVoteFlowMap =
+                voteFlows.computeIfAbsent(
+                        oldPreferredCandidate,
+                        k -> new LinkedHashMap<>()
+                );
 
-        VoteFlow voteFlow = genderedCandidateVoteFlowMap.get(newPreferredCandidate);
-        if (voteFlow == null) {
-            voteFlow = new VoteFlow(oldPreferredCandidate, newPreferredCandidate);
-            genderedCandidateVoteFlowMap.put(newPreferredCandidate, voteFlow);
-        }
-        return voteFlow;
+        return genderedCandidateVoteFlowMap.computeIfAbsent(
+                newPreferredCandidate,
+                c -> new VoteFlow(oldPreferredCandidate, c)
+        );
     }
 
     private boolean sameState(VoteState<GenderedCandidate> originalVoteState, VoteState<GenderedCandidate> newVoteState) {
@@ -172,10 +166,6 @@ public final class ElectionCalculationSvgDocumentBuilder {
         }
 
         throw new IllegalArgumentException("Ballot No. " + ballotId + " does not exist");
-    }
-
-    public void markCandidateElected(GenderedCandidate winner, BigFraction numberOfVotes, BigFraction quorum) {
-
     }
 
     public void setQuorum(long numberOfValidBallots, long numberOfSeats, BigFraction quorum) {

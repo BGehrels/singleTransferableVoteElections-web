@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static info.gehrels.voting.web.integrationTests.pages.WebElementUtils.setInputText;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class ElectionCalculationPage {
     private static final Pattern NUMBER_OF_POSITIONS_PATTERN = Pattern.compile(".* ([0-9]+) .*");
@@ -61,7 +61,7 @@ public final class ElectionCalculationPage {
     private long extractNumberOfPositions(WebElement h2) {
         Matcher matcher = NUMBER_OF_POSITIONS_PATTERN.matcher(h2.getText());
         assertTrue(matcher.find());
-        return Long.valueOf(matcher.group(1));
+        return Long.parseLong(matcher.group(1));
     }
 
 

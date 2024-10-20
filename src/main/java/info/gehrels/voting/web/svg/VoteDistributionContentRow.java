@@ -22,7 +22,7 @@ public final class VoteDistributionContentRow extends VoteDistributionGridRow {
             this.voteDistribution.put(Optional.of(electableCandidate), new VotesForCandidate(numberOfVotes, quorum));
         }
 
-        this.voteDistribution.put(Optional.<GenderedCandidate>empty(), new VotesForCandidate(voteDistribution.noVotes, quorum));
+        this.voteDistribution.put(Optional.empty(), new VotesForCandidate(voteDistribution.noVotes, quorum));
         this.caption = new TextElement().withText((indexOfVoteDistribution + 1) + ". Wahlgang");
 
     }

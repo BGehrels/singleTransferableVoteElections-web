@@ -50,7 +50,7 @@ public final class EditBallotLayoutController {
 			return new ModelAndView("redirect:/");
 		}
 
-		if (StringUtils.isEmpty(newOfficeName)) {
+		if (newOfficeName == null || newOfficeName.isEmpty()) {
 			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Der Name des Amtes darf nicht leer sein"));
 		}
 

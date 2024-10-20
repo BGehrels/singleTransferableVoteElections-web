@@ -1,5 +1,7 @@
 package info.gehrels.voting.web.ballotCasting;
 
+import java.util.Objects;
+
 public final class PreferenceBuilder {
 	private Long value;
 
@@ -22,7 +24,7 @@ public final class PreferenceBuilder {
 
 		PreferenceBuilder that = (PreferenceBuilder) o;
 
-		return !((value != null) ? !value.equals(that.value) : (that.value != null));
+		return Objects.equals(value, that.value);
 
 	}
 

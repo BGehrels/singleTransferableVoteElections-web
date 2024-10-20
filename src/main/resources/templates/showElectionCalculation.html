@@ -38,7 +38,7 @@
         <form method="POST"
               data-th-action="@{/resolveAmbiguity(dateTimeTheCalculationStarted=${electionCalculation.startDateTime})}"
               data-th-object="${ambiguityResolverResultBuilder}">
-            <div data-th-each="candidate : ${electionCalculation.ambiguityResulutionTask.candidatesToChooseFrom}">
+            <div data-th-each="candidate : ${electionCalculation.ambiguityResolutionTask.candidatesToChooseFrom}">
                 <input type="radio" data-th-field="*{candidateName}" data-th-value="${candidate.name}"
                        required="required"/>
                 <label data-th-for="${#ids.prev('candidateName')}" data-th-text="${candidate.name}">Petra
@@ -52,7 +52,7 @@
             <input type="submit"/>
         </form>
         <h2>Bisheriges Ablaufprotokoll</h2>
-        <pre data-th-text="${electionCalculation.ambiguityResulutionTask.currentLog}">Protokolldaten en masse</pre>
+        <pre data-th-text="${electionCalculation.ambiguityResolutionTask.currentLog}">Protokolldaten en masse</pre>
     </th-block>
     <th-block data-th-unless="${#lists.isEmpty(electionCalculation.resultsOfFinishedCalculations)}">
         <h1>Bereits abgeschlossene Berechnungen</h1>
@@ -83,8 +83,8 @@
             <nav>
                 <ul>
                     <li><a data-th-href="@{/downloadElectionCalculationAsJson(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName})}">Maschinenlesbare Fassung herunterladen (JSON)</a></li>
-                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=true)}">Graphisches Ablaufprotokoll für die Frauenplätze (pre-alpha)</a></li>
-                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=false)}">Graphisches Ablaufprotokoll für die offenen Plätze (pre-alpha)</a></li>
+                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=true)}">Grafisches Ablaufprotokoll für die Frauenplätze (pre-alpha)</a></li>
+                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=false)}">Grafisches Ablaufprotokoll für die offenen Plätze (pre-alpha)</a></li>
                 </ul>
             </nav>
             <pre data-th-text="${calculationResult.auditLogAsString}">Protokolldaten en masse</pre>

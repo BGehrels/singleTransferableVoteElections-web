@@ -19,7 +19,7 @@ public class AuditLog {
 		}
 	}
 
-	interface Entry {
+	public interface Entry {
 		<T extends STVElectionCalculationListener<GenderedCandidate> & ElectionCalculationWithFemaleExclusivePositionsListener> void replay(
 			T listener);
 	}

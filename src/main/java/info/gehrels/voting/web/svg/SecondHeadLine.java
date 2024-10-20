@@ -27,7 +27,7 @@ public final class SecondHeadLine {
                 ", davon sind " + numberOfElectablePositions + " zu besetzen. " +
                 "Es gibt " + numberOfValidBallots + " abgegebene gültige Stimmzettel und " +
                 invalidVotes + " ungültige Stimmen." +
-                (quorum != null ? " Das Quorum liegt daher bei " + Double.toString(quorum.doubleValue()) : "") + ".";
+                (quorum != null ? " Das Quorum liegt daher bei " + quorum.doubleValue() : "") + ".";
         return new TextElement().withX(baseX).withY((baseY + 20)).withText(textContent).build(document);
     }
 }

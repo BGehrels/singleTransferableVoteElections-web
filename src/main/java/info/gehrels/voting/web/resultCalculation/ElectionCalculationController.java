@@ -104,7 +104,7 @@ public final class ElectionCalculationController {
         if (!bindingResult.hasErrors()) {
             try {
                 build = ambiguityResolverResultBuilder.build(
-                        snapshot.getAmbiguityResulutionTask().getCandidatesToChooseFrom());
+                        snapshot.getAmbiguityResolutionTask().getCandidatesToChooseFrom());
             } catch (NoSuchCandidateException e) {
                 bindingResult.addError(new ObjectError("unknownCandidate.ambiguityResolverResultBuilder.candidateName",
                         "The candidate " + e.candidateName + " is unknown"));

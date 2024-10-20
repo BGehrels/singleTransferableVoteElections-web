@@ -38,7 +38,7 @@
         <input type="submit" value="Ergebnisberechnung jetzt starten"/>
     </form>
     <section data-th-unless="${electionCalculations.empty}">
-        <h1>Laufende und Abgeschlossene Berechnungen</h1>
+        <h1>Laufende und abgeschlossene Berechnungen</h1>
         <ul>
             <li data-th-each="electionCalculation : ${electionCalculations}">
                 <a data-th-href="@{/showElectionCalculation(dateTimeTheCalculationStarted=${electionCalculation.key})}">Berechnung

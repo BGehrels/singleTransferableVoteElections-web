@@ -1,13 +1,13 @@
 # singleTransferableVoteElections-web
 ## English summary
-This is a simple web interface for the Single Transferable Vote (STV) Elections library. It was developed for the german GRÜNE JUGEND Bundesverband - the youth organization of the german Green Party (BÜNDNIS 90/DIE GRÜNEN) - and is used to elect several offices and delegation during their semiannual general assembly. STV Elections do not need secondary election runs on close results. You can thus vote many offices using only one Ballot form and one election run. This safes a lot of time. 
+This is a simple web interface for the Single Transferable Vote (STV) Elections library. It was developed for the german GRÜNE JUGEND Bundesverband - the youth organization of the german Green Party (BÜNDNIS 90/DIE GRÜNEN) - and is used to elect several offices and delegation during their semiannual general assembly. STV Elections do not need secondary election runs on close results. You can thus vote many offices using only one Ballot form and one election run. This saves a lot of time. 
 
-The software allows to manually enter a batch of marked ballots and calculate the election results. It requires each ballot to be entered twice to prevent fraud and accidential typos. Since the only user is a german organization, the user interface as well as this documentation has not been internationalized. Feel free to contact me if you have any questions regarding this software.
+The software allows to manually enter a batch of marked ballots and calculate the election results. It requires each ballot to be entered twice to prevent fraud and accidental typos. Since the only user is a german organization, the user interface as well as this documentation has not been internationalized. Feel free to contact me if you have any questions regarding this software.
 
 ## Einleitung
-Dies ist ein Web Interface für die Single Transferable Vote (STV) Elections Softwarebibliothek. Es wurde im Auftrag des GRÜNE JUGEND Bundesverbands entwickelt, dem Jugendverband von BÜNDNIS 90/DIE GRÜNEN und wird zur Wahl meherer Ämter und Delegationen im Rahmen der halbjährlichen Bundemitgliederversammlung genutzt. Wahlen mittels übertragbarer Einzelstimmgebung kommen ohne zweite Wahlgänge bei knappen Wahlergebnissen aus. Mehrere Ämter können daher auf einem Wahlzettel in einem Wahlgang gewählt werden. Dies spart eine Menge Zeit. 
+Dies ist ein Web Interface für die Single Transferable Vote (STV) Elections Softwarebibliothek. Es wurde im Auftrag des GRÜNE JUGEND Bundesverbands entwickelt, dem Jugendverband von BÜNDNIS 90/DIE GRÜNEN und wird zur Wahl mehrerer Ämter und Delegationen im Rahmen der halbjährlichen Bundesmitgliederversammlung genutzt. Wahlen mittels übertragbarer Einzelstimmgebung kommen ohne zweite Wahlgänge bei knappen Wahlergebnissen aus. Mehrere Ämter können daher auf einem Wahlzettel in einem Wahlgang gewählt werden. Dies spart eine Menge Zeit. 
 
-Die Software erlaubt die manuelle Eingabe ausgefüllter Stimmzettel und die Berechnung des Wahlergebnisses. Hierbei muss jeder Stimmzettel zwei mal eingegeben werden, um Fehler oder Betrugsversuche erkennen zu können. Sollten Sie Fragen zu dieser Software haben können Sie mich gerne kontaktieren
+Die Software erlaubt die manuelle Eingabe ausgefüllter Stimmzettel und die Berechnung des Wahlergebnisses. Hierbei muss jeder Stimmzettel zweimal eingegeben werden, um Fehler oder Betrugsversuche erkennen zu können. Sollten Sie Fragen zu dieser Software haben können Sie mich gerne kontaktieren
 
 ## Wie baue ich die Software?
 Vorbedingungen:
@@ -41,17 +41,17 @@ Schritte:
 Ziele:
 - Alle Stimmen müssen gewertet werden
 - Alle Stimmen müssen inhaltlich korrekt erfasst werden
-- Es dürfen keine zusäzlichen Stimmen ins System eingeschmuggelt oder bestehende Stimmen unterschlagen werden können
+- Es dürfen keine zusätzlichen Stimmen ins System eingeschmuggelt oder bestehende Stimmen unterschlagen werden können
 - Manipulation bei der Erfassung von Stimmzettelinhalten und versehentliche Fehleingaben sollen vermieden werden
-- Der Sicherheitsstandard darf nicht hinter den klassischer Urnenwahlen zurückfallen
+- Der Sicherheitsstandard darf nicht hinter jenem klassischer Urnenwahlen zurückfallen
 - Es muss auch nach der Wahlauszählung und ohne Softwareunterstützung jederzeit nachvollziehbar sein, dass dies der Fall ist.
 
 Mittel:
 - Das System protokolliert jeden eingegebenen Stimmzettel samt dessen Inhalt
 - Das System protokolliert alle relevanten Berechnungsschritte und deren Ergebnisse
-- Das System forciert eine zweifache Eingabe jedes Stimmzettels und vergleicht die Gleicheit beider Eingaben.
+- Das System forciert eine zweifache Eingabe jedes Stimmzettels und vergleicht die Gleichheit beider Eingaben.
 - Das System fordert zur Löschung des eingegebenen Stimmzettels und zur Neueingabe auf, sollte keine Gleichheit vorliegen
-- Das System gibt einen Überblick über die Anzahl der eingegeneben Stimmzettel, so dass Minder- und Übermengen erkannt werden können
+- Das System gibt einen Überblick über die Anzahl der eingegebenen Stimmzettel, sodass Minder- und Übermengen erkannt werden können
 
 Bedingungen
 - Das System muss in einem geschlossenen, für unbeteiligte nicht zugreifbaren Netzwerk betrieben werden.
@@ -83,26 +83,26 @@ Zuerst eine Vorbemerkung: Der Server speichert keinerlei Daten auf der Festplatt
 
 ### Hauptmenü
 
-Nach dem Öffnen von http://<serverIp>:8080/ sehen wir das Hauptmenü. Neben den Links zu den unterschiedlichen Funktionen der Software finden wir hier die Übersicht der eingebenen Stimmzettel. Hier ist sicherzustellen, dass diese bis zur Eröffnung der Stimmeingabe stets auf 0 stehen.
+Nach dem Öffnen von http://<serverIp>:8080/ sehen wir das Hauptmenü. Neben den Links zu den unterschiedlichen Funktionen der Software finden wir hier die Übersicht der eingegebenen Stimmzettel. Hier ist sicherzustellen, dass diese bis zur Eröffnung der Stimmeingabe stets auf 0 stehen.
 
-### Eingabe eines Stimmzetellayouts
+### Eingabe eines Stimmzettellayouts
 Bevor wir mit der Stimmeingabe beginnen muss das System mit dem Layout der Stimmzettel vertraut gemacht werden. Die Ämter und Kandidierenden sollten in genau der Reihenfolge eingegeben werden, wie sie auch auf den gedruckten Stimmzetteln erscheinen.
 
-Bitte prüfen Sie zweimal, ob für alle Kandididerenden die "weiblich Ja/Nein"-Angabe korrekt ist. Andernfalls kann und wird es zu falschen Wahlergebnissen kommen.
+Bitte prüfen Sie zweimal, ob für alle Kandidierenden die "weiblich Ja/Nein"-Angabe korrekt ist. Andernfalls kann und wird es zu falschen Wahlergebnissen kommen.
 
 ### Nummerierung aller Stimmzettel
 Jeder Stimmzettel braucht eine eindeutige Nummer. Um die Vertraulichkeit der Wahl nicht zu brechen, darf diese Nummer erst nach Abgabe des Stimmzettels vergeben werden. Es empfiehlt sich, unmittelbar nach der Öffnung der Wahlurnen und dem Zählen der Stimmzettel diese von Hand oder mit einem sogenannten Paginierstempel mit fortlaufenden Nummern zu versehen.
 
 ### Ersteingabe der Stimmzettel
-Mit einem Klick auf "Stimmen eingeben (Ersteingabe) gelangen wir zu der Maske, die von unseren Wahlhelfer*innen zur Stimmeingabe genutzt wird. Diese Stimmeingabe kann von mehreren Rechnern aus parallel geschehen, jedes Auszählteam erhält einen Rechner und einen Teil der Stimmzettel zur Eingabe.
+Mit einem Klick auf "Stimmen eingeben (Ersteingabe)" gelangen wir zu der Maske, die von unseren Wahlhelfer*innen zur Stimmeingabe genutzt wird. Diese Stimmeingabe kann von mehreren Rechnern aus parallel geschehen, jedes Auszählteam erhält einen Rechner und einen Teil der Stimmzettel zur Eingabe.
 
 Nach der Eingabe der Stimmzettelnummer ist hier für jedes Amt zuerst die Stimmart einzugeben: Präferenz bedeutet, das die Wählerin bei mindestens einer Kandidierenden eine Präferenz (Zahl) eingetragen hat. Keine Stimmabgabe bedeutet, dass für dieses Amt keinerlei Markierung auf dem Stimmzettel vorhanden ist. Nein und Ungültig dürften Selbsterklärend sein.
 
-Unterhalb der Stimmtypauswahl findet sich eine Liste der Kandidierenden mit jeweils einem Eingabefeld dahinter. Hier ist zu jeder Kandidierenden die Präferenz (Zahl) einzutragen. Ist auf dem Simmzettel keine Zahl eingetragen worden, lassen wir auch hier das Feld leer.
+Unterhalb der Stimmtypenauswahl findet sich eine Liste der Kandidierenden mit jeweils einem Eingabefeld dahinter. Hier ist zu jeder Kandidierenden die Präferenz (Zahl) einzutragen. Ist auf dem Simmzettel keine Zahl eingetragen worden, lassen wir auch hier das Feld leer.
 
 Sollte es hier einmal versehentlich zu Fehleingaben kommen so ist dies nicht dramatisch: Am Ende, wenn alle Stimmen ein zweites Mal eingegeben wurden findet eine automatische Fehlerkontrolle statt. Fehlerhafte Stimmzettel können dann gelöscht und erneut eingegeben werden.
 
-Nach der Vollständigen Eingabe des Stimmzettels kann mit einem klick auf "Hinzufügen und nächsten Stimmzettel ausfüllen" die Eingabe gespeichert werden. Sind alle Zettel eingegeben wird der letzte noch gespeichert und dann mittels eines Klicks auf "Zurück zur Startseite" die Ersteingabe beendet.
+Nach der vollständigen Eingabe des Stimmzettels kann mit einem Klick auf "Hinzufügen und nächsten Stimmzettel ausfüllen" die Eingabe gespeichert werden. Sind alle Zettel eingegeben, wird der letzte noch gespeichert und dann mittels eines Klicks auf "Zurück zur Startseite" die Ersteingabe beendet.
 
 ### Zweiteingabe der Stimmzettel
 
@@ -111,5 +111,5 @@ Nach der Vollständigen Eingabe des Stimmzettels kann mit einem klick auf "Hinzu
 --- Stimmzettelnummern unbedingt abschreiben
 -- Wahlergebnisse anzeigen
 --- Unbedingt ausdrucken, da flüchtig
---- Der Autor freut sich über zugesandte JSON- und SVG-Dateien zum optimieren der grafischen Darstellungen
+--- Der Autor freut sich über zugesandte JSON- und SVG-Dateien zum Optimieren der grafischen Darstellungen
 --- 

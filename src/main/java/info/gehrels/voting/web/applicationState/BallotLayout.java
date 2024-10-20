@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class BallotLayout {
-	private List<GenderedElection> elections = new ArrayList<>();
+	private final List<GenderedElection> elections = new ArrayList<>();
 
 	public BallotLayout(List<GenderedElection> elections) {
 	    this.elections.addAll(elections);

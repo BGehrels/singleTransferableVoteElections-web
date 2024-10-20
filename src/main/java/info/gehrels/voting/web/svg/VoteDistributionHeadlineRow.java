@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class VoteDistributionHeadlineRow extends VoteDistributionGridRow {
-    public List<TextElement> columnHeaders = new ArrayList<>();
+    public final List<TextElement> columnHeaders = new ArrayList<>();
 
     public VoteDistributionHeadlineRow(List<GenderedCandidate> electableCandidates) {
         super(electableCandidates.size());

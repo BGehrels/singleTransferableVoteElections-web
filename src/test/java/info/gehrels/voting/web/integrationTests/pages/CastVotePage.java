@@ -9,9 +9,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 
 import static info.gehrels.voting.web.integrationTests.pages.WebElementUtils.setInputText;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public final class CastVotePage {
     private final WebDriver webDriver;
@@ -27,7 +29,7 @@ public final class CastVotePage {
 
     public CastVotePage(final WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60).until(input -> {
+        new WebDriverWait(webDriver, Duration.of(60, SECONDS)).until(input -> {
             WebElement element = webDriver.findElement(By.name("ballotId"));
             return element.isDisplayed() && element.getText().isEmpty();
         });

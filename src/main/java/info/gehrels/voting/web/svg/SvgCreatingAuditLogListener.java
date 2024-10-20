@@ -27,7 +27,6 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
 
     @Override
     public void startFemaleExclusiveElectionRun() {
-        femaleExclusiveRun.started();
     }
 
     @Override
@@ -46,7 +45,6 @@ public final class SvgCreatingAuditLogListener implements STVElectionCalculation
     @Override
     public void startNotFemaleExclusiveElectionRun() {
         weAreStillInFemaleExclusiveRun = false;
-        nonFemaleExclusiveRun.started();
     }
 
     @Override

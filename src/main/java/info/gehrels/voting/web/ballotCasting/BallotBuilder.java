@@ -59,9 +59,7 @@ public final class BallotBuilder {
 		Builder<Vote<GenderedCandidate>> preferenceSetBuilder = ImmutableSet.builder();
 		for (GenderedElection genderedElection : ballotLayout.getElections()) {
 			Optional<Vote<GenderedCandidate>> vote = votesByElectionId.get(i).createVote(genderedElection);
-			if (vote.isPresent()) {
-				preferenceSetBuilder.add(vote.get());
-			}
+            vote.ifPresent(preferenceSetBuilder::add);
 			i++;
 		}
 

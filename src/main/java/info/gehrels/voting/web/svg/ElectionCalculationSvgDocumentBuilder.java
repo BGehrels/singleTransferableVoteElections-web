@@ -99,10 +99,6 @@ public final class ElectionCalculationSvgDocumentBuilder {
         return writer.toString();
     }
 
-
-    public void started() {
-    }
-
     public void voteWeightRedistributionCompleted(ImmutableCollection<VoteState<GenderedCandidate>> originalVoteStates, ImmutableCollection<VoteState<GenderedCandidate>> newVoteStates, VoteDistribution<GenderedCandidate> voteDistribution) {
         voteDistributions.add(new VoteDistributionContentRow(voteDistribution,electableCandidates, quorum, indexOfVoteDistributions++));
 

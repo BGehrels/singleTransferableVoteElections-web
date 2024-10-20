@@ -111,12 +111,7 @@ public final class AuditLogBuildingElectionCalculationListener
 
 	@Override
 	public void noCandidatesAreLeft() {
-		entries.add(new Entry() {
-			@Override
-			public <T extends STVElectionCalculationListener<GenderedCandidate> & ElectionCalculationWithFemaleExclusivePositionsListener> void replay(T stvElectionCalculationListener) {
-				stvElectionCalculationListener.noCandidatesAreLeft();
-			}
-		});
+		entries.add(STVElectionCalculationListener::noCandidatesAreLeft);
 	}
 
 	@Override
@@ -203,24 +198,12 @@ public final class AuditLogBuildingElectionCalculationListener
 
 	@Override
 	public void startFemaleExclusiveElectionRun() {
-		entries.add(new Entry() {
-			@Override
-			public <T extends STVElectionCalculationListener<GenderedCandidate> & ElectionCalculationWithFemaleExclusivePositionsListener> void replay(
-				T listener) {
-				listener.startFemaleExclusiveElectionRun();
-			}
-		});
+		entries.add(ElectionCalculationWithFemaleExclusivePositionsListener::startFemaleExclusiveElectionRun);
 	}
 
 	@Override
 	public void startNotFemaleExclusiveElectionRun() {
-		entries.add(new Entry() {
-			@Override
-			public <T extends STVElectionCalculationListener<GenderedCandidate> & ElectionCalculationWithFemaleExclusivePositionsListener> void replay(
-				T listener) {
-				listener.startNotFemaleExclusiveElectionRun();
-			}
-		});
+		entries.add(ElectionCalculationWithFemaleExclusivePositionsListener::startNotFemaleExclusiveElectionRun);
 	}
 
 	public AuditLog buildAndReset() {

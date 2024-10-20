@@ -7,6 +7,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 public class IndexPage {
     public static final String CREATE_BALLOT_LAYOUT_LINK = "Stimmzettellayout erstellen/überschreiben (löscht eventuell bereits eingegebene Stimmen)";
 
@@ -35,7 +39,7 @@ public class IndexPage {
 
     public IndexPage(WebDriver webDriver) {
         this.webDriver = webDriver;
-        new WebDriverWait(webDriver, 60)
+        new WebDriverWait(webDriver, Duration.of(60, SECONDS))
                 .until(input -> input.findElement(By.linkText(CREATE_BALLOT_LAYOUT_LINK)).isDisplayed());
     }
 

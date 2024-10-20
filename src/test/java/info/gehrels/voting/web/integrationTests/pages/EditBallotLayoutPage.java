@@ -7,7 +7,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+
 import static info.gehrels.voting.web.integrationTests.pages.WebElementUtils.setInputText;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public final class EditBallotLayoutPage {
     private final WebDriver webDriver;
@@ -18,7 +21,7 @@ public final class EditBallotLayoutPage {
     public EditBallotLayoutPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
 
-        new WebDriverWait(webDriver, 60).until(input -> webDriver.findElement(By.linkText("Zurück zur Startseite")).isDisplayed());
+        new WebDriverWait(webDriver, Duration.of(60, SECONDS)).until(input -> webDriver.findElement(By.linkText("Zurück zur Startseite")).isDisplayed());
     }
 
     public void setNewOfficeName(String oldOfficeName, String newOfficeName) {

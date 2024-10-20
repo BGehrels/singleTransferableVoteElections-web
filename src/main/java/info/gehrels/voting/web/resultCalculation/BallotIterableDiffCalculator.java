@@ -33,12 +33,6 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 
 public final class BallotIterableDiffCalculator {
-	private static final Function<Ballot<?>, Long> GET_ID_FROM_BALLOT_FUNCTION = new Function<Ballot<?>, Long>() {
-		@Override
-		public Long apply(Ballot<?> input) {
-			return input.id;
-		}
-	};
 
 	private BallotIterableDiffCalculator() {
 	}
@@ -91,11 +85,11 @@ public final class BallotIterableDiffCalculator {
 	}
 
 	private static <T extends Candidate> ImmutableSet<Long> toImmutableIdSet(Iterable<Ballot<T>> ballotSetB) {
-		return ImmutableSet.copyOf(Iterables.transform(ballotSetB, GET_ID_FROM_BALLOT_FUNCTION));
+		return ImmutableSet.copyOf(Iterables.transform(ballotSetB, input -> input.id));
 	}
 
 	private static <T extends Candidate> Set<Long> toMutableIdSet(Iterable<Ballot<T>> ballotSetA) {
-		return newHashSet(Iterables.transform(ballotSetA, GET_ID_FROM_BALLOT_FUNCTION));
+		return newHashSet(Iterables.transform(ballotSetA, (Function<Ballot<?>, Long>) input -> input.id));
 	}
 
 	private static <T extends Candidate> Set<Long> findDuplicateIds(Iterable<Ballot<T>> castBallots) {
@@ -114,9 +108,7 @@ public final class BallotIterableDiffCalculator {
 
 	private static <T extends Candidate> Multimap<Long, Ballot<T>> asIdToBallotsMulitmap(
 		Iterable<Ballot<T>> castBallots) {
-		return Multimaps
-			.index(castBallots,
-			       GET_ID_FROM_BALLOT_FUNCTION);
+		return Multimaps.index(castBallots, input -> input.id);
 	}
 
 	public static final class BallotIterableDiff {

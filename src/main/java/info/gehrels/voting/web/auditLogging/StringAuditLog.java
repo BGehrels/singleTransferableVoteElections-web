@@ -105,7 +105,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 
 	@Override
 	public void delegatingToExternalAmbiguityResolution(ImmutableSet<GenderedCandidate> bestCandidates) {
-		formatLine("Mehrere Stimmgleiche Kandidierende: %s. Delegiere an externes Auswahlverfahren.", bestCandidates);
+		formatLine("Mehrere stimmengleiche Kandidierende: %s. Delegiere an externes Auswahlverfahren.", bestCandidates);
 	}
 
 	/*

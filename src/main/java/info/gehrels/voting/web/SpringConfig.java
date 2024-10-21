@@ -25,25 +25,17 @@ import info.gehrels.voting.web.ballotLayoutAdministration.EditBallotLayoutContro
 import info.gehrels.voting.web.resultCalculation.DeleteBallotController;
 import info.gehrels.voting.web.resultCalculation.ElectionCalculationController;
 import info.gehrels.voting.web.resultCalculation.ManageElectionCalculationsController;
-import jakarta.servlet.ServletContext;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import java.util.EnumSet;
-
-import static jakarta.servlet.DispatcherType.REQUEST;
-
-
 @Configuration
 @EnableAutoConfiguration
-public class SpringConfig implements ServletContextInitializer {
+public class SpringConfig {
     public static void main(String... args) {
 	    SpringApplication springApplication = new SpringApplication(SpringConfig.class);
 	    springApplication.setBannerMode(Banner.Mode.OFF);
@@ -108,13 +100,6 @@ public class SpringConfig implements ServletContextInitializer {
 	@Bean
 	public ElectionCalculationsState electionCalculationsState() {
 		return new ElectionCalculationsState();
-	}
-
-	@Override
-	public void onStartup(ServletContext servletContext) {
-		CharacterEncodingFilter filter = new CharacterEncodingFilter();
-		filter.setEncoding("UTF-8");
-		servletContext.addFilter("characterEncodingFilter", filter).addMappingForUrlPatterns(EnumSet.of(REQUEST), false, "/*");
 	}
 
 }

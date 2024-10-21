@@ -75,8 +75,8 @@ public class BallotState {
 		return ImmutableList.copyOf(secondTryCastBallots);
 	}
 
-	private synchronized BallotIdPredicate hasId(long ballotId) {
-		return new BallotIdPredicate(ballotId);
+	private synchronized Predicate<Ballot<GenderedCandidate>> hasId(long ballotId) {
+		return input -> ballotId == input.id;
 	}
 
 	private synchronized Collection<Ballot<GenderedCandidate>> getBallotState(BallotInputTry firstOrSecondTry) {
@@ -107,18 +107,5 @@ public class BallotState {
 		firstTryCastBallots = firstTryCastBallots.stream().map(b -> b.withReplacedCandidateVersion(genderedElection, newVersion)).collect(toList());
 		secondTryCastBallots = secondTryCastBallots.stream().map(b -> b.withReplacedCandidateVersion(genderedElection, newVersion)).collect(toList());
 
-	}
-
-    private static final class BallotIdPredicate implements Predicate<Ballot<GenderedCandidate>> {
-		private final long ballotId;
-
-		private BallotIdPredicate(long ballotId) {
-			this.ballotId = ballotId;
-		}
-
-		@Override
-		public boolean apply(Ballot<GenderedCandidate> input) {
-			return ballotId == input.id;
-		}
 	}
 }

@@ -45,28 +45,9 @@ public class IndexPageController {
 		);
 	}
 
-	public static final class IndexPageBean {
+	public record IndexPageBean(int numberOfCastBallotsFirstTry, int numberOfCastBallotsSecondTry,
+								boolean ballotLayoutExists) {
 
-		private final int numberOfCastBallotsFirstTry;
-		private final int numberOfCastBallotsSecondTry;
-		private final boolean ballotLayoutExists;
 
-		public IndexPageBean(int numberOfCastBallotsFirstTry, int numberOfCastBallotsSecondTry, boolean ballotLayoutExists) {
-			this.numberOfCastBallotsFirstTry = numberOfCastBallotsFirstTry;
-			this.numberOfCastBallotsSecondTry = numberOfCastBallotsSecondTry;
-			this.ballotLayoutExists = ballotLayoutExists;
-		}
-
-		public int getNumberOfCastBallotsFirstTry() {
-			return numberOfCastBallotsFirstTry;
-		}
-
-		public int getNumberOfCastBallotsSecondTry() {
-			return numberOfCastBallotsSecondTry;
-		}
-
-		public boolean isBallotLayoutExists() {
-			return ballotLayoutExists;
-		}
 	}
 }

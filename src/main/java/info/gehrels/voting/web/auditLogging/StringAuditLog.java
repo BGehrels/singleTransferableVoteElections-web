@@ -242,28 +242,17 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 		formatLine("\tUngültig: %f Stimmen", voteDistribution.invalidVotes.doubleValue());
 	}
 
-	private static final class VoteStatePair {
-		public final VoteState<GenderedCandidate> oldState;
-		public final VoteState<GenderedCandidate> newState;
-
-		VoteStatePair(VoteState<GenderedCandidate> oldState, VoteState<GenderedCandidate> newState) {
-			this.oldState = oldState;
-			this.newState = newState;
-		}
-
+	private record VoteStatePair(VoteState<GenderedCandidate> oldState, VoteState<GenderedCandidate> newState) {
 	}
 
 
 	private String getReasonAsGermanString(NonQualificationReason reason) {
-		switch (reason) {
-			case NOT_FEMALE:
-				return "Nicht weiblich";
-			case ALREADY_ELECTED:
-				return "Bereits gewählt";
-		}
+        return switch (reason) {
+            case NOT_FEMALE -> "Nicht weiblich";
+            case ALREADY_ELECTED -> "Bereits gewählt";
+        };
 
-		throw new IllegalArgumentException("Unbekannter Grund: " + reason);
-	}
+    }
 
 	private StringBuilder formatLine(String formatString, Object... objects) {
 		return builder.append(format(formatString, objects)).append('\n');

@@ -43,7 +43,7 @@ Ziele:
 - Alle Stimmen müssen inhaltlich korrekt erfasst werden
 - Es dürfen keine zusätzlichen Stimmen ins System eingeschmuggelt oder bestehende Stimmen unterschlagen werden können
 - Manipulation bei der Erfassung von Stimmzettelinhalten und versehentliche Fehleingaben sollen vermieden werden
-- Der Sicherheitsstandard darf nicht hinter jenem klassischer Urnenwahlen zurückfallen
+- Der Sicherheitsstandard darf nicht hinter jenen klassischer Urnenwahlen zurückfallen
 - Es muss auch nach der Wahlauszählung und ohne Softwareunterstützung jederzeit nachvollziehbar sein, dass dies der Fall ist.
 
 Mittel:
@@ -98,7 +98,7 @@ Mit einem Klick auf "Stimmen eingeben (Ersteingabe)" gelangen wir zu der Maske, 
 
 Nach der Eingabe der Stimmzettelnummer ist hier für jedes Amt zuerst die Stimmart einzugeben: Präferenz bedeutet, das die Wählerin bei mindestens einer Kandidierenden eine Präferenz (Zahl) eingetragen hat. Keine Stimmabgabe bedeutet, dass für dieses Amt keinerlei Markierung auf dem Stimmzettel vorhanden ist. Nein und Ungültig dürften Selbsterklärend sein.
 
-Unterhalb der Stimmtypenauswahl findet sich eine Liste der Kandidierenden mit jeweils einem Eingabefeld dahinter. Hier ist zu jeder Kandidierenden die Präferenz (Zahl) einzutragen. Ist auf dem Simmzettel keine Zahl eingetragen worden, lassen wir auch hier das Feld leer.
+Unterhalb der Stimmtypenauswahl findet sich eine Liste der Kandidierenden mit jeweils einem Eingabefeld dahinter. Hier ist zu jeder Kandidierenden die Präferenz (Zahl) einzutragen. Ist auf dem Stimmzettel keine Zahl eingetragen worden, lassen wir auch hier das Feld leer.
 
 Sollte es hier einmal versehentlich zu Fehleingaben kommen so ist dies nicht dramatisch: Am Ende, wenn alle Stimmen ein zweites Mal eingegeben wurden findet eine automatische Fehlerkontrolle statt. Fehlerhafte Stimmzettel können dann gelöscht und erneut eingegeben werden.
 

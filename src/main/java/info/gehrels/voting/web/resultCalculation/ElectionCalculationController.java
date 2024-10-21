@@ -65,7 +65,7 @@ public final class ElectionCalculationController {
             throw new IllegalArgumentException("The given Office name does not exist");
         }
         JsonAuditLog jsonAuditLog = new JsonAuditLog();
-        resultOfFinishedCalculation.get().getAuditLog().replay(jsonAuditLog);
+        resultOfFinishedCalculation.get().auditLog().replay(jsonAuditLog);
         return jsonAuditLog.getResult().toString();
     }
 
@@ -81,7 +81,7 @@ public final class ElectionCalculationController {
             throw new IllegalArgumentException("The given Office name does not exist");
         }
         SvgCreatingAuditLogListener svgCreatingAuditLogListener = new SvgCreatingAuditLogListener();
-        resultOfFinishedCalculation.get().getAuditLog().replay(svgCreatingAuditLogListener);
+        resultOfFinishedCalculation.get().auditLog().replay(svgCreatingAuditLogListener);
         String result;
         if (femaleExclusiveRun) {
             result = svgCreatingAuditLogListener.getFemaleExclusiveRunSvg();

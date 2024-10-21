@@ -23,31 +23,8 @@ import info.gehrels.voting.web.auditLogging.StringAuditLog;
 
 import java.time.Instant;
 
-public class ElectionCalculationResultBean {
-	private final Instant startDateTime;
-	private final GenderedElection election;
-	private final Result electionResult;
-	private final AuditLog auditLog;
-
-	public ElectionCalculationResultBean(Instant startDateTime, GenderedElection election, Result electionResult,
-										 AuditLog auditLog) {
-		this.startDateTime = startDateTime;
-		this.election = election;
-		this.electionResult = electionResult;
-		this.auditLog = auditLog;
-	}
-
-	public GenderedElection getElection() {
-		return election;
-	}
-
-	public Result getElectionResult() {
-		return electionResult;
-	}
-
-	public AuditLog getAuditLog() {
-		return auditLog;
-	}
+public record ElectionCalculationResultBean(Instant startDateTime, GenderedElection election, Result electionResult,
+											AuditLog auditLog) {
 
 
 	public String getAuditLogAsString() {
@@ -56,7 +33,5 @@ public class ElectionCalculationResultBean {
 		return stringAuditLog.toString();
 	}
 
-	public Instant getStartDateTime() {
-		return startDateTime;
-	}
+
 }

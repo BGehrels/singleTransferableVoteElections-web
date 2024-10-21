@@ -234,7 +234,7 @@ public final class AsyncElectionCalculation implements Runnable {
 
 		public Optional<ElectionCalculationResultBean> getResultOfFinishedCalculation(String officeName) {
 			for (ElectionCalculationResultBean resultOfFinishedCalculation : resultsOfFinishedCalculations) {
-				if (resultOfFinishedCalculation.getElection().getOfficeName().equals(officeName)) {
+				if (resultOfFinishedCalculation.election().getOfficeName().equals(officeName)) {
 					return Optional.of(resultOfFinishedCalculation);
 				}
 			}

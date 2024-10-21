@@ -11,7 +11,7 @@ Die Software erlaubt die manuelle Eingabe ausgefüllter Stimmzettel und die Bere
 
 ## Wie baue ich die Software?
 Vorbedingungen:
-* Java JDK >= 1.8
+* Java JDK >= 17
 * Apache Maven (aktuelle Version)
 * Internetzugriff
 * Git (optional)

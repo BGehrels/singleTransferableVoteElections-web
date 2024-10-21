@@ -63,7 +63,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.12</version>
+		<version>3.2.10</version>
 	</parent>
 
 	<dependencies>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>info.gehrels.voting</groupId>
 			<artifactId>singleTransferableVoteElections</artifactId>
-			<version>5.2</version>
+			<version>7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>

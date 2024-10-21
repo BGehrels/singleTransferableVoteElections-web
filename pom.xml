@@ -63,7 +63,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.10</version>
+		<version>3.3.4</version>
 	</parent>
 
 	<dependencies>
@@ -110,6 +110,12 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svg-dom</artifactId>
             <version>1.18</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
 
         <dependency>

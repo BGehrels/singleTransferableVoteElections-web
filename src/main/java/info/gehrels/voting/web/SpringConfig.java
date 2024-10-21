@@ -25,6 +25,7 @@ import info.gehrels.voting.web.ballotLayoutAdministration.EditBallotLayoutContro
 import info.gehrels.voting.web.resultCalculation.DeleteBallotController;
 import info.gehrels.voting.web.resultCalculation.ElectionCalculationController;
 import info.gehrels.voting.web.resultCalculation.ManageElectionCalculationsController;
+import jakarta.servlet.ServletContext;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -35,10 +36,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import javax.servlet.ServletContext;
 import java.util.EnumSet;
 
-import static javax.servlet.DispatcherType.REQUEST;
+import static jakarta.servlet.DispatcherType.REQUEST;
 
 
 @Configuration

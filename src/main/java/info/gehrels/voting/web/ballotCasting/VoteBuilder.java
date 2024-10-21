@@ -23,8 +23,8 @@ import info.gehrels.voting.genderedElections.GenderedElection;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,18 +56,12 @@ public final class VoteBuilder {
 	}
 
 	public Optional<Vote<GenderedCandidate>> createVote(GenderedElection genderedElection) {
-		switch (type) {
-			case PREFERENCE:
-				return Optional.of(createPreferenceVote(genderedElection));
-			case NO:
-				return Optional.of(Vote.createNoVote(genderedElection));
-			case INVALID:
-				return Optional.of(Vote.createInvalidVote(genderedElection));
-			case NOT_VOTED:
-				return Optional.empty();
-			default:
-				throw new IllegalStateException("Unknown type " + type);
-		}
+        return switch (type) {
+            case PREFERENCE -> Optional.of(createPreferenceVote(genderedElection));
+            case NO -> Optional.of(Vote.createNoVote(genderedElection));
+            case INVALID -> Optional.of(Vote.createInvalidVote(genderedElection));
+            case NOT_VOTED -> Optional.empty();
+        };
 	}
 
 	private Vote<GenderedCandidate> createPreferenceVote(GenderedElection genderedElection) {

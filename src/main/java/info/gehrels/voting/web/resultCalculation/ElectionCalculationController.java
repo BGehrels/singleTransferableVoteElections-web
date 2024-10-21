@@ -21,6 +21,7 @@ import info.gehrels.voting.genderedElections.GenderedCandidate;
 import info.gehrels.voting.web.applicationState.ElectionCalculationsState;
 import info.gehrels.voting.web.auditLogging.JsonAuditLog;
 import info.gehrels.voting.web.svg.SvgCreatingAuditLogListener;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -61,7 +61,7 @@ public final class ElectionCalculationController {
 
         Optional<ElectionCalculationResultBean> resultOfFinishedCalculation = snapshot
                 .getResultOfFinishedCalculation(office);
-        if (!resultOfFinishedCalculation.isPresent()) {
+        if (resultOfFinishedCalculation.isEmpty()) {
             throw new IllegalArgumentException("The given Office name does not exist");
         }
         JsonAuditLog jsonAuditLog = new JsonAuditLog();
@@ -77,7 +77,7 @@ public final class ElectionCalculationController {
 
         Optional<ElectionCalculationResultBean> resultOfFinishedCalculation = snapshot
                 .getResultOfFinishedCalculation(office);
-        if (!resultOfFinishedCalculation.isPresent()) {
+        if (resultOfFinishedCalculation.isEmpty()) {
             throw new IllegalArgumentException("The given Office name does not exist");
         }
         SvgCreatingAuditLogListener svgCreatingAuditLogListener = new SvgCreatingAuditLogListener();

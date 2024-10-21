@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableSet;
 import info.gehrels.voting.AmbiguityResolver.AmbiguityResolverResult;
 import info.gehrels.voting.Candidate;
 import info.gehrels.voting.genderedElections.GenderedCandidate;
-import  javax.validation.constraints.NotEmpty;
+import  jakarta.validation.constraints.NotEmpty;
 
 import static com.google.common.collect.Iterables.find;
 

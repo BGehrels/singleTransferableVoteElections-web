@@ -17,9 +17,9 @@
 package info.gehrels.voting.web.ballotLayoutAdministration;
 
 import info.gehrels.voting.web.applicationState.BallotLayout;
-import  javax.validation.constraints.NotEmpty;
+import  jakarta.validation.constraints.NotEmpty;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 

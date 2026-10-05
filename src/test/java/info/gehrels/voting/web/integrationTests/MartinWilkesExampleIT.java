@@ -49,6 +49,13 @@ public final class MartinWilkesExampleIT {
 
     @Value("${local.server.port}")
     int port;
+    
+    @Value("${app.security.username}")
+    private String username;
+
+    @Value("${app.security.password}")
+    private String password;
+
 
     public WebDriver driver;
 
@@ -60,6 +67,8 @@ public final class MartinWilkesExampleIT {
 
 	@Test
 	public void exampleByMartinWilke() {
+
+        LoginHelper.login(driver, "http://localhost:" + port, username, password);
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();

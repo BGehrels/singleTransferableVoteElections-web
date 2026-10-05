@@ -41,8 +41,7 @@
             <div data-th-each="candidate : ${electionCalculation.ambiguityResolutionTask.candidatesToChooseFrom}">
                 <input type="radio" data-th-field="*{candidateName}" data-th-value="${candidate.name}"
                        required="required"/>
-                <label data-th-for="${#ids.prev('candidateName')}" data-th-text="${candidate.name}">Petra
-                    Musterfrau</label>
+                <label data-th-for="${#ids.prev('candidateName')}" data-th-text="${candidate.name}">Maxi Mustermensch</label>
             </div>
             <span data-th-errors="*{candidateName}" class="error">Es ist ein Fehler aufgetreten</span>
             <label for="comment">Kommentar:</label>
@@ -61,12 +60,12 @@
 
             <h2>Auf die
                 <th-block data-th-text="${calculationResult.election.numberOfFemaleExclusivePositions}"/>
-                Frauenplätze
+                FLINTA* Plätze
                 wurden gewählt:
             </h2>
             <ul>
                 <li data-th-each="electedCandidate : ${calculationResult.electionResult.candidatesElectedInFemaleExclusiveRun}" data-th-text="${electedCandidate.name}">
-                    Petra Musterfrau
+                    Maxi Mustermensch
                 </li>
             </ul>
             <h2>Auf die
@@ -83,7 +82,7 @@
             <nav>
                 <ul>
                     <li><a data-th-href="@{/downloadElectionCalculationAsJson(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName})}">Maschinenlesbare Fassung herunterladen (JSON)</a></li>
-                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=true)}">Grafisches Ablaufprotokoll für die Frauenplätze (pre-alpha)</a></li>
+                    <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=true)}">Grafisches Ablaufprotokoll für die FLINTA* Plätze (pre-alpha)</a></li>
                     <li><a data-th-href="@{/downloadElectionCalculationAsSvg(dateTimeTheCalculationStarted=${calculationResult.startDateTime}, office=${calculationResult.election.officeName}, femaleExclusiveRun=false)}">Grafisches Ablaufprotokoll für die offenen Plätze (pre-alpha)</a></li>
                 </ul>
             </nav>

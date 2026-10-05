@@ -32,9 +32,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.context.annotation.Import;
+
 
 @Configuration
 @EnableAutoConfiguration
+@Import(SecurityConfig.class)
 public class SpringConfig {
     public static void main(String... args) {
 	    SpringApplication springApplication = new SpringApplication(SpringConfig.class);

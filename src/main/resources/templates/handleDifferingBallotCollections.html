@@ -27,7 +27,7 @@
     <p>Es gibt noch Abweichungen zwischen der Ersteingabe der Stimmzettel und der Kontrolleingabe. Es besteht nun die
         Möglichkeit, diese Stimmzettel zu löschen, um sie erneut zu erfassen.</p>
 
-    <form method="POST" action="/deleteBallots">
+    <form method="POST" data-th-action="@{/deleteBallots}">
         <section data-th-unless="${ballotIterableDiff.setAsDuplicateIds.empty}">
             <h2>Bei der Ersteingabe mehrfach eingegebene Stimmzettel</h2>
             <ul>

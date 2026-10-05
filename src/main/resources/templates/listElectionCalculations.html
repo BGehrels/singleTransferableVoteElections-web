@@ -34,7 +34,7 @@
         gestartet werden.
     </p>
 
-    <form action="/startElectionCalculation" method="POST">
+    <form data-th-action="@{/startElectionCalculation}" method="POST">
         <input type="submit" value="Ergebnisberechnung jetzt starten"/>
     </form>
     <section data-th-unless="${electionCalculations.empty}">

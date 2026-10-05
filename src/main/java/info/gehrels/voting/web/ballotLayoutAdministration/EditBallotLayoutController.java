@@ -65,7 +65,7 @@ public final class EditBallotLayoutController {
 		}
 
 		if (newNumberOfFemaleExclusivePositions < 0) {
-			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an Frauenplätzen darf nicht negativ sein."));
+			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an FLINTA* Plätzen darf nicht negativ sein."));
 		}
 
 		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfFemaleExclusivePositions(newNumberOfFemaleExclusivePositions));
@@ -80,7 +80,7 @@ public final class EditBallotLayoutController {
 		}
 
 		if (newNumberOfNotFemaleExclusivePositions < 0) {
-			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an Frauenplätzen darf nicht negativ sein."));
+			return new ModelAndView("editBallotLayout", ImmutableMap.of("ballotLayout", ballotLayoutState.getBallotLayout(), "error", "Die Anzahl an FLINTA* Plätzen darf nicht negativ sein."));
 		}
 
 		ballotLayoutState.replaceElectionVersion(officeName, (e) -> e.withNumberOfNotFemaleExclusivePositions(newNumberOfNotFemaleExclusivePositions));

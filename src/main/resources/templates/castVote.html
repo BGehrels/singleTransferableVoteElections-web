@@ -38,7 +38,7 @@
     <h1>Stimmzettel eingeben</h1>
 </header>
 <main>
-    <form method="POST" action="/castVote" data-th-object="${ballotBuilder}">
+    <form method="POST" data-th-action="@{/castVote}" data-th-object="${ballotBuilder}">
         <input type="hidden" name="firstOrSecondTry" data-th-value="${firstOrSecondTry}"/>
         <section>
             <label for="ballotId">Stimmzettelnummer</label>

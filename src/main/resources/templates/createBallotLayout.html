@@ -30,7 +30,7 @@
 	<h1>Stimmzettelmuster</h1>
 </header>
 <main>
-	<form method="post" action="/createBallotLayout" data-th-object="${ballotLayoutBuilderBean}">
+	<form method="post" data-th-action="@{/createBallotLayout}" data-th-object="${ballotLayoutBuilderBean}">
         <section data-th-each="election,electionsStatus : *{elections}">
             <h1 data-th-text="${electionsStatus.count} + '. Amt'">1. Amt</h1>
 
@@ -38,7 +38,7 @@
             <input data-th-field="*{elections[__${electionsStatus.index}__].officeName}" required="required" size="60"/>
             <span data-th-errors="*{elections[__${electionsStatus.index}__].officeName}" class="error">Bitte einen Wert eingeben.</span><br />
 
-            <label data-th-for="'elections' + ${electionsStatus.index} + '.numberOfFemaleExclusivePositions'">Anzahl Frauenplätze:</label>
+            <label data-th-for="'elections' + ${electionsStatus.index} + '.numberOfFemaleExclusivePositions'">Anzahl FLINTA* Plätze:</label>
             <input data-th-field="*{elections[__${electionsStatus.index}__].numberOfFemaleExclusivePositions}" type="number" required="required" min="0" size="3"/>
             <span data-th-errors="*{elections[__${electionsStatus.index}__].numberOfFemaleExclusivePositions}" class="error">Bitte eine Zahl eingeben.</span><br />
 
@@ -50,7 +50,7 @@
             <div data-th-each="candidate,candidatesStatus : *{elections[__${electionsStatus.index}__].candidates}">
                 <label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.name'">Name:</label>
                 <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].name}" required="required" size="60" />
-                weiblich
+                FLINTA*
                 <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" type="radio" value="true" /><label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.female1'">Ja</label>
                 <input data-th-field="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].female}" type="radio" value="false" /><label data-th-for="'elections' + ${electionsStatus.index} + '.candidates' + ${candidatesStatus.index} + '.female2'">Nein</label>
                 <span data-th-errors="*{elections[__${electionsStatus.index}__].candidates[__${candidatesStatus.index}__].name}" class="error">Bitte einen Namen eingeben</span>

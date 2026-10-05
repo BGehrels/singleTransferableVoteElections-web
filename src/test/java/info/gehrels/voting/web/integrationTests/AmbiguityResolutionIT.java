@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.openqa.selenium.By;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -36,6 +37,12 @@ public final class AmbiguityResolutionIT {
     @Value("${local.server.port}")
     private int port;
 
+    @Value("${app.security.username}")
+    private String username;
+
+    @Value("${app.security.password}")
+    private String password;
+
     public WebDriver driver = new HtmlUnitDriver();
 
     @BeforeEach
@@ -44,8 +51,10 @@ public final class AmbiguityResolutionIT {
         driver.navigate().to(new URL("http", "localhost", port, "/"));
     }
 
+
     @Test
     public void createAmbiguousSituationAndResolveIt() {
+        LoginHelper.login(driver, "http://localhost:" + port, username, password);
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         CreateBallotLayoutPage createBallotLayoutPage = indexPage.clickCreateBallotLayoutLink();

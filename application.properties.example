@@ -1,0 +1,5 @@
+# cp applicaton.properties.example application.properties
+app.security.username=USERNAME
+app.security.password=PASSWORD
+
+server.forward-headers-strategy=framework

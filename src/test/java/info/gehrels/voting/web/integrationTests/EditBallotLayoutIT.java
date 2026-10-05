@@ -37,6 +37,12 @@ public class EditBallotLayoutIT {
     @Value("${local.server.port}")
     int port;
 
+    @Value("${app.security.username}")
+    private String username;
+
+    @Value("${app.security.password}")
+    private String password;
+
     public WebDriver driver;
 
     @BeforeEach
@@ -47,6 +53,8 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeOfficeName() {
+
+        LoginHelper.login(driver, "http://localhost:" + port, username, password);
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
@@ -85,6 +93,8 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeNumberOfFemaleExclusivePositions() {
+
+        LoginHelper.login(driver, "http://localhost:" + port, username, password);
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
@@ -117,6 +127,8 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeNumberOfNotFemaleExclusivePositions() {
+
+        LoginHelper.login(driver, "http://localhost:" + port, username, password);
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot
@@ -150,6 +162,8 @@ public class EditBallotLayoutIT {
 
     @Test
     public void changeCandidatesGender() {
+
+        LoginHelper.login(driver, "http://localhost:" + port, username, password);
         IndexPage indexPage = PageFactory.initElements(driver, IndexPage.class);
 
         // Given we created a ballot

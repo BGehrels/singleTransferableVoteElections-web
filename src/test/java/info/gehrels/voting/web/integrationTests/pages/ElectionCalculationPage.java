@@ -45,7 +45,7 @@ public final class ElectionCalculationPage {
 
 
     public long getNumberOfFemaleExclusivePositions(String officeName) {
-        return extractNumberOfPositions(findNumberOfPositionsHeadline(officeName, "Frauen"));
+        return extractNumberOfPositions(findNumberOfPositionsHeadline(officeName, "FLINTA*"));
     }
 
 
@@ -68,7 +68,7 @@ public final class ElectionCalculationPage {
     public List<String> getFemaleExclusiveElectedCandidateNames(String officeName) {
         List<WebElement> li = webDriver.findElements(By.xpath(
                 "//h1[contains(text(), '" + officeName + "')]/parent::section" +
-                        "/h2[contains(text(), 'Frauen')]/following-sibling::ul[1]/li"));
+                        "/h2[contains(text(), 'FLINTA*')]/following-sibling::ul[1]/li"));
         Builder<String> builder = ImmutableList.builder();
         for (WebElement webElement : li) {
             builder.add(webElement.getText());

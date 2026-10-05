@@ -32,7 +32,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 											   long numberOfOpenNotFemaleExclusiveSeats,
 											   long numberOfElectableNotFemaleExclusiveSeats) {
 		formatLine(
-			"Es wurden nur %d von %d Frauenplätzen besetzt. Daher können auch nur %d von %d offenen Plätzen gewählt werden.",
+			"Es wurden nur %d von %d FLINTA* Plätzen besetzt. Daher können auch nur %d von %d offenen Plätzen gewählt werden.",
 			numberOfElectedFemaleExclusiveSeats, numberOfOpenFemaleExclusiveSeats,
 				numberOfElectableNotFemaleExclusiveSeats, numberOfOpenNotFemaleExclusiveSeats);
 	}
@@ -68,7 +68,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 
 	@Override
 	public void startFemaleExclusiveElectionRun() {
-		formatLine("Starte die Berechnung der Frauenplätze.");
+		formatLine("Starte die Berechnung der FLINTA* Plätze.");
 	}
 
 	@Override
@@ -248,7 +248,7 @@ public final class StringAuditLog implements ElectionCalculationWithFemaleExclus
 
 	private String getReasonAsGermanString(NonQualificationReason reason) {
         return switch (reason) {
-            case NOT_FEMALE -> "Nicht weiblich";
+            case NOT_FEMALE -> "Nicht FLINTA*";
             case ALREADY_ELECTED -> "Bereits gewählt";
         };
 

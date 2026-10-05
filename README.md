@@ -26,6 +26,9 @@ Schritte:
 - In das Wurzelverzeichnis des Repositories (dort, wo auch diese Readme.md Datei liegt) wechseln
 
     cd singleTransferableVoteElections-web
+- Beispiel application.properties kopieren und anpassen
+
+  cp application.properties.example application.properties
 
 - Dort die Software mittels Maven Kompilieren und Paketieren:
 
@@ -88,7 +91,7 @@ Nach dem Öffnen von http://<serverIp>:8080/ sehen wir das Hauptmenü. Neben den
 ### Eingabe eines Stimmzettellayouts
 Bevor wir mit der Stimmeingabe beginnen muss das System mit dem Layout der Stimmzettel vertraut gemacht werden. Die Ämter und Kandidierenden sollten in genau der Reihenfolge eingegeben werden, wie sie auch auf den gedruckten Stimmzetteln erscheinen.
 
-Bitte prüfen Sie zweimal, ob für alle Kandidierenden die "weiblich Ja/Nein"-Angabe korrekt ist. Andernfalls kann und wird es zu falschen Wahlergebnissen kommen.
+Bitte prüfen Sie zweimal, ob für alle Kandidierenden die "FLINTA* Ja/Nein"-Angabe korrekt ist. Andernfalls kann und wird es zu falschen Wahlergebnissen kommen.
 
 ### Nummerierung aller Stimmzettel
 Jeder Stimmzettel braucht eine eindeutige Nummer. Um die Vertraulichkeit der Wahl nicht zu brechen, darf diese Nummer erst nach Abgabe des Stimmzettels vergeben werden. Es empfiehlt sich, unmittelbar nach der Öffnung der Wahlurnen und dem Zählen der Stimmzettel diese von Hand oder mit einem sogenannten Paginierstempel mit fortlaufenden Nummern zu versehen.

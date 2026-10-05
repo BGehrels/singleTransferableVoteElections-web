@@ -23,7 +23,7 @@ public final class SecondHeadLine {
 
 
     public Element build(Document document, int baseX, int baseY) {
-        String textContent = numberOfSeats + " " + (femaleExclusive ? "Frauenplätze" : "offene Plätze") +
+        String textContent = numberOfSeats + " " + (femaleExclusive ? "FLINTA* Plätze" : "offene Plätze") +
                 ", davon sind " + numberOfElectablePositions + " zu besetzen. " +
                 "Es gibt " + numberOfValidBallots + " abgegebene gültige Stimmzettel und " +
                 invalidVotes + " ungültige Stimmen." +
